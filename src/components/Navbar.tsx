@@ -1,6 +1,6 @@
-import { Link } from "react-router-dom";
-import { MENUS } from "../constants/constants";
-import styles from "./Navbar.module.css";
+import { Link } from 'react-router-dom';
+import { MENUS } from '../constants/constants';
+import styles from './Navbar.module.css';
 
 export default function Navbar() {
   return (

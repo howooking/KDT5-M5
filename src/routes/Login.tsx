@@ -1,10 +1,10 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const HEADERS = {
-  "content-type": "application/json",
-  apikey: "KDT5_nREmPe9B",
-  username: "KDT5_Team1",
+  'content-type': 'application/json',
+  apikey: 'KDT5_nREmPe9B',
+  username: 'KDT5_Team1',
 };
 
 interface LoginDataType {
@@ -14,9 +14,9 @@ interface LoginDataType {
 
 const login = async (loginData: LoginDataType) => {
   const res = await fetch(
-    "https://asia-northeast3-heropy-api.cloudfunctions.net/api/auth/login",
+    'https://asia-northeast3-heropy-api.cloudfunctions.net/api/auth/login',
     {
-      method: "POST",
+      method: 'POST',
       headers: HEADERS,
       body: JSON.stringify({
         email: loginData.email,
@@ -29,7 +29,7 @@ const login = async (loginData: LoginDataType) => {
 };
 
 export default function Login() {
-  const [loginData, setLoginData] = useState({ email: "", password: "" });
+  const [loginData, setLoginData] = useState({ email: '', password: '' });
 
   const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -42,8 +42,6 @@ export default function Login() {
       [event.target.name]: event.target.value,
     });
   };
-
-  //   회원가입,
 
   return (
     <div>

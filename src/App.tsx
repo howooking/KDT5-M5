@@ -1,11 +1,11 @@
-import { Route, Routes } from "react-router-dom";
-import "./App.css";
-import Layout from "./components/Layout";
-import Home from "./routes/Home";
-import NotFound from "./routes/NotFound";
-import Products from "./routes/Products";
-import Login from "./routes/Login";
-import SignUp from "./routes/SignUp";
+import { Route, Routes } from 'react-router-dom';
+import './App.css';
+import Layout from './components/Layout';
+import Home from './routes/Home';
+import NotFound from './routes/NotFound';
+import Products from './routes/Products';
+import Login from './routes/Login';
+import SignUp from './routes/SignUp';
 
 function App() {
   return (
