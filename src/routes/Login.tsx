@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import userStore from '../store';
 
-const HEADERS = {
+export const headers = {
   'content-type': 'application/json',
   apikey: 'KDT5_nREmPe9B',
   username: 'KDT5_Team1',
@@ -18,7 +18,7 @@ const login = async (loginData: LoginDataType) => {
     'https://asia-northeast3-heropy-api.cloudfunctions.net/api/auth/login',
     {
       method: 'POST',
-      headers: HEADERS,
+      headers: headers,
       body: JSON.stringify({
         email: loginData.email,
         password: loginData.password,
