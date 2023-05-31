@@ -6,7 +6,7 @@ export default function Button({ text }: { text: string }) {
   return (
     <button className={styles.button}>
       {text}
-      <span className={styles.span}>"버튼"</span>
+      <span className={styles.span}>"버!튼"</span>
     </button>
   );
 }
