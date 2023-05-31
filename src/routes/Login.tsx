@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import userStore from '../store';
 
 const HEADERS = {
   'content-type': 'application/json',
@@ -25,15 +26,18 @@ const login = async (loginData: LoginDataType) => {
     }
   );
   const json = await res.json();
-  console.log(json);
+  return json;
 };
 
 export default function Login() {
   const [loginData, setLoginData] = useState({ email: '', password: '' });
 
-  const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
+  const setUser = userStore((state) => state.setUser);
+  const userInfo = userStore((state) => state.userInfo);
+  const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    login(loginData);
+    const userData = await login(loginData);
+    setUser(userData);
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,6 +50,7 @@ export default function Login() {
   return (
     <div>
       <h2>로그인</h2>
+      {userInfo.user.displayName}
       <form onSubmit={handleLogin}>
         <label htmlFor="email">이메일</label>
         <input
