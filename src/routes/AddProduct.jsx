@@ -10,6 +10,14 @@ const AddProduct = () => {
   const [photoBase64, setPhotoBase64] = useState('');
   const [discountRate, setDiscountRate] = useState('');
 
+  const handleTitle =(event) => setTitle(event.target.value);
+  const handlePrice = (event) => setPrice(event.target.value);
+  const handleDescription = (event) => setDescription(event.target.value);
+  const handleTags = (event) => setTags(event.target.value);
+  const handleThumbnailBase64 = (event) => setThumbnailBase64(event.target.value);
+  const handlePhotoBase64 = (event) => setPhotoBase64(event.target.value);
+  const handleDiscountRate = (event) => setDiscountRate(event.target.value);
+
   const submitProduct = async () => {
     const requestBody = {
       title,
@@ -26,17 +34,9 @@ const AddProduct = () => {
     if (data) {
       console.log(data);
     } else {
-      console.error('제품 추가 중 오류가 발생했습니다.');
+      console.error('제품 추가 중 오류 발생');
     }
   };
-
-  const handleTitle =(event) => setTitle(event.target.value);
-  const handlePrice = (event) => setPrice(event.target.value);
-  const handleDescription = (event) => setDescription(event.target.value);
-  const handleTags = (event) => setTags(event.target.value);
-  const handleThumbnailBase64 = (event) => setThumbnailBase64(event.target.value);
-  const handlePhotoBase64 = (event) => setPhotoBase64(event.target.value);
-  const handleDiscountRate = (event) => setDiscountRate(event.target.value);
 
   return (
     <div>
