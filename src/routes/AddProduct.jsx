@@ -18,6 +18,7 @@ const AddProduct = () => {
   const handlePhotoBase64 = (event) => setPhotoBase64(event.target.value);
   const handleDiscountRate = (event) => setDiscountRate(event.target.value);
 
+  
   const submitProduct = async () => {
     const requestBody = {
       title,
