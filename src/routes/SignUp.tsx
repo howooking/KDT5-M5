@@ -1,7 +1,5 @@
 import { useState } from 'react';
 import { headers } from './Login';
-import { Link } from 'react-router-dom';
-import './SignUp.css';
 
 
 
@@ -100,11 +98,9 @@ export default function SignUp() {
         placeholder="이름을 입력하세요."
       />
       <div className="flex-space"></div>
-      <span>프로필 사진</span>
-      <input type="file" />
-      <Link to="/login">
+      {/* <span>프로필 사진</span>
+      <input type="file" /> */}
         <button>회원가입</button>
-      </Link>
     </form>
   );
 }
