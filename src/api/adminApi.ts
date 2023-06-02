@@ -1,13 +1,13 @@
 const API_URL = 'https://asia-northeast3-heropy-api.cloudfunctions.net/api';
 
 const api_headers = {
-  "content-type": "application/json",
-  "apikey": "KDT5_nREmPe9B",
-  "username": "KDT5_Team1",
-  "masterKey": "true"
+  'content-type': 'application/json',
+  apikey: 'KDT5_nREmPe9B',
+  username: 'KDT5_Team1',
+  masterKey: 'true',
 };
 
-export const addProduct = async (productData) => {
+export const addProduct = async (productData: ProductData | undefined) => {
   try {
     const response = await fetch(`${API_URL}/products`, {
       method: 'POST',
@@ -21,7 +21,10 @@ export const addProduct = async (productData) => {
   }
 };
 
-export const updateProduct = async (productId, updateData) => {
+export const updateProduct = async (
+  productId: string,
+  updateData: UpdatedProduct
+) => {
   try {
     const response = await fetch(`${API_URL}/products/${productId}`, {
       method: 'PUT',
@@ -35,7 +38,7 @@ export const updateProduct = async (productId, updateData) => {
   }
 };
 
-export const deleteProduct = async (productId) => {
+export const deleteProduct = async (productId: string) => {
   try {
     await fetch(`${API_URL}/products/${productId}`, {
       method: 'DELETE',
