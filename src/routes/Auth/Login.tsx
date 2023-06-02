@@ -3,11 +3,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import { userStore } from '../../store';
 import styles from './Login.module.css';
 import { signIn } from '../../api/authApi';
+import { EMAIL_REGEX } from '../../constants/constants';
 
 export default function Login() {
-  const [message, setMessage] = useState('');
-
   const navigate = useNavigate();
+
+  const [message, setMessage] = useState('');
   const [loginData, setLoginData] = useState({ email: '', password: '' });
 
   const authMe = userStore((state) => state.authMe);
@@ -20,13 +21,10 @@ export default function Login() {
       return;
     }
     // 이메일의 유효성 검사
-    const regex =
-      /^[0-9a-zA-Z]([-_\\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
-    if (!regex.test(loginData.email)) {
+    if (!EMAIL_REGEX.test(loginData.email)) {
       setMessage('올바른 이메일을 입력해주세요');
       return;
     }
-
     const res = await signIn(loginData);
     if (res.accessToken) {
       localStorage.setItem('token', res.accessToken);

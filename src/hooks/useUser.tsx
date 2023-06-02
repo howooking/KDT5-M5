@@ -18,7 +18,7 @@ export default function useUser(): {
     } else {
       authMe(accessToken);
     }
-  }, []);
+  }, [accessToken, authMe, logoutUser]);
 
   return { userInfo, logoutUser, isAdmin };
 }
