@@ -7,9 +7,7 @@ export default function useUser(): {
   isAdmin: boolean;
 } {
   const accessToken = localStorage.getItem('token');
-  const userInfo = userStore((state) => state.userInfo);
-  const logoutUser = userStore((state) => state.logoutUser);
-  const authMe = userStore((state) => state.authMe);
+  const { userInfo, authMe, logoutUser } = userStore();
   const isAdmin = userInfo.user.email === 'admin@naver.com';
 
   useEffect(() => {

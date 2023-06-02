@@ -11,7 +11,7 @@ export default function Login() {
   const [message, setMessage] = useState('');
   const [loginData, setLoginData] = useState({ email: '', password: '' });
 
-  const authMe = userStore((state) => state.authMe);
+  const { authMe } = userStore();
 
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();

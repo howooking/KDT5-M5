@@ -6,7 +6,7 @@ import { EMAIL_REGEX } from '../../constants/constants';
 
 export default function SignUp() {
   const navigate = useNavigate();
-  const setUser = userStore((state) => state.setUser);
+  const { setUser } = userStore();
 
   const [message, setMessage] = useState('');
   const [signUpData, setSignData] = useState({
@@ -49,13 +49,14 @@ export default function SignUp() {
       setMessage(res);
       return;
     }
-    navigate('/', { replace: true });
+    navigate(-1);
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
     setSignData({
       ...signUpData,
-      [event.target.name]: event.target.value,
+      [name]: value,
     });
   };
 

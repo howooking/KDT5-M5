@@ -3,8 +3,6 @@ import { addProduct } from '../../api/adminApi';
 
 const AddProduct = () => {
   const [productData, setProductData] = useState<ProductData>();
-
-  console.log(productData);
   // const [thumbnailBase64, setThumbnailBase64] = useState('');
   // const [photoBase64, setPhotoBase64] = useState('');
   // const handleThumbnailBase64 = (event) => setThumbnailBase64(event.target.value);
@@ -21,7 +19,6 @@ const AddProduct = () => {
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.name);
     if (event.target.name === 'price' || event.target.name === 'discountRate') {
       setProductData({
         ...productData,
