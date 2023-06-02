@@ -1,14 +1,12 @@
 import { create } from 'zustand';
-import { authenticate } from './api/api';
+import { authenticate } from './api/authApi';
 
 interface UserState {
   userInfo: User;
-  authMe: () => void;
+  authMe: (accessToken: string) => void;
   setUser: (user: User) => void;
   logoutUser: () => void;
 }
-
-const accessToken = localStorage.getItem('token');
 
 export const userStore = create<UserState>((set) => ({
   userInfo: {
@@ -17,9 +15,9 @@ export const userStore = create<UserState>((set) => ({
       displayName: '',
       profileImg: '',
     },
-    accessToken: accessToken,
+    accessToken: '',
   },
-  authMe: async () => {
+  authMe: async (accessToken: string) => {
     const response = await authenticate(accessToken);
     set({ userInfo: { user: response, accessToken } });
   },

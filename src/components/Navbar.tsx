@@ -1,12 +1,11 @@
 import { Link } from 'react-router-dom';
 import { MENUS } from '../constants/constants';
 import styles from './Navbar.module.css';
-import { logout } from '../api/api';
-import { userStore } from '../store';
+import { logout } from '../api/authApi';
+import useUser from '../hooks/useUser';
 
 export default function Navbar() {
-  const userInfo = userStore((state) => state.userInfo);
-  const logoutUser = userStore((state) => state.logoutUser);
+  const { userInfo, logoutUser, isAdmin } = useUser();
 
   const handleLogout = async () => {
     await logout(userInfo.accessToken);
@@ -28,6 +27,8 @@ export default function Navbar() {
         <li>
           {userInfo.accessToken ? (
             <>
+              {isAdmin ? <Link to="/admin">관리자</Link> : <></>}
+              <span>{userInfo.user.displayName}님</span>
               <button onClick={handleLogout}>로그아웃</button>
             </>
           ) : (

@@ -1,11 +1,6 @@
-import { useEffect } from 'react';
-import { userStore } from '../store';
+import useUser from '../hooks/useUser';
 
 export default function Home() {
-  const authMe = userStore((state) => state.authMe);
-  useEffect(() => {
-    authMe();
-  }, []);
-
-  return <div>Home</div>;
+  const { userInfo } = useUser();
+  return <div>{userInfo.user.displayName}</div>;
 }

@@ -1,3 +1,7 @@
+import useUser from '../hooks/useUser';
+
 export default function Products() {
-  return <div>Products</div>;
+  const { userInfo } = useUser();
+
+  return <div>{userInfo.user.email}</div>;
 }

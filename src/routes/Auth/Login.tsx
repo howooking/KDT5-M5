@@ -1,21 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { signIn } from '../api/api';
-import { userStore } from '../store';
+import { userStore } from '../../store';
 import styles from './Login.module.css';
+import { signIn } from '../../api/authApi';
 
 export default function Login() {
   const [message, setMessage] = useState('');
-
-  useEffect(() => {
-    authMe();
-  }, []);
 
   const navigate = useNavigate();
   const [loginData, setLoginData] = useState({ email: '', password: '' });
 
   const authMe = userStore((state) => state.authMe);
-  const setUser = userStore((state) => state.setUser);
 
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -32,15 +27,15 @@ export default function Login() {
       return;
     }
 
-    const userData = await signIn(loginData);
-    if (userData.accessToken) {
-      localStorage.setItem('token', userData.accessToken);
+    const res = await signIn(loginData);
+    if (res.accessToken) {
+      localStorage.setItem('token', res.accessToken);
+      authMe(res.accessToken);
     } else {
-      setMessage(userData);
+      setMessage(res);
       return;
     }
-    setUser(userData);
-    navigate('/', { replace: true });
+    navigate(-1);
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {

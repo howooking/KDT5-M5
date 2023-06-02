@@ -26,13 +26,13 @@ export const signIn = async (loginData: LoginDataType) => {
   return json;
 };
 
+// 회원가입
 interface SignUpDataType {
   email: string;
   password: string;
   displayName: string;
 }
 
-// 회원가입
 export const signUp = async (signUpData: SignUpDataType) => {
   const res = await fetch(
     'https://asia-northeast3-heropy-api.cloudfunctions.net/api/auth/signup',
@@ -67,7 +67,7 @@ export const logout = async (accessToken: string | null) => {
 };
 
 // 인증확인
-export const authenticate = async (accessToken: string | null) => {
+export const authenticate = async (accessToken: string) => {
   const res = await fetch(
     'https://asia-northeast3-heropy-api.cloudfunctions.net/api/auth/me',
     {
