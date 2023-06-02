@@ -1,19 +1,27 @@
 import { create } from 'zustand';
+import { authenticate } from './api/api';
 
 interface UserState {
   userInfo: User;
+  authMe: () => void;
   setUser: (user: User) => void;
   logoutUser: () => void;
 }
 
-const userStore = create<UserState>((set) => ({
+const accessToken = localStorage.getItem('token');
+
+export const userStore = create<UserState>((set) => ({
   userInfo: {
     user: {
       email: '',
       displayName: '',
       profileImg: '',
     },
-    accessToken: '',
+    accessToken: accessToken,
+  },
+  authMe: async () => {
+    const response = await authenticate(accessToken);
+    set({ userInfo: { user: response, accessToken } });
   },
   setUser: (user) =>
     set(() => ({
@@ -31,18 +39,3 @@ const userStore = create<UserState>((set) => ({
       },
     }),
 }));
-
-// export default function SignUp() {
-//   const bears = useStore((state) => state.bears);
-//   const increasePopulation = useStore((state) => state.increasePopulation);
-//   const removeAllBears = useStore((state) => state.removeAllBears);
-//   return (
-//     <>
-//       <h1>{bears} around here...</h1>
-//       <button onClick={increasePopulation}>one up</button>
-//       <button onClick={removeAllBears}>re</button>
-//     </>
-//   );
-// }
-
-export default userStore;

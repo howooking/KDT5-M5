@@ -4,5 +4,5 @@ interface User {
     displayName: string;
     profileImg: string | null;
   };
-  accessToken: string;
+  accessToken: string | null;
 }
