@@ -5,6 +5,7 @@ interface User {
     profileImg: string | null;
   };
   accessToken: string | null;
+  isAdmin: boolean;
 }
 
 interface ProductData {

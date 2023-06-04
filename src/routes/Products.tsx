@@ -1,7 +1,10 @@
-import useUser from '../hooks/useUser';
+import { useEffect } from 'react';
+import { userStore } from '../store';
 
 export default function Products() {
-  const { userInfo } = useUser();
-
-  return <div>{userInfo.user.email}</div>;
+  const { authMe, userInfo } = userStore();
+  useEffect(() => {
+    authMe();
+  }, [authMe]);
+  return <div>{userInfo.user.displayName}</div>;
 }

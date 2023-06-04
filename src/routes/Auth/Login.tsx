@@ -1,4 +1,5 @@
-import { useState } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { userStore } from '../../store';
 import styles from './Login.module.css';
@@ -6,18 +7,24 @@ import { signIn } from '../../api/authApi';
 import { EMAIL_REGEX } from '../../constants/constants';
 
 export default function Login() {
+  const { authMe, setUser } = userStore();
+  useEffect(() => {
+    authMe();
+  }, []);
+
+  //로그인 후 직전의 페이지로 이동하기 위해
   const navigate = useNavigate();
 
+  // 로그인 과정 사용자와 상호작용
   const [message, setMessage] = useState('');
   const [loginData, setLoginData] = useState({ email: '', password: '' });
 
-  const { authMe } = userStore();
-
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
+    // form이벤트의 기본 새로고침을 막음
     event.preventDefault();
     // 이메일과 비밀번호를 입력하지 않은경우
     if (loginData.email.trim() === '' || loginData.password.trim() === '') {
-      setMessage('이메일 or 비번 입력안함');
+      setMessage('이메일 또는 비밀번호를 입력해주세요');
       return;
     }
     // 이메일의 유효성 검사
@@ -26,10 +33,12 @@ export default function Login() {
       return;
     }
     const res = await signIn(loginData);
+    // 로그인에 성공하는 경우
     if (res.accessToken) {
       localStorage.setItem('token', res.accessToken);
-      authMe(res.accessToken);
+      setUser(res);
     } else {
+      // 아이디 or 비번이 맞지 않는 경우
       setMessage(res);
       return;
     }
@@ -37,9 +46,10 @@ export default function Login() {
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
     setLoginData({
       ...loginData,
-      [event.target.name]: event.target.value,
+      [name]: value,
     });
   };
 

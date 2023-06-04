@@ -1,6 +1,12 @@
+import { useEffect } from 'react';
 import { Link, Outlet } from 'react-router-dom';
+import { userStore } from '../../store';
 
 const Admin = () => {
+  const { authMe, userInfo } = userStore();
+  useEffect(() => {
+    authMe();
+  }, [authMe]);
   return (
     <div>
       <h2>관리자 패널</h2>

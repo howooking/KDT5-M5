@@ -10,16 +10,23 @@ import Admin from './routes/Admin/Admin';
 import AddProduct from './routes/Admin/AddProduct';
 import DeleteProduct from './routes/Admin/DeleteProduct';
 import UpdateProduct from './routes/Admin/UpdateProduct';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   return (
     <Routes>
       <Route element={<Layout />}>
         <Route path="/" element={<Home />} />
-        <Route path="/products" element={<Products />} />
+        <Route
+          path="/products"
+          element={<ProtectedRoute element={<Products />} />}
+        />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
-        <Route path="/admin" element={<Admin />}>
+        <Route
+          path="/admin"
+          element={<ProtectedRoute adminRequired element={<Admin />} />}
+        >
           <Route path="addProduct" element={<AddProduct />} />
           <Route path="deleteProduct" element={<DeleteProduct />} />
           <Route path="updateProduct" element={<UpdateProduct />} />
