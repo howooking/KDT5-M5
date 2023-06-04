@@ -2,6 +2,7 @@
 import { Navigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { authenticate } from '../api/authApi';
+import LoadingSpinner from './ui/LoadingSpinner';
 
 type ProtectedRouteProps = {
   element: React.ReactNode;
@@ -29,7 +30,7 @@ export default function ProtectedRoute({
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <LoadingSpinner />;
   }
   if (!accessToken) {
     return <Navigate to="/login" replace />;

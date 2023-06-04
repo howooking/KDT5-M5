@@ -71,8 +71,10 @@ export const userStore = create<UserState>((set) => ({
     }
     // 로컬저장소에 토큰이 있는경우
     const response = await authenticate(accessToken);
-    // 유효한 토큰이 아닌 경우(expired)
+    // 인증에 실패하는 경우 경우(유효하지 않은 토큰 or 기타오류)
     if (!response) {
+      // 로컬저장소에 무효화된 토큰을 삭제
+      localStorage.removeItem('token');
       // 유져 초기화
       set({
         userInfo: {
@@ -85,11 +87,12 @@ export const userStore = create<UserState>((set) => ({
           isAdmin: false,
         },
       });
-      // 로컬저장소에 무효화된 토큰을 삭제
-      localStorage.removeItem('token');
+      // 인증에 성공하는 경우
+    } else {
+      // admin여부 확인
+      const isAdmin = response.email === 'admin@naver.com';
+      // 해당유저 세팅
+      set({ userInfo: { user: response, accessToken, isAdmin } });
     }
-    // 유효한 토큰이 맞는 경우
-    const isAdmin = response.email === 'admin@naver.com';
-    set({ userInfo: { user: response, accessToken, isAdmin } });
   },
 }));

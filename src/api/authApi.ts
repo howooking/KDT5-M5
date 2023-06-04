@@ -1,79 +1,107 @@
-const headers = {
+const AUTH_URL =
+  'https://asia-northeast3-heropy-api.cloudfunctions.net/api/auth';
+
+const HEADERS = {
   'content-type': 'application/json',
   apikey: 'KDT5_nREmPe9B',
   username: 'KDT5_Team1',
 };
 
-// 로그인
-interface LoginDataType {
-  email: string;
-  password: string;
+// 1. 로그인
+
+// 로그인에 성공시 응답값의 타입
+interface SignIResponseValue {
+  user: {
+    email: string;
+    displayName: string;
+    profileImg: string | null;
+  };
+  accessToken: string;
 }
 
-export const signIn = async (loginData: LoginDataType) => {
+export const signIn = async (loginData: {
+  email: string;
+  password: string;
+}) => {
   try {
-    const res = await fetch(
-      'https://asia-northeast3-heropy-api.cloudfunctions.net/api/auth/login',
-      {
-        method: 'POST',
-        headers: headers,
-        body: JSON.stringify({
-          email: loginData.email,
-          password: loginData.password,
-        }),
-      }
-    );
+    const res = await fetch(`${AUTH_URL}/login`, {
+      method: 'POST',
+      headers: HEADERS,
+      body: JSON.stringify({
+        email: loginData.email,
+        password: loginData.password,
+      }),
+    });
+
     // 로그인 성공
     if (res.ok) {
-      const json = await res.json();
-      return json;
-      //     interface ResponseValue {
-      //   user: {
-      //     email: string
-      //     displayName: string
-      //     profileImg: string | null
-      //   }
-      //   accessToken: string
-      // }
+      const user: SignIResponseValue = await res.json();
+      return user;
     }
 
-    // 로그인 실패(없는 이메일 or 비번 입력 오류)
-    const json = await res.json();
-    return json;
-    // 유효한 사용자 입니다 or 이메일 혹은 비밀번호가 일치하지 않습니다.
+    // 로그인 실패(없는 이메일 or 비번 입력 오류 or 유효성 오류 or api키가 잘못된 경우)
+    const error: string = await res.json();
+    return error;
 
-    // 기타 오류
+    // 기타 오류(서버 문제, url이 잘못된 경우)
   } catch (error) {
-    console.log(error, 'error while login!');
+    console.log('Error while login: ', error);
+    return '로그인 도중 오류발생, 잠시 후 다시 시도해 주세요';
   }
 };
 
-// 회원가입
-interface SignUpDataType {
+// 2. 회원가입
+
+// 회원가입에 성공시 응답값의 타입
+interface SignUpResponseValue {
+  user: {
+    email: string;
+    displayName: string;
+    profileImg: string | null;
+  };
+  accessToken: string;
+}
+
+export const signUp = async (signUpData: {
   email: string;
   password: string;
   displayName: string;
-}
+}) => {
+  try {
+    const res = await fetch(
+      'https://asia-northeast3-heropy-api.cloudfunctions.net/api/auth/signup',
+      {
+        method: 'POST',
+        headers: HEADERS,
+        body: JSON.stringify({
+          email: signUpData.email,
+          password: signUpData.password,
+          displayName: signUpData.displayName,
+        }),
+      }
+    );
 
-export const signUp = async (signUpData: SignUpDataType) => {
-  const res = await fetch(
-    'https://asia-northeast3-heropy-api.cloudfunctions.net/api/auth/signup',
-    {
-      method: 'POST',
-      headers,
-      body: JSON.stringify({
-        email: signUpData.email,
-        password: signUpData.password,
-        displayName: signUpData.displayName,
-      }),
+    // 회원가입 성공
+    if (res.ok) {
+      const json: SignUpResponseValue = await res.json();
+      console.log(json);
+      return json;
     }
-  );
-  const json = await res.json();
-  return json;
+
+    // 회원가입 실패(이미 등록된 이메일 or 유효성 오류 or apikey오류)
+    const error: string = await res.json();
+    return error;
+
+    // 기타 오류(서버 문제, url이 잘못된 경우)
+  } catch (error) {
+    console.log('Error while signup: ', error);
+    return '회원가입 도중 오류발생, 잠시 후 다시 시도해 주세요';
+  }
 };
 
-//로그아웃
+// 3. 로그아웃
 export const logout = async (accessToken: string | null) => {
+  // accessToken 이 없다면 로그아웃상태이므로 함수 종료
   if (!accessToken) {
     return;
   }
@@ -83,25 +111,33 @@ export const logout = async (accessToken: string | null) => {
       {
         method: 'POST',
         headers: {
-          ...headers,
+          ...HEADERS,
           Authorization: `Bearer ${accessToken}`,
         },
       }
     );
-    const json = await res.json();
-    // ResponseValue = true
-    return json;
+    const isLoggedout: boolean = await res.json();
+    return isLoggedout;
   } catch (error) {
-    console.log(error, 'error while logout');
+    console.log('Error while logout: ', error);
   }
 };
 
-// 인증확인
+// 4. 인증확인
+
+// 인증확인 성공시 응답값의 타입
+interface AuthenticateResponseValue {
+  email: string;
+  displayName: string;
+  profileImg: string | null;
+}
+
 export const authenticate = async (accessToken: string | null) => {
   // 토큰이 없는 경우, 이미 요청단계에서 rule out되긴함
   if (!accessToken) {
     return;
   }
+
   // 토큰이 있는경우
   try {
     const res = await fetch(
@@ -109,26 +145,24 @@ export const authenticate = async (accessToken: string | null) => {
       {
         method: 'POST',
         headers: {
-          ...headers,
+          ...HEADERS,
           Authorization: `Bearer ${accessToken}`,
         },
       }
     );
+
     // 유효한 토큰이 맞는 경우
     if (res.ok) {
-      const json = await res.json();
-      return json;
-      // interface ResponseValue {
-      //   email: string;
-      //   displayName: string;
-      //   profileImg: string | null;
-      // }
+      const user: AuthenticateResponseValue = await res.json();
+      return user;
     }
-    // 유효한 토큰이 아닌경우
-    console.log('token expired');
-    return;
-    // 그밖의 에러
+
+    // 유효한 토큰이 아닌경우(expired 또는 임의의 토큰을 입력한 경우)
+    const error: string = await res.json();
+    console.log(error);
+
+    // 기타 오류(서버 문제, url이 잘못된 경우)
   } catch (error) {
-    console.log(error, 'error while authenticate');
+    console.log('Error while authenticate: ', error);
   }
 };

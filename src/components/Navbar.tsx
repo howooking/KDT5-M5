@@ -2,9 +2,13 @@ import { Link } from 'react-router-dom';
 import { MENUS } from '../constants/constants';
 import styles from './Navbar.module.css';
 import { userStore } from '../store';
+import { useEffect } from 'react';
 
 export default function Navbar() {
-  const { userInfo, logoutUser } = userStore();
+  const { userInfo, logoutUser, authMe } = userStore();
+  useEffect(() => {
+    authMe();
+  }, []);
   console.log(userInfo);
 
   return (
