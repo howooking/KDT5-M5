@@ -62,14 +62,12 @@ interface SignUpResponseValue {
   accessToken: string;
 }
 
-export const signUp = async (
-  signUpData: {
-    email: string;
-    password: string;
-    displayName: string;
-  },
-  image?: string
-) => {
+export const signUp = async (signUpData: {
+  email: string;
+  password: string;
+  displayName: string;
+  profileImgBase64?: string;
+}) => {
   try {
     const res = await fetch(
       'https://asia-northeast3-heropy-api.cloudfunctions.net/api/auth/signup',
@@ -80,7 +78,7 @@ export const signUp = async (
           email: signUpData.email,
           password: signUpData.password,
           displayName: signUpData.displayName,
-          profileImgBase64: image,
+          profileImgBase64: signUpData.profileImgBase64,
         }),
       }
     );

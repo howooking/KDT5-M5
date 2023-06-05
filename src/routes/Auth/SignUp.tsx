@@ -13,17 +13,17 @@ export default function SignUp() {
     email: '',
     password: '',
     displayName: '',
+    profileImgBase64: '',
   });
-  const [image, setImage] = useState('');
-  console.log(image);
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    if (name === 'image') {
+    if (name === 'profileImgBase64') {
       const files = event.target.files as FileList;
       const reader = new FileReader();
       reader.readAsDataURL(files[0]);
       reader.onloadend = () => {
-        setImage(reader.result as string);
+        setSignData({ ...signUpData, [name]: reader.result as string });
       };
     }
     setSignData({
@@ -31,6 +31,7 @@ export default function SignUp() {
       [name]: value,
     });
   };
+  console.log(signUpData);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     // form이벤트의 기본 새로고침을 막음
@@ -66,7 +67,7 @@ export default function SignUp() {
       return;
     }
 
-    const res = await signUp(signUpData, image);
+    const res = await signUp(signUpData);
     // 기타오류, 이미 등록된 이메일 or 유효성 오류 or apikey오류
     if (typeof res === 'string') {
       setMessage(res);
@@ -111,11 +112,14 @@ export default function SignUp() {
         />
       </div>
       <div>
-        <label htmlFor="image">프로필사진</label>
-        <input id="image" type="file" name="image" onChange={handleChange} />
+        <label htmlFor="profileImgBase64">프로필사진</label>
+        <input
+          id="profileImgBase64"
+          type="file"
+          name="profileImgBase64"
+          onChange={handleChange}
+        />
       </div>
-      {/* <span>프로필 사진</span>
-      <input type="file" /> */}
       <button>회원가입</button>
       <div>{message}</div>
     </form>
