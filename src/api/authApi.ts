@@ -100,7 +100,7 @@ export const signUp = async (signUpData: {
 };
 
 // 3. 로그아웃
-export const logout = async (accessToken: string | null) => {
+export const logOut = async (accessToken: string | null) => {
   // accessToken 이 없다면 로그아웃상태이므로 함수 종료
   if (!accessToken) {
     return;
@@ -116,8 +116,8 @@ export const logout = async (accessToken: string | null) => {
         },
       }
     );
-    const isLoggedout: boolean = await res.json();
-    return isLoggedout;
+    const isLoggedOut: boolean = await res.json();
+    return isLoggedOut;
   } catch (error) {
     console.log('Error while logout: ', error);
   }

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Link } from 'react-router-dom';
 import { MENUS } from '../constants/constants';
 import styles from './Navbar.module.css';

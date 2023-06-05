@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { authenticate, logout } from './api/authApi';
+import { authenticate, logOut } from './api/authApi';
 
 // user관련 전역state(store)에 무엇이 들어가는지 타입지정
 interface UserState {
@@ -31,8 +31,8 @@ export const userStore = create<UserState>((set) => ({
   // 로그아웃
   logoutUser: async () => {
     const accessToken = localStorage.getItem('token');
-    await logout(accessToken);
-    // 서버에 로그아웃이 성공하든 실패(실패할 확률 0)하든 client state 초기화
+    await logOut(accessToken);
+    // 서버에서 로그아웃이 성공하든 실패(실패할 확률 0)하든 client state 초기화
     set({
       userInfo: {
         user: {
