@@ -33,3 +33,9 @@ interface User {
   displayName: string; // 사용자 표시 이름
   profileImg: string; // 사용자 프로필 이미지 URL
 }
+
+// interface EditUser {
+//   displayName: string // 새로운 표시 이름
+//   oldPassword: string // 기존 비밀번호
+//   newPassword: string // 새로운 비밀번호
+// }

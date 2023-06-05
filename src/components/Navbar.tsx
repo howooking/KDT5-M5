@@ -27,7 +27,7 @@ export default function Navbar() {
           {userInfo.accessToken ? (
             <>
               {userInfo.isAdmin ? <Link to="/admin">관리자</Link> : <></>}
-              <span>{userInfo.user.displayName}님</span>
+              <span><Link to ="/editUser">{userInfo.user.displayName}님</Link></span>
               <button onClick={logoutUser}>로그아웃</button>
             </>
           ) : (

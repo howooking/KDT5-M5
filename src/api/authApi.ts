@@ -176,8 +176,14 @@ interface EditUserResponseValue {
   profileImg: string | null;
 }
 
-export const EditUser = async (accessToken: string | null) => {
-  // accessToken 이 없다면 로그아웃상태이므로 함수 종료
+export const RequestEditUser = async (
+  accessToken: string | null,
+  editData: {
+    displayName: string;
+    oldPassword: string;
+    newPassword: string;
+  }
+) => {
   if (!accessToken) {
     return;
   }
@@ -189,11 +195,16 @@ export const EditUser = async (accessToken: string | null) => {
         headers: {
           ...HEADERS,
           Authorization: `Bearer ${accessToken}`,
+          body: JSON.stringify({
+            displayName: editData.displayName,
+            oldPassword: editData.oldPassword,
+            newPassword: editData.newPassword,
+          }),
         },
       }
     );
-    const EditUser: EditUserResponseValue = await res.json();
-    return EditUser;
+    const editUser: EditUserResponseValue = await res.json();
+    return editUser;
   } catch (error) {
     console.log('Error while EditUser: ', error);
   }
