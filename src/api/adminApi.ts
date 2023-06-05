@@ -49,3 +49,16 @@ export const deleteProduct = async (productId: string) => {
     throw new Error('Failed to delete product.');
   }
 };
+
+// 유저조회
+export const userCheck = async () => {
+  const res = await fetch(
+    'https://asia-northeast3-heropy-api.cloudfunctions.net/api/auth/users',
+    {
+      method: 'GET',
+      headers: api_headers
+    }
+  )
+  const json = await res.json();
+  return json;
+}

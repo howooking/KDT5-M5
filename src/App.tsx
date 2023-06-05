@@ -10,6 +10,7 @@ import Admin from './routes/Admin/Admin';
 import AddProduct from './routes/Admin/AddProduct';
 import DeleteProduct from './routes/Admin/DeleteProduct';
 import UpdateProduct from './routes/Admin/UpdateProduct';
+import UserCheck from './routes/Admin/UserCheck';
 import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
           <Route path="addProduct" element={<AddProduct />} />
           <Route path="deleteProduct" element={<DeleteProduct />} />
           <Route path="updateProduct" element={<UpdateProduct />} />
+          <Route path="userCheck" element={<UserCheck />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Route>
