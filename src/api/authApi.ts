@@ -178,7 +178,7 @@ interface EditUserResponseValue {
   profileImg: string | null;
 }
 
-export const RequestEditUser = async (
+export const editUser = async (
   accessToken: string | null,
   editData: {
     displayName: string;
@@ -186,6 +186,8 @@ export const RequestEditUser = async (
     newPassword: string;
   }
 ) => {
+  console.log({ editData, accessToken });
+
   if (!accessToken) {
     return;
   }
@@ -197,14 +199,15 @@ export const RequestEditUser = async (
         headers: {
           ...HEADERS,
           Authorization: `Bearer ${accessToken}`,
-          body: JSON.stringify({
-            displayName: editData.displayName,
-            oldPassword: editData.oldPassword,
-            newPassword: editData.newPassword,
-          }),
         },
+        body: JSON.stringify({
+          displayName: editData.displayName,
+          oldPassword: editData.oldPassword,
+          newPassword: editData.newPassword,
+        }),
       }
     );
+    console.log(res.json());
     const editUser: EditUserResponseValue = await res.json();
     return editUser;
   } catch (error) {
