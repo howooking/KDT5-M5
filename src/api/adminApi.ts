@@ -62,7 +62,7 @@ export const getUsers = async () => {
     );
     // 유저들 조회가 성공한 경우
     if (res.ok) {
-      const users: User[] = await res.json();
+      const users: CheckUser[] = await res.json();
       return users;
     }
     // 유저들 조회가 실패한 경우(masterkey가 없는경우)
