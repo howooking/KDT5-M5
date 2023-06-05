@@ -1,8 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Navigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import { authenticate } from '../api/authApi';
-import LoadingSpinner from './ui/LoadingSpinner';
+import { useEffect } from 'react';
+import { userStore } from '../store';
 
 type ProtectedRouteProps = {
   element: React.ReactNode;
@@ -14,28 +13,15 @@ export default function ProtectedRoute({
   adminRequired,
 }: ProtectedRouteProps) {
   const accessToken = localStorage.getItem('token');
-  const [userEmail, setUserEmail] = useState('');
-  const [loading, setLoading] = useState(true);
-
+  const { authMe, userInfo } = userStore();
   useEffect(() => {
-    authenticate(accessToken).then((data) => {
-      if (!data) {
-        setUserEmail('');
-        setLoading(false);
-        return;
-      }
-      setUserEmail(data.email);
-      setLoading(false);
-    });
+    authMe();
   }, []);
 
-  if (loading) {
-    return <LoadingSpinner />;
-  }
   if (!accessToken) {
     return <Navigate to="/login" replace />;
   }
-  if (adminRequired && userEmail !== 'admin@naver.com') {
+  if (adminRequired && !userInfo.isAdmin) {
     return <Navigate to="/" replace />;
   }
   return <>{element}</>;
