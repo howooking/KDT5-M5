@@ -12,6 +12,7 @@
 .ul {
   display: flex;
   width: 1200px;
+  padding: 0 30px;
   margin: auto;
   gap: 50px;
 }
