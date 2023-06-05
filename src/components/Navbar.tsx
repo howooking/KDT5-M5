@@ -39,6 +39,11 @@ export default function Navbar() {
               <Link to="/myaccount" className={styles.link}>
                 {userInfo.user.displayName}님
               </Link>
+              <img
+                src={userInfo.user.profileImg || '/defaultProfile.jpg'}
+                alt="profile"
+                className={styles.profile}
+              />
             </>
           ) : (
             <>

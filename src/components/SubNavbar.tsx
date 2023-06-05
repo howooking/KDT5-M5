@@ -7,7 +7,7 @@ export default function SubNavbar() {
     <nav className={styles.nav}>
       <ul className={styles.ul}>
         {SUB_MENUS.map((menu) => (
-          <li>
+          <li key={menu.label}>
             <Link to={menu.href} className={styles.link}>
               {menu.label}
             </Link>

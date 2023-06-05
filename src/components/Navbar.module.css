@@ -27,3 +27,8 @@ header {
 .cart {
   color: var(--accent-color);
 }
+
+.profile {
+  width: 35px;
+  border-radius: 50%;
+}
