@@ -12,6 +12,7 @@ import DeleteProduct from './routes/Admin/DeleteProduct';
 import UpdateProduct from './routes/Admin/UpdateProduct';
 import UserCheck from './routes/Admin/UserCheck';
 import ProtectedRoute from './components/ProtectedRoute';
+import EditUser from './routes/Auth/EditUser';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path='/editUser' element={<EditUser/>} />
         <Route
           path="/admin"
           element={<ProtectedRoute adminRequired element={<Admin />} />}

@@ -166,3 +166,35 @@ export const authenticate = async (accessToken: string | null) => {
     console.log('Error while authenticate: ', error);
   }
 };
+
+//사용자 정보수정
+
+//수정 성공시 응답값의 타입
+interface EditUserResponseValue {
+  email: string;
+  displayName: string;
+  profileImg: string | null;
+}
+
+export const EditUser = async (accessToken: string | null) => {
+  // accessToken 이 없다면 로그아웃상태이므로 함수 종료
+  if (!accessToken) {
+    return;
+  }
+  try {
+    const res = await fetch(
+      'https://asia-northeast3-heropy-api.cloudfunctions.net/api/auth/user',
+      {
+        method: 'PUT',
+        headers: {
+          ...HEADERS,
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    const EditUser: EditUserResponseValue = await res.json();
+    return EditUser;
+  } catch (error) {
+    console.log('Error while EditUser: ', error);
+  }
+};
