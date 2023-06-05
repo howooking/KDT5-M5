@@ -27,3 +27,9 @@ interface UpdatedProduct {
   isSoldOut?: boolean; // 제품 매진 여부
   discountRate?: number; // 제품 할인율
 }
+
+interface User {
+  email: string; // 사용자 아이디
+  displayName: string; // 사용자 표시 이름
+  profileImg: string; // 사용자 프로필 이미지 URL
+}

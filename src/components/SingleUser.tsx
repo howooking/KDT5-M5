@@ -1,11 +1,13 @@
+interface SingleUserProps {
+  data: User;
+}
 
-
-export default function SingleUser(props) {
+export default function SingleUser({ data }: SingleUserProps) {
   return (
-        <div>
-          <p>Email: {props.data.email}</p>
-          <p>Display Name: {props.data.displayName}</p>
-          {/* <img src={data.profileImg || ''} alt="Profile" /> */} 
-        </div>
-  )
+    <div>
+      <p>Email: {data.email}</p>
+      <p>Display Name: {data.displayName}</p>
+      {/* <img src={data.profileImg || ''} alt="Profile" /> */}
+    </div>
+  );
 }

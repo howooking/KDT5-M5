@@ -51,14 +51,25 @@ export const deleteProduct = async (productId: string) => {
 };
 
 // 유저조회
-export const userCheck = async () => {
-  const res = await fetch(
-    'https://asia-northeast3-heropy-api.cloudfunctions.net/api/auth/users',
-    {
-      method: 'GET',
-      headers: api_headers
+export const getUsers = async () => {
+  try {
+    const res = await fetch(
+      'https://asia-northeast3-heropy-api.cloudfunctions.net/api/auth/users',
+      {
+        method: 'GET',
+        headers: api_headers,
+      }
+    );
+    // 유저들 조회가 성공한 경우
+    if (res.ok) {
+      const users: User[] = await res.json();
+      return users;
     }
-  )
-  const json = await res.json();
-  return json;
-}
+    // 유저들 조회가 실패한 경우(masterkey가 없는경우)
+    const error: string = await res.json();
+    console.log(error);
+    // 기타 오류(url이 잘못된경우, aws가 서버다운)
+  } catch (error) {
+    console.log('Error while getUser: ', error);
+  }
+};

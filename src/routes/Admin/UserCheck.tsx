@@ -1,29 +1,26 @@
-import { useState } from 'react';
-import { userCheck } from '../../api/adminApi';
+import { useEffect, useState } from 'react';
+import { getUsers } from '../../api/adminApi';
 import SingleUser from '../../components/SingleUser';
 
-interface UserData {
-  email: string;
-  displayName: string;
-  profileImg: string;
-}
-
 function UserCheck() {
-  const [checkData, setCheckData] = useState<UserData[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
 
-  const handleClick = async () => {
-    const data: UserData[] = await userCheck();
-    setCheckData(data);
-    console.log(data)
-  }
+  useEffect(() => {
+    async function fetchData() {
+      const data = await getUsers();
+      if (!data) {
+        return;
+      }
+      setUsers(data);
+    }
+    fetchData();
+  }, []);
 
   return (
     <div>
       <h3>유저 조회</h3>
-      <button onClick={handleClick}>유저 조회 버튼</button> 
-
-      {checkData.map((data) => (
-        <SingleUser key={data.email} data = {data} />
+      {users.map((data) => (
+        <SingleUser key={data.email} data={data} />
       ))}
     </div>
   );
