@@ -1,5 +1,5 @@
 interface SingleUserProps {
-  data: User;
+  data: CheckUser;
 }
 
 export default function SingleUser({ data }: SingleUserProps) {
