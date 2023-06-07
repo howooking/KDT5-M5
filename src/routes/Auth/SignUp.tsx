@@ -13,10 +13,19 @@ export default function SignUp() {
     email: '',
     password: '',
     displayName: '',
+    profileImgBase64: '',
   });
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
+    if (name === 'profileImgBase64') {
+      const files = event.target.files as FileList;
+      const reader = new FileReader();
+      reader.readAsDataURL(files[0]);
+      reader.onloadend = () => {
+        setSignData({ ...signUpData, [name]: reader.result as string });
+      };
+    }
     setSignData({
       ...signUpData,
       [name]: value,
@@ -71,33 +80,45 @@ export default function SignUp() {
 
   return (
     <form className="container" onSubmit={handleSubmit}>
-      <label htmlFor="email">이메일</label>
-      <input
-        id="email"
-        type="text"
-        name="email"
-        onChange={handleChange}
-        value={signUpData.email}
-      />
-      <label htmlFor="password">비밀번호(8자 이상)</label>
-      <input
-        id="password"
-        type="password"
-        name="password"
-        onChange={handleChange}
-        value={signUpData.password}
-      />
-      <label htmlFor="displayName">이름(20자 이하)</label>
-      <input
-        id="displayName"
-        type="text"
-        name="displayName"
-        onChange={handleChange}
-        value={signUpData.displayName}
-      />
-      <div className="flex-space"></div>
-      {/* <span>프로필 사진</span>
-      <input type="file" /> */}
+      <div>
+        <label htmlFor="email">이메일</label>
+        <input
+          id="email"
+          type="text"
+          name="email"
+          onChange={handleChange}
+          value={signUpData.email}
+        />
+      </div>
+      <div>
+        <label htmlFor="password">비밀번호(8자 이상)</label>
+        <input
+          id="password"
+          type="password"
+          name="password"
+          onChange={handleChange}
+          value={signUpData.password}
+        />
+      </div>
+      <div>
+        <label htmlFor="displayName">이름(20자 이하)</label>
+        <input
+          id="displayName"
+          type="text"
+          name="displayName"
+          onChange={handleChange}
+          value={signUpData.displayName}
+        />
+      </div>
+      <div>
+        <label htmlFor="profileImgBase64">프로필사진</label>
+        <input
+          id="profileImgBase64"
+          type="file"
+          name="profileImgBase64"
+          onChange={handleChange}
+        />
+      </div>
       <button>회원가입</button>
       <div>{message}</div>
     </form>

@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Navigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { authenticate } from '../api/authApi';
+import { userStore } from '../store';
 import LoadingSpinner from './ui/LoadingSpinner';
 
 type ProtectedRouteProps = {
@@ -13,29 +13,26 @@ export default function ProtectedRoute({
   element,
   adminRequired,
 }: ProtectedRouteProps) {
-  const accessToken = localStorage.getItem('token');
-  const [userEmail, setUserEmail] = useState('');
   const [loading, setLoading] = useState(true);
-
+  const { authMe } = userStore();
+  const [loggedInUser, setLoggedInUser] = useState<User | void>();
   useEffect(() => {
-    authenticate(accessToken).then((data) => {
-      if (!data) {
-        setUserEmail('');
-        setLoading(false);
-        return;
-      }
-      setUserEmail(data.email);
+    async function getLoggedInUser() {
+      const user = await authMe();
+      setLoggedInUser(user);
       setLoading(false);
-    });
+    }
+    getLoggedInUser();
   }, []);
 
   if (loading) {
     return <LoadingSpinner />;
   }
-  if (!accessToken) {
+
+  if (!loggedInUser) {
     return <Navigate to="/login" replace />;
   }
-  if (adminRequired && userEmail !== 'admin@naver.com') {
+  if (adminRequired && !loggedInUser?.isAdmin) {
     return <Navigate to="/" replace />;
   }
   return <>{element}</>;

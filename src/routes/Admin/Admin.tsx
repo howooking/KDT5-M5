@@ -22,7 +22,7 @@ const Admin = () => {
             <Link to="updateProduct">상품수정</Link>
           </li>
           <li>
-            <Link to="updateProduct">유저 관리</Link>
+            <Link to="userCheck">유저 관리</Link>
           </li>
           <li>
             <Link to="updateProduct">기타 등등</Link>

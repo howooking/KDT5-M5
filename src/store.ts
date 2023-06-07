@@ -1,29 +1,21 @@
 import { create } from 'zustand';
 import { authenticate, logOut } from './api/authApi';
+import { ADMINS } from './constants/constants';
 
 // user관련 전역state(store)에 무엇이 들어가는지 타입지정
 interface UserState {
-  userInfo: User;
+  userInfo: User | null;
   setUser: (user: User) => void;
   logoutUser: () => void;
-  authMe: () => void;
+  authMe: () => void | Promise<User | undefined>;
 }
 
 export const userStore = create<UserState>((set) => ({
   //유져정보(useState처럼 초기값을 지정해줌)
-  userInfo: {
-    user: {
-      email: '',
-      displayName: '',
-      profileImg: '',
-    },
-    accessToken: '',
-    isAdmin: false,
-  },
+  userInfo: null,
 
   // 로그인(client단에서 user를 세팅함)
-  // 불필요한 통신을 하지 않기 위해 해당 함수에는 통신을 하는 로직이 없음
-  setUser: (user) =>
+  setUser: (user: User) =>
     set(() => ({
       userInfo: user,
     })),
@@ -34,19 +26,11 @@ export const userStore = create<UserState>((set) => ({
     await logOut(accessToken);
     // 서버에서 로그아웃이 성공하든 실패(실패할 확률 0)하든 client state 초기화
     set({
-      userInfo: {
-        user: {
-          email: '',
-          displayName: '',
-          profileImg: '',
-        },
-        accessToken: '',
-        isAdmin: false,
-      },
+      userInfo: null,
     });
     // 로컬저장소 토큰 삭제
     localStorage.removeItem('token');
-    // 특정조건에만 갈수있는 protected route에서 로그아웃 한 경우 강제 새로고침
+    // protected route에서 로그아웃 한 경우 강제 새로고침 해야함
     location.reload();
   },
 
@@ -57,15 +41,7 @@ export const userStore = create<UserState>((set) => ({
     if (!accessToken) {
       // 유져 초기화
       set({
-        userInfo: {
-          user: {
-            email: '',
-            displayName: '',
-            profileImg: '',
-          },
-          accessToken: '',
-          isAdmin: false,
-        },
+        userInfo: null,
       });
       return;
     }
@@ -77,22 +53,16 @@ export const userStore = create<UserState>((set) => ({
       localStorage.removeItem('token');
       // 유져 초기화
       set({
-        userInfo: {
-          user: {
-            email: '',
-            displayName: '',
-            profileImg: '',
-          },
-          accessToken: '',
-          isAdmin: false,
-        },
+        userInfo: null,
       });
       // 인증에 성공하는 경우
     } else {
       // admin여부 확인
-      const isAdmin = response.email === 'admin@naver.com';
-      // 해당유저 세팅
+      const isAdmin = ADMINS.includes(response.email);
+      // 해당유저를 클라이언트 유저상태에 세팅
       set({ userInfo: { user: response, accessToken, isAdmin } });
+      // protected route에서 사용할 return 값
+      return { user: response, accessToken, isAdmin };
     }
   },
 }));

@@ -1,13 +1,37 @@
 header {
-  background-color: palegreen;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 30px;
+  height: 90px;
+  max-width: 1200px;
+  margin: auto;
+  position: relative;
 }
 
-ul {
+.logo {
+  height: 64px;
+}
+.ul {
   display: flex;
-  list-style-type: none;
+  align-items: center;
   gap: 20px;
+}
+
+.link {
+  color: var(--gray-medium);
+  text-decoration: none;
+  outline: none;
+  font-weight: 700;
+}
+
+.cart {
+  color: var(--accent-color);
+}
+
+.profile {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  object-fit: cover;
 }

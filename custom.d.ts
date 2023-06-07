@@ -51,3 +51,9 @@ declare interface AccountList {
   totalBalance: number;
   accounts: Account[];
 }
+// 어드민에서 사용자들 정보를 조회할 때 오는 사용자 정보 타입
+interface CheckUser {
+  email: string; // 사용자 아이디
+  displayName: string; // 사용자 표시 이름
+  profileImg: string; // 사용자 프로필 이미지 URL
+}
