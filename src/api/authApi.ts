@@ -208,9 +208,14 @@ export const editUser = async (
       }
     );
     console.log(res.json());
-    const editUser: EditUserResponseValue = await res.json();
-    return editUser;
+    if (res.ok) {
+      const editUser: EditUserResponseValue = await res.json();
+      return editUser;
+    }
+    const error: string = await res.json();
+    return error;
   } catch (error) {
     console.log('Error while EditUser: ', error);
+    return '회원정보 수정 도중 오류발생, 잠시 후 다시 시도해 주세요.';
   }
 };

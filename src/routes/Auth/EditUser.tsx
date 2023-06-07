@@ -1,27 +1,32 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { userStore } from '../../store';
 import { editUser } from '../../api/authApi';
 
 function EditUser() {
-  const { userInfo, setUser, authMe } = userStore();
+  const { userInfo } = userStore();
   const [message, setMessage] = useState('');
+  const [isDisabled, setDisabled] = useState(true)
+  const inputRef = useRef<HTMLInputElement>(null);
   const [editData, setEditData] = useState({
     displayName: '',
     oldPassword: '',
     newPassword: '',
   });
-  console.log(editData);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if(
+      editData.displayName.trim() === ''
+    ){
+      setEditData({...editData,displayName: userInfo.user.displayName})
+    }
     if (
       editData.newPassword.trim() === '' ||
-      editData.displayName.trim() === ''
-    ) {
+      editData.oldPassword.trim() === ''
+    ){
       setMessage('이름, 비밀번호를 모두 입력해주세요');
       return;
     }
-
     // 이름 길이 유효성검사
     if (editData.displayName.length > 20) {
       setMessage('이름은 20자 이하로 작성해주세요');
@@ -33,7 +38,10 @@ function EditUser() {
       return;
     }
     const res = await editUser(userInfo.accessToken, editData);
-    authMe()
+    if (typeof res === 'string') {
+      setMessage(res);
+      return;
+    }
   };
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -43,17 +51,37 @@ function EditUser() {
     });
   };
 
+  const handleName = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    event.preventDefault();
+    setDisabled(!isDisabled);
+    console.log('inputRef current :',inputRef.current)
+  };
+useEffect(()=>{
+  if (!isDisabled && inputRef.current) {
+    inputRef.current.focus();
+  }
+},[isDisabled])
+
+
   return (
     <form onSubmit={handleSubmit}>
       <div>
-        <label htmlFor="displayName">이름:{userInfo.user.displayName}</label>
+        <label htmlFor="displayName">이름:</label>
         <input
           type="text"
           id="displayName"
           name="displayName"
           value={editData.displayName}
           onChange={handleChange}
+          placeholder={userInfo.user.displayName}
+          disabled={isDisabled}
+          ref={inputRef}
         />
+        <button type="button" onClick={handleName}>
+        {isDisabled ? '수정' : '완료'}
+        </button>
       </div>
       <div>
         <label htmlFor="newPassword">새로운 비밀번호:</label>
@@ -76,7 +104,7 @@ function EditUser() {
         />
       </div>
       <h1>{message}</h1>
-      <button>저장</button>
+      <button type="submit">저장</button>
     </form>
   );
 }
