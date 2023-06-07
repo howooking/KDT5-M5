@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useRef, useState } from 'react';
 import { userStore } from '../../store';
 import { editUser } from '../../api/authApi';
@@ -88,11 +89,7 @@ function EditUser() {
           disabled={!isEdit}
           ref={inputRef}
         />
-        <Button
-          text={isEdit ? '완료' : '수정'}
-          onClick={handleName}
-          type="primary"
-        />
+        <button onClick={handleName}>{isEdit ? '완료' : '수정'}</button>
       </div>
       <div>
         <label htmlFor="oldPassword">기존 비밀번호:</label>
@@ -115,7 +112,7 @@ function EditUser() {
         />
       </div>
       <h1>{message}</h1>
-      <Button text="저장" />
+      <button>저장</button>
     </form>
   );
 }

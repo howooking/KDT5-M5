@@ -2,9 +2,12 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { userStore } from '../../store';
-import styles from './Login.module.css';
 import { signIn } from '../../api/authApi';
 import { EMAIL_REGEX } from '../../constants/constants';
+import Input from '../../components/ui/Input';
+import AlertMessage from '../../components/ui/AlertMessage';
+import Button from '../../components/ui/Button';
+import LoadingSpinner from '../../components/ui/LoadingSpinner';
 
 export default function Login() {
   const { authMe, setUser } = userStore();
@@ -15,8 +18,10 @@ export default function Login() {
   //로그인 후 직전의 페이지로 이동하기 위해
   const navigate = useNavigate();
 
+  const [isSending, setIsSending] = useState(false);
+
   // 로그인 과정 사용자와 상호작용
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState(' ');
   const [loginData, setLoginData] = useState({ email: '', password: '' });
 
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -27,28 +32,30 @@ export default function Login() {
 
     // 이메일과 비밀번호를 입력하지 않은경우
     if (loginData.email.trim() === '' || loginData.password.trim() === '') {
-      setMessage('이메일 또는 비밀번호를 입력해주세요');
+      setMessage('이메일 또는 비밀번호를 입력해주세요.');
       return;
     }
 
     // 이메일의 유효성 검사
     if (!EMAIL_REGEX.test(loginData.email)) {
-      setMessage('올바른 이메일을 입력해주세요');
+      setMessage('올바른 이메일을 입력해주세요.');
       return;
     }
 
+    setIsSending(true);
     const res = await signIn(loginData);
-
     // 기타오류, 없는 이메일 or 비번 입력 오류 or 유효성 오류 or apikey오류
     if (typeof res === 'string') {
       setMessage(res);
+      setIsSending(false);
       return;
     }
 
     // 로그인에 성공하는 경우
     localStorage.setItem('token', res.accessToken);
     setUser({ ...res, isAdmin: false });
-    navigate(-1);
+    setIsSending(false);
+    navigate('/', { replace: true });
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,35 +67,38 @@ export default function Login() {
   };
 
   return (
-    <div className={styles.login}>
-      <h3>Login</h3>
-      <form onSubmit={handleLogin} className={styles.form}>
-        <div>
-          <label htmlFor="email">이메일</label>
-          <input
-            type="text"
-            id="email"
-            name="email"
-            value={loginData.email}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label htmlFor="password">비밀번호</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={loginData.password}
-            onChange={handleChange}
-          />
-        </div>
-        <span>{message}</span>
-        <div>
-          <button>로그인</button>
-          <Link to="/signup">회원가입</Link>
-        </div>
-      </form>
+    <div className="flex justify-center p-20">
+      <div className="flex w-[436px] flex-col">
+        <h3 className="py-3 text-3xl text-gray-800">로그인</h3>
+        <form onSubmit={handleLogin} className="flex flex-col">
+          <div className="flex-1">
+            <Input
+              placeholder="이메일"
+              name="email"
+              onChange={handleChange}
+              type="text"
+              value={loginData.email}
+            />
+            <Input
+              placeholder="비밀번호"
+              name="password"
+              onChange={handleChange}
+              type="password"
+              value={loginData.password}
+            />
+            <AlertMessage message={message} />
+          </div>
+          <div>
+            <Button
+              text={isSending ? <LoadingSpinner color="white" /> : '로그인'}
+              disabled={isSending}
+            />
+            <Link to="/signup">
+              <Button text="회원가입" secondary />
+            </Link>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

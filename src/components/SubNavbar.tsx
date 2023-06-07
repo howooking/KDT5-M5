@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import styles from './SubNavbar.module.css';
 
 interface SubNavbarProps {
   menus: {
@@ -10,11 +9,11 @@ interface SubNavbarProps {
 
 export default function SubNavbar({ menus }: SubNavbarProps) {
   return (
-    <nav className={styles.nav}>
-      <ul className={styles.ul}>
+    <nav className="bg-accent h-12 flex">
+      <ul className="flex container mx-auto px-20 gap-20 items-center">
         {menus.map((menu) => (
           <li key={menu.label}>
-            <Link to={menu.href} className={styles.link}>
+            <Link to={menu.href} className="text-white font-bold">
               {menu.label}
             </Link>
           </li>
