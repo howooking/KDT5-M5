@@ -6,6 +6,9 @@
   box-sizing: border-box;
   position: relative;
   display: flex;
+  justify-content: center;
+  position: absolute;
+  left: calc(50% - 165px);
 }
 
 .inner {

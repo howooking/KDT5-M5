@@ -31,7 +31,6 @@ export default function SignUp() {
       [name]: value,
     });
   };
-  console.log(signUpData);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     // form이벤트의 기본 새로고침을 막음
