@@ -168,3 +168,54 @@ export const authenticate = async (accessToken: string | null) => {
     console.log('Error while authenticate: ', error);
   }
 };
+
+//사용자 정보수정
+
+//수정 성공시 응답값의 타입
+interface EditUserResponseValue {
+  email: string;
+  displayName: string;
+  profileImg: string | null;
+}
+
+export const editUser = async (
+  accessToken: string | null,
+  editData: {
+    displayName: string;
+    oldPassword: string;
+    newPassword: string;
+  }
+) => {
+  console.log({ editData, accessToken });
+
+  if (!accessToken) {
+    return;
+  }
+  try {
+    const res = await fetch(
+      'https://asia-northeast3-heropy-api.cloudfunctions.net/api/auth/user',
+      {
+        method: 'PUT',
+        headers: {
+          ...HEADERS,
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({
+          displayName: editData.displayName,
+          oldPassword: editData.oldPassword,
+          newPassword: editData.newPassword,
+        }),
+      }
+    );
+    console.log(res.json());
+    if (res.ok) {
+      const editUser: EditUserResponseValue = await res.json();
+      return editUser;
+    }
+    const error: string = await res.json();
+    return error;
+  } catch (error) {
+    console.log('Error while EditUser: ', error);
+    return '회원정보 수정 도중 오류발생, 잠시 후 다시 시도해 주세요.';
+  }
+};
