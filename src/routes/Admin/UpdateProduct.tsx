@@ -1,78 +1,94 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { updateProduct } from '../../api/adminApi';
 
-const UpdateProduct = () => {
-  const [title, setTitle] = useState('');
-  const [price, setPrice] = useState<number>(0);
-  const [description, setDescription] = useState('');
-  const [tags, setTags] = useState('');
-  const [thumbnailBase64, setThumbnailBase64] = useState('');
-  const [photoBase64, setPhotoBase64] = useState('');
-  const [isSoldOut, setIsSoldOut] = useState(false);
-  const [discountRate, setDiscountRate] = useState(0);
+const UpdateProduct: React.FC<ProductId> = ({ productId }) => {
+  const [product, setProduct] = useState<UpdatedProduct>({});
+  const [rawTags, setRawTags] = useState<string>('');
+  
 
-  const submitProduct = async () => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const { name, value, checked } = e.target;
+
+  if (name === 'isSoldOut') {
+    setProduct((prevProduct) => ({ ...prevProduct, [name]: checked }));
+  } else if (name !== 'tags') {
+    setProduct((prevProduct) => ({ ...prevProduct, [name]: value }));
+  }
+};
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const tagsArray = rawTags.split(',').map((tag) => tag.trim());
     const updateData = {
-      title,
-      price,
-      description,
-      tags: tags.split(','),
-      thumbnailBase64,
-      photoBase64,
-      isSoldOut,
-      discountRate,
+      ...product,
+      tags: tagsArray,
     };
 
-    const data = await updateProduct('123', updateData);
+    const data = await updateProduct(productId, updateData);
 
     if (data) {
-      console.log('제품이 성공적으로 수정되었습니다:', data);
+      console.log(data);
     } else {
-      console.error('제품 수정 중 오류가 발생했습니다.');
+      console.error('제품 수정 중 오류가 발생.');
     }
   };
 
   return (
-    <div>
+    <form onSubmit={handleSubmit}>
       <h3>제품 수정</h3>
+      <label>제품 ID:</label>
+      <input id="productId" name="productId" onChange={handleChange} />
+      <label>
+        제품명: 
+        <input 
+        name="title" 
+        value={product.title || ''} 
+        onChange={handleChange} />
+      </label>
+      <label>
+        가격: 
+        <input 
+        name="price" 
+        value={product.price || ''} 
+        onChange={handleChange} />
+      </label>
+      <label>
+        설명: 
+        <input 
+        name="description" 
+        value={product.description || ''} 
+        onChange={handleChange} />
+      </label>
+      <label>
+        태그: 
+        <input 
+        name="tags" 
+        value={rawTags} 
+        onChange={handleChange} />
+      </label>
       {/* <label>
-          제품명: <input type="text" value={title} onChange={handleTitle} />
-        </label>
-        <label>
-          가격: <input type="number" value={price} onChange={handlePrice} />
-        </label>
-        <label>
-          설명: <textarea value={description} onChange={handleDescription} />
-        </label>
-        <label>
-          태그: <input type="text" value={tags} onChange={handleTags} />
-        </label>
-        <label>
-          썸네일 이미지 (Base64):{' '}
-          <textarea value={thumbnailBase64} onChange={handleThumbnailBase64} />
-        </label>
-        <label>
-          상세 이미지 (Base64):{' '}
-          <textarea value={photoBase64} onChange={handlePhotoBase64} />
-        </label>
-        <label>
-          매진 여부:{' '}
-          <input
-            type="checkbox"
-            checked={isSoldOut}
-            onChange={handleIsSoldOut}
-          />
-        </label> */}
-      {/* <label>
-          할인율:{' '}
-          <input
-            type="number"
-            value={discountRate}
-            onChange={handleDiscountRate}
-          />
-        </label> */}
-      <button onClick={submitProduct}>제품 수정하기</button>
-    </div>
+        썸네일 이미지 (Base64): <input name="thumbnailBase64" value={product.thumbnailBase64 || ''} onChange={handleChange} />
+      </label>
+      <label>
+        상세 이미지 (Base64): <input name="photoBase64" value={product.photoBase64 || ''} onChange={handleChange} />
+      </label> */}
+      <label>
+        매진 여부: 
+        <input 
+        type="checkbox" 
+        name="isSoldOut" 
+        checked={product.isSoldOut || false} 
+        onChange={handleChange} />
+      </label>
+      <label>
+        할인율: 
+        <input 
+        name="discountRate" 
+        value={product.discountRate || ''} 
+        onChange={handleChange} />
+      </label>
+      <button>제품 수정하기</button>
+    </form>
   );
 };
 

@@ -27,3 +27,27 @@ interface UpdatedProduct {
   isSoldOut?: boolean; // 제품 매진 여부
   discountRate?: number; // 제품 할인율
 }
+
+interface ProductId {
+  productId: string;
+}
+
+declare interface Bank {
+  name: string;
+  code: string;
+  digits: number[];
+  disabled: boolean;
+}
+
+declare interface Account {
+  id: string;
+  bankName: string;
+  bankCode: string;
+  accountNumber: string;
+  balance: number;
+}
+
+declare interface AccountList {
+  totalBalance: number;
+  accounts: Account[];
+}
