@@ -15,18 +15,27 @@ export const SUB_MENUS = [
   },
   {
     label: '풋살화',
-    href: 'soccerboots',
+    href: 'footsal',
   },
   {
     label: '족구',
-    href: 'soccerboots',
+    href: 'footvolley',
   },
   {
     label: '운동화/슬리퍼',
-    href: 'soccerboots',
+    href: 'sneakers',
   },
   {
     label: '의류',
-    href: 'soccerboots',
+    href: 'wear',
   },
+];
+
+// 어드민 이메일 목록
+export const ADMINS = [
+  'admin@naver.com',
+  'admin1@naver.com',
+  'admin2@naver.com',
+  'admin3@naver.com',
+  'admin4@naver.com',
 ];

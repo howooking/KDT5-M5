@@ -1,7 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Navigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { userStore } from '../store';
+import LoadingSpinner from './ui/LoadingSpinner';
 
 type ProtectedRouteProps = {
   element: React.ReactNode;
@@ -12,16 +13,26 @@ export default function ProtectedRoute({
   element,
   adminRequired,
 }: ProtectedRouteProps) {
-  const accessToken = localStorage.getItem('token');
-  const { authMe, userInfo } = userStore();
+  const [loading, setLoading] = useState(true);
+  const { authMe } = userStore();
+  const [loggedInUser, setLoggedInUser] = useState<User | void>();
   useEffect(() => {
-    authMe();
+    async function getLoggedInUser() {
+      const user = await authMe();
+      setLoggedInUser(user);
+      setLoading(false);
+    }
+    getLoggedInUser();
   }, []);
 
-  if (!accessToken) {
+  if (loading) {
+    return <LoadingSpinner />;
+  }
+
+  if (!loggedInUser) {
     return <Navigate to="/login" replace />;
   }
-  if (adminRequired && !userInfo.isAdmin) {
+  if (adminRequired && !loggedInUser?.isAdmin) {
     return <Navigate to="/" replace />;
   }
   return <>{element}</>;

@@ -7,5 +7,5 @@ export default function Home() {
   useEffect(() => {
     authMe();
   }, []);
-  return <div>{userInfo.user.displayName}</div>;
+  return <div>{userInfo?.user.displayName}</div>;
 }

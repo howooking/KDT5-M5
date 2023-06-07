@@ -22,7 +22,7 @@ export default function Navbar() {
         </Link>
         <Search />
         <ul className={styles.ul}>
-          {userInfo.accessToken ? (
+          {userInfo?.accessToken ? (
             <>
               <li>
                 <Link to="#" onClick={logoutUser} className={styles.link}>

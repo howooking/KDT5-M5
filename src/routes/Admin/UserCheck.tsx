@@ -3,7 +3,7 @@ import { getUsers } from '../../api/adminApi';
 import SingleUser from '../../components/SingleUser';
 
 function UserCheck() {
-  const [users, setUsers] = useState<User[]>([]);
+  const [users, setUsers] = useState<CheckUser[]>([]);
 
   useEffect(() => {
     async function fetchData() {
