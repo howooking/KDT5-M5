@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import Search from './Search';
 import { BsCart } from 'react-icons/bs';
 import SubNavbar from './SubNavbar';
+import { SUB_MENUS } from '../constants/constants';
 
 export default function Navbar() {
   const { userInfo, logoutUser, authMe } = userStore();
@@ -66,7 +67,7 @@ export default function Navbar() {
           </li>
         </ul>
       </header>
-      <SubNavbar />
+      <SubNavbar menus={SUB_MENUS} />
     </div>
   );
 }

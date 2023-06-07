@@ -1,11 +1,16 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { userStore } from '../../store';
 import { editUser } from '../../api/authApi';
+import Button from '../../components/ui/Button';
 
 function EditUser() {
-  const { userInfo } = userStore();
+  const { userInfo, authMe } = userStore();
+  useEffect(() => {
+    authMe();
+  }, []);
+
   const [message, setMessage] = useState('');
-  const [isDisabled, setDisabled] = useState(true)
+  const [isEdit, setIsEdit] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const [editData, setEditData] = useState({
     displayName: '',
@@ -15,15 +20,16 @@ function EditUser() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if(
-      editData.displayName.trim() === ''
-    ){
-      setEditData({...editData,displayName: userInfo.user.displayName})
+    if (editData.displayName.trim() === '') {
+      setEditData({
+        ...editData,
+        displayName: userInfo?.user.displayName as string,
+      });
     }
     if (
       editData.newPassword.trim() === '' ||
       editData.oldPassword.trim() === ''
-    ){
+    ) {
       setMessage('이름, 비밀번호를 모두 입력해주세요');
       return;
     }
@@ -37,12 +43,15 @@ function EditUser() {
       setMessage('비밀번호를 8자리 이상 입력해주세요');
       return;
     }
-    const res = await editUser(userInfo.accessToken, editData);
+    const res = await editUser(userInfo?.accessToken, editData);
     if (typeof res === 'string') {
       setMessage(res);
       return;
     }
+    authMe();
+    // myaccount 페이지로 이동하기
   };
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setEditData({
@@ -55,15 +64,15 @@ function EditUser() {
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     event.preventDefault();
-    setDisabled(!isDisabled);
-    console.log('inputRef current :',inputRef.current)
+    setIsEdit((prev) => !prev);
   };
-useEffect(()=>{
-  if (!isDisabled && inputRef.current) {
-    inputRef.current.focus();
-  }
-},[isDisabled])
 
+  // 수정모드시 바로 input에 포커싱
+  useEffect(() => {
+    if (isEdit && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isEdit]);
 
   return (
     <form onSubmit={handleSubmit}>
@@ -75,22 +84,14 @@ useEffect(()=>{
           name="displayName"
           value={editData.displayName}
           onChange={handleChange}
-          placeholder={userInfo.user.displayName}
-          disabled={isDisabled}
+          placeholder={userInfo?.user.displayName}
+          disabled={!isEdit}
           ref={inputRef}
         />
-        <button type="button" onClick={handleName}>
-        {isDisabled ? '수정' : '완료'}
-        </button>
-      </div>
-      <div>
-        <label htmlFor="newPassword">새로운 비밀번호:</label>
-        <input
-          type="password"
-          id="newPassword"
-          name="newPassword"
-          value={editData.newPassword}
-          onChange={handleChange}
+        <Button
+          text={isEdit ? '완료' : '수정'}
+          onClick={handleName}
+          type="primary"
         />
       </div>
       <div>
@@ -103,8 +104,18 @@ useEffect(()=>{
           onChange={handleChange}
         />
       </div>
+      <div>
+        <label htmlFor="newPassword">새로운 비밀번호:</label>
+        <input
+          type="password"
+          id="newPassword"
+          name="newPassword"
+          value={editData.newPassword}
+          onChange={handleChange}
+        />
+      </div>
       <h1>{message}</h1>
-      <button type="submit">저장</button>
+      <Button text="저장" />
     </form>
   );
 }

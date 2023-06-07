@@ -26,7 +26,7 @@ function App() {
         />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
-        <Route path='/myaccount' element={<MyAccount/>} />
+        <Route path="/myaccount" element={<MyAccount />} />
         <Route
           path="/admin"
           element={<ProtectedRoute adminRequired element={<Admin />} />}

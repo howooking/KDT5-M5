@@ -179,7 +179,7 @@ interface EditUserResponseValue {
 }
 
 export const editUser = async (
-  accessToken: string | null,
+  accessToken: string | null | undefined,
   editData: {
     displayName: string;
     oldPassword: string;
@@ -207,13 +207,10 @@ export const editUser = async (
         }),
       }
     );
-    console.log(res.json());
-    if (res.ok) {
-      const editUser: EditUserResponseValue = await res.json();
-      return editUser;
+    if (!res.ok) {
+      const error: string = await res.json();
+      return error;
     }
-    const error: string = await res.json();
-    return error;
   } catch (error) {
     console.log('Error while EditUser: ', error);
     return '회원정보 수정 도중 오류발생, 잠시 후 다시 시도해 주세요.';
