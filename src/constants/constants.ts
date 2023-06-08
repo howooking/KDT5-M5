@@ -55,3 +55,11 @@ export const SUB_MENUS_MYACCOUNT = [
     href: '/myaccount/purchased',
   },
 ];
+
+export const url  = 'https://asia-northeast3-heropy-api.cloudfunctions.net/api/products/'
+export const headers  = {
+  'Content-Type': 'application/json',
+  'apikey': 'KDT5_nREmPe9B',
+  'username': 'KDT5_Team1',
+  'masterKey': 'true'
+}

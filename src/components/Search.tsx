@@ -1,5 +1,5 @@
 import { BiSearch } from 'react-icons/bi';
-import styles from './Search.module.css';
+// import styles from './Search.module.css';
 import { useState } from 'react';
 
 export default function Search() {

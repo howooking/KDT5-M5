@@ -12,8 +12,9 @@ import DeleteProduct from './routes/Admin/DeleteProduct';
 import UpdateProduct from './routes/Admin/UpdateProduct';
 import UserCheck from './routes/Admin/UserCheck';
 import ProtectedRoute from './components/ProtectedRoute';
-import EditUser from './routes/Auth/EditUser';
+// import EditUser from './routes/Auth/EditUser';
 import MyAccount from './routes/Auth/Myaccount';
+import AdminProductView from './routes/Admin/AdminProductView.tsx';
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
           <Route path="addProduct" element={<AddProduct />} />
           <Route path="deleteProduct" element={<DeleteProduct />} />
           <Route path="updateProduct" element={<UpdateProduct />} />
+          <Route path="searchProduct" element={<AdminProductView />} />
           <Route path="userCheck" element={<UserCheck />} />
         </Route>
         <Route path="*" element={<NotFound />} />
