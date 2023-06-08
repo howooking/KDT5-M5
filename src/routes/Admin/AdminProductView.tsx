@@ -10,19 +10,15 @@ export default function AdminProductView() {
 
     const handleChange = (e:ChangeEvent<HTMLInputElement>) => {
         setText(() => e.target.value)
-        console.log(text)
     }
     const handleSubmit = (e:FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         async function fetchProductsDetail() {
-            console.log(text)
             const res = await AdminFetchProductDetail({text});
             if(!res){
                 return
             }
-            console.log(res)
             setDetailProduct(res)
-            console.log(detailProduct)
         }
         fetchProductsDetail()
         setText('')
@@ -73,7 +69,7 @@ export default function AdminProductView() {
                     />
                     <button className={'btn btn-outline btn-accent bold text-[1.4rem] ml-4 rounded-[8px]'}>Add</button>
                 </form>
-                <div>
+                <div className={'m-4 text-[20px]'}>
                    상품Id:{detailProduct?.title} 상품가격: {detailProduct?.price} 상품설명: {detailProduct?.description}
                 </div>
             </div>
