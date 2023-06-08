@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { getUsers } from '../../api/adminApi';
 import SingleUser from '../../components/SingleUser';
-import styles from './UserCheck.module.css';
+// import styles from './UserCheck.module.css';
 
 function UserCheck() {
   const [users, setUsers] = useState<CheckUser[]>([]);
@@ -19,19 +19,19 @@ function UserCheck() {
 
   return (
     <div>
-      <div>
+      <div >
         <h3>유저 조회</h3>
-        <table>
+        <table className={'mx-auto w-[50%] text-2xl'}>
           <thead>
-            <tr className={styles.title}>
+            <tr>
               <th>번호</th>
               <th>Email</th>
               <th>이름</th>
             </tr>
           </thead>
-          <tbody className={styles.user}>
+          <tbody>
             {users.map((data, index) => (
-              <SingleUser key={data.email} data={data} index={index + 0} />
+              <SingleUser key={data.email} data={data} index={index+1} />
             ))}
           </tbody>
         </table>

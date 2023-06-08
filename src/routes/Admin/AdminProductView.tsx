@@ -36,7 +36,7 @@ export default function AdminProductView() {
     }, [])
 
     return (
-        <div>
+        <div className={'mx-auto w-[60%] text-[20px]'}>
             <h1 className={'text-3xl mt-4 text-orange-400'}>Admin Product 조회 - 전체 리스트 grid 형태로 스타일링 예정</h1>
             <div className={' m-4'}>
                 <h2 className={'mt-10 text-2xl'}>제품 전체 조회</h2>
