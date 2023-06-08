@@ -12,8 +12,8 @@ import DeleteProduct from './routes/Admin/DeleteProduct';
 import UpdateProduct from './routes/Admin/UpdateProduct';
 import UserCheck from './routes/Admin/UserCheck';
 import ProtectedRoute from './components/ProtectedRoute';
-import EditUser from './routes/Auth/EditUser';
-import MyAccount from './routes/Auth/Myaccount';
+import MyAccount from './routes/Auth/MyAccount';
+
 
 function App() {
   return (
