@@ -1,4 +1,4 @@
-import {url, headers} from "./constants.ts";
+import {url, headers} from "../constants/constants.ts";
 export default async function AdminFetchProductDetail(
     productId: { text: string },
 ) {
