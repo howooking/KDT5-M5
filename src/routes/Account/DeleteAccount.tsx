@@ -3,11 +3,13 @@ import { deleteAccount } from '../../api/bankApi';
 
 interface DeleteAccountProps {
   account: UserAccount;
+  accessToken: string;
   onAccountDeleted: (account: UserAccount) => void;
 }
 
 const DeleteAccount: React.FC<DeleteAccountProps> = ({
   account,
+  accessToken,
   onAccountDeleted,
 }) => {
   const handleDelete = async () => {
@@ -15,7 +17,7 @@ const DeleteAccount: React.FC<DeleteAccountProps> = ({
       const isSuccess = await deleteAccount({
         accountId: account.id,
         signature: false,
-      });
+      }, accessToken);
       if (isSuccess) {
         onAccountDeleted(account);
       }
@@ -25,7 +27,7 @@ const DeleteAccount: React.FC<DeleteAccountProps> = ({
   };
 
   return (
-    <button onClick={handleDelete}>Delete Account</button>
+    <button onClick={handleDelete}>계좌 삭제</button>
   );
 };
 

@@ -10,14 +10,17 @@ export default function Search() {
     setSearchTerm('');
   };
   return (
-    <form className={styles.outer} onSubmit={handleSearch}>
+    <form
+      className="absolute left-[calc(50%-165px)] flex h-[44px] w-[330px] items-center py-2 pl-2 pr-9 ring-2 ring-accent"
+      onSubmit={handleSearch}
+    >
       <input
         type="text"
-        className={styles.inner}
+        className="w-full focus:outline-none"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />
-      <div className={styles.icon}>
+      <div className="absolute right-2 cursor-pointer text-accent">
         <BiSearch size={26} />
       </div>
     </form>

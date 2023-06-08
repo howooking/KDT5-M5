@@ -26,7 +26,7 @@ export default function ProtectedRoute({
   }, []);
 
   if (loading) {
-    return <LoadingSpinner />;
+    return <LoadingSpinner color="accent" />;
   }
 
   if (!loggedInUser) {

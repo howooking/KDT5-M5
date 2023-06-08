@@ -3,6 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { userStore } from '../../store';
 import { signUp } from '../../api/authApi';
 import { EMAIL_REGEX } from '../../constants/constants';
+import Button from '../../components/ui/Button';
+import AlertMessage from '../../components/ui/AlertMessage';
+import Input from '../../components/ui/Input';
+import LoadingSpinner from '../../components/ui/LoadingSpinner';
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -12,9 +16,17 @@ export default function SignUp() {
   const [signUpData, setSignData] = useState({
     email: '',
     password: '',
+    passwordRepeat: '',
     displayName: '',
     profileImgBase64: '',
   });
+
+  // 서버와 전송상태에 따라 버튼의 상태를 바꿔주기 위해서 스테이트 지정
+  const [isSending, setIsSending] = useState(false);
+  // input type file과 다른 input 태그들 간의 스타일 통일성을 위해서
+  const [isImageUploaded, setIsImageUploaded] = useState(false);
+  // 에러메세지 타임아웃
+  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -23,6 +35,7 @@ export default function SignUp() {
       const reader = new FileReader();
       reader.readAsDataURL(files[0]);
       reader.onloadend = () => {
+        setIsImageUploaded(true);
         setSignData({ ...signUpData, [name]: reader.result as string });
       };
     }
@@ -36,6 +49,12 @@ export default function SignUp() {
     // form이벤트의 기본 새로고침을 막음
     event.preventDefault();
 
+    // 이전 타임아웃이 아직 작동중이 초기화
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+      setTimeoutId(null);
+    }
+
     //// 클라이언트 사이드 유효성 검사
 
     // 이메일 or 비밀번호 or 이름을 입력하지 않은경우
@@ -44,83 +63,128 @@ export default function SignUp() {
       signUpData.password.trim() === '' ||
       signUpData.displayName.trim() === ''
     ) {
-      setMessage('이메일, 비밀번호, 이름을 모두 입력해주세요');
+      setMessage('이메일, 비밀번호, 닉네임을 모두 입력해주세요.');
+      const id = setTimeout(() => {
+        setMessage('');
+      }, 2000);
+      setTimeoutId(id);
       return;
     }
 
     // 이메일의 유효성 검사
     if (!EMAIL_REGEX.test(signUpData.email)) {
-      setMessage('올바른 이메일을 입력해주세요');
+      setMessage('올바른 이메일을 입력해주세요.');
+      const id = setTimeout(() => {
+        setMessage('');
+      }, 2000);
+      setTimeoutId(id);
       return;
     }
 
     // 비번 8자리 유효성검사
     if (signUpData.password.length < 7) {
-      setMessage('비밀번호를 8자리 이상 입력해주세요');
+      setMessage('비밀번호를 8자리 이상 입력해주세요.');
+      const id = setTimeout(() => {
+        setMessage('');
+      }, 2000);
+      setTimeoutId(id);
       return;
     }
 
     // 이름 길이 유효성검사
     if (signUpData.displayName.length > 20) {
-      setMessage('이름은 20자 이하로 작성해주세요');
+      setMessage('이름은 20자 이하로 작성해주세요.');
+      const id = setTimeout(() => {
+        setMessage('');
+      }, 2000);
+      setTimeoutId(id);
       return;
     }
 
+    // 비밀번호 확인
+    if (signUpData.password !== signUpData.passwordRepeat) {
+      setMessage('비밀번호가 일치하지 않습니다.');
+      const id = setTimeout(() => {
+        setMessage('');
+      }, 2000);
+      setTimeoutId(id);
+      return;
+    }
+
+    setIsSending(true);
     const res = await signUp(signUpData);
     // 기타오류, 이미 등록된 이메일 or 유효성 오류 or apikey오류
     if (typeof res === 'string') {
       setMessage(res);
+      const id = setTimeout(() => {
+        setMessage('');
+      }, 2000);
+      setTimeoutId(id);
+      setIsSending(false);
       return;
     }
     // 회원가입에 성공하는 경우
     localStorage.setItem('token', res.accessToken);
     setUser({ ...res, isAdmin: false });
-    navigate(-1);
+    setIsSending(true);
+    navigate('/', { replace: true });
   };
 
   return (
-    <form className="container" onSubmit={handleSubmit}>
-      <div>
-        <label htmlFor="email">이메일</label>
-        <input
-          id="email"
-          type="text"
-          name="email"
-          onChange={handleChange}
-          value={signUpData.email}
-        />
+    <div className="flex justify-center p-20">
+      <div className="flex w-[436px] flex-col">
+        <h3 className="py-3 text-3xl text-gray-800">회원가입</h3>
+        <form onSubmit={handleSubmit} className="flex flex-col">
+          <Input
+            placeholder="이메일*"
+            name="email"
+            onChange={handleChange}
+            type="text"
+            value={signUpData.email}
+          />
+          <Input
+            placeholder="비밀번호* (8자이상)"
+            name="password"
+            onChange={handleChange}
+            type="password"
+            value={signUpData.password}
+          />
+          <Input
+            placeholder="비밀번호 획인*"
+            name="passwordRepeat"
+            onChange={handleChange}
+            type="password"
+            value={signUpData.passwordRepeat}
+          />
+          <Input
+            placeholder="닉네임* (20자 이하)"
+            name="displayName"
+            onChange={handleChange}
+            type="displayName"
+            value={signUpData.displayName}
+          />
+          <div
+            className={`mb-2 px-3 py-3 ring-1 ring-gray-400  ${
+              isImageUploaded ? 'text-black' : 'text-gray-400'
+            }`}
+          >
+            <label htmlFor="profileImgBase64">프로필사진 </label>
+            <input
+              id="profileImgBase64"
+              type="file"
+              name="profileImgBase64"
+              onChange={handleChange}
+            />
+          </div>
+          <AlertMessage message={message} />
+          <div>
+            <Button
+              text={isSending ? <LoadingSpinner color="white" /> : '회원가입'}
+              disabled={isSending}
+            />
+          </div>
+        </form>
       </div>
-      <div>
-        <label htmlFor="password">비밀번호(8자 이상)</label>
-        <input
-          id="password"
-          type="password"
-          name="password"
-          onChange={handleChange}
-          value={signUpData.password}
-        />
-      </div>
-      <div>
-        <label htmlFor="displayName">이름(20자 이하)</label>
-        <input
-          id="displayName"
-          type="text"
-          name="displayName"
-          onChange={handleChange}
-          value={signUpData.displayName}
-        />
-      </div>
-      <div>
-        <label htmlFor="profileImgBase64">프로필사진</label>
-        <input
-          id="profileImgBase64"
-          type="file"
-          name="profileImgBase64"
-          onChange={handleChange}
-        />
-      </div>
-      <button>회원가입</button>
-      <div>{message}</div>
-    </form>
+    </div>
   );
 }

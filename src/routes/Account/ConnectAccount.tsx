@@ -3,11 +3,13 @@ import { connectAccount } from '../../api/bankApi';
 
 interface ConnectAccountProps {
   bankList: Bank[];
+  accessToken: string
   onAccountConnected: (account: UserAccount) => void;
 }
 
 const ConnectAccount: React.FC<ConnectAccountProps> = ({
   bankList,
+  accessToken,
   onAccountConnected,
 }) => {
   const [bankCode, setBankCode] = useState<string>('');
@@ -22,7 +24,7 @@ const ConnectAccount: React.FC<ConnectAccountProps> = ({
         accountNumber,
         phoneNumber,
         signature: false,
-      });
+      }, accessToken);
       onAccountConnected(account);
     } catch (error) {
       console.error(error);

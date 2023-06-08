@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { getAccountList } from '../../api/bankApi';
 
-const AccountList: React.FC = () => {
+const AccountList: React.FC<{ accessToken: string}> = ({accessToken}) => {
   const [totalBalance, setTotalBalance] = useState<number>(0);
   const [accounts, setAccounts] = useState<UserAccount[]>([]);
 
   useEffect(() => {
     const fetchAccountList = async () => {
       try {
-        const data = await getAccountList();
+        const data = await getAccountList(accessToken);
         setTotalBalance(data.totalBalance);
         setAccounts(data.accounts);
       } catch (error) {

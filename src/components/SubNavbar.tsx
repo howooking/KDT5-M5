@@ -1,14 +1,20 @@
 import { Link } from 'react-router-dom';
-import { SUB_MENUS } from '../constants/constants';
-import styles from './SubNavbar.module.css';
 
-export default function SubNavbar() {
+interface SubNavbarProps {
+  menus: {
+    label: string;
+    href: string;
+  }[];
+  sub?: boolean;
+}
+
+export default function SubNavbar({ menus, sub }: SubNavbarProps) {
   return (
-    <nav className={styles.nav}>
-      <ul className={styles.ul}>
-        {SUB_MENUS.map((menu) => (
+    <nav className={`flex h-12 ${sub ? 'bg-gray-700' : 'bg-accent'} w-full`}>
+      <ul className="container mx-auto flex items-center gap-20 px-20">
+        {menus.map((menu) => (
           <li key={menu.label}>
-            <Link to={menu.href} className={styles.link}>
+            <Link to={menu.href} className="font-bold text-white">
               {menu.label}
             </Link>
           </li>
