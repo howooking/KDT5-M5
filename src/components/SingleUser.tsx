@@ -1,5 +1,10 @@
-import styles from '../routes/Admin/UserCheck.module.css';
-import defaultImage from '../assets/defaultProfile.jpg';
+import React from 'react';
+
+interface CheckUser {
+  email: string; // 사용자 아이디
+  displayName: string; // 사용자 표시 이름
+  profileImg: string; // 사용자 프로필 이미지 URL
+}
 
 interface SingleUserProps {
   data: CheckUser;
@@ -7,19 +12,15 @@ interface SingleUserProps {
 }
 
 export default function SingleUser({ data, index }: SingleUserProps) {
-  const even = index % 2 === 0 ? styles.even : '';
-
-  const defaultImageSrc = defaultImage;
-
-  const profileImage = data.profileImg || defaultImageSrc;
+  // const even = index % 2 === 0 ? styles.even : '';
 
   return (
-    <tr className={even}>
-      <td className={styles.number}>{index}</td>
-      <td className={styles.email}>{data.email}</td>
-      <td className={styles.Name}>{data.displayName}</td>
+    <tr>
+      <td >{index}</td>
+      <td >{data.email}</td>
+      <td> {data.displayName}</td>
       <td>
-        <img src={profileImage} alt="Profile" className={styles.profileImg} />
+        <img src={data.profileImg || '/defaultProfile.jpg'} alt="Profile" />
       </td>
     </tr>
   );
