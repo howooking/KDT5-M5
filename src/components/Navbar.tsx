@@ -1,11 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Link } from 'react-router-dom';
-import styles from './Navbar.module.css';
 import { userStore } from '../store';
 import { useEffect } from 'react';
 import Search from './Search';
 import { BsCart } from 'react-icons/bs';
 import SubNavbar from './SubNavbar';
+import { SUB_MENUS } from '../constants/constants';
 
 export default function Navbar() {
   const { userInfo, logoutUser, authMe } = userStore();
@@ -16,57 +16,61 @@ export default function Navbar() {
 
   return (
     <div>
-      <header className={styles.header}>
+      <header className="container relative mx-auto flex h-20 items-center justify-between px-20">
         <Link to="/">
-          <img src="/mainlogo.png" alt="logo" className={styles.logo} />
+          <img src="/mainlogo.png" alt="logo" className="h-16" />
         </Link>
         <Search />
-        <ul className={styles.ul}>
+        <ul className="flex items-center gap-5">
           {userInfo?.accessToken ? (
             <>
               <li>
-                <Link to="#" onClick={logoutUser} className={styles.link}>
+                <Link
+                  to="#"
+                  onClick={logoutUser}
+                  className="font-bold text-gray-400"
+                >
                   로그아웃
                 </Link>
               </li>
               {userInfo.isAdmin ? (
-                <Link to="/admin" className={styles.link}>
+                <Link to="/admin" className="font-bold text-gray-400">
                   관리자
                 </Link>
               ) : (
                 <></>
               )}
-              <Link to="/myaccount" className={styles.link}>
+              <Link to="/myaccount" className="font-bold text-gray-400">
                 {userInfo.user.displayName}님
               </Link>
               <img
                 src={userInfo.user.profileImg || '/defaultProfile.jpg'}
                 alt="profile"
-                className={styles.profile}
+                className="h-9 w-9 rounded-full object-cover"
               />
             </>
           ) : (
             <>
               <li>
-                <Link to="/login" className={styles.link}>
+                <Link to="/login" className="font-bold text-gray-400">
                   로그인
                 </Link>
               </li>
               <li>
-                <Link to="/signup" className={styles.link}>
+                <Link to="/signup" className="font-bold text-gray-400">
                   회원가입
                 </Link>
               </li>
             </>
           )}
           <li>
-            <Link to="/mycart" className={styles.cart}>
+            <Link to="/mycart" className="text-accent">
               <BsCart size={20} />
             </Link>
           </li>
         </ul>
       </header>
-      <SubNavbar />
+      <SubNavbar menus={SUB_MENUS} />
     </div>
   );
 }

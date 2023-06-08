@@ -39,3 +39,27 @@ export const ADMINS = [
   'admin3@naver.com',
   'admin4@naver.com',
 ];
+
+// myAccount nav menu
+export const SUB_MENUS_MYACCOUNT = [
+  {
+    label: '닉네임 변경',
+    href: '/myaccount/changename',
+  },
+  {
+    label: '비밀번호 변경',
+    href: '/myaccount/changepw',
+  },
+  {
+    label: '구입목록',
+    href: '/myaccount/purchased',
+  },
+];
+
+export const url  = 'https://asia-northeast3-heropy-api.cloudfunctions.net/api/products/'
+export const headers  = {
+  'Content-Type': 'application/json',
+  'apikey': 'KDT5_nREmPe9B',
+  'username': 'KDT5_Team1',
+  'masterKey': 'true'
+}

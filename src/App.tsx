@@ -16,6 +16,7 @@ import ConnectAccount from './routes/Account/ConnectAccount';
 import DeleteAccount from './routes/Account/DeleteAccount';
 import AccountList from './routes/Account/AccountList';
 import AccountPage from './routes/Account/AccountPage';
+import AdminProductView from './routes/Admin/AdminProductView.tsx';
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
           <Route path="addProduct" element={<AddProduct />} />
           <Route path="deleteProduct" element={<DeleteProduct />} />
           <Route path="updateProduct" element={<UpdateProduct />} />
+          <Route path="searchProduct" element={<AdminProductView />} />
           <Route path="userCheck" element={<UserCheck />} />
         </Route>
         <Route
