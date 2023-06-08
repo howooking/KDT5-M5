@@ -12,9 +12,10 @@ import DeleteProduct from './routes/Admin/DeleteProduct';
 import UpdateProduct from './routes/Admin/UpdateProduct';
 import UserCheck from './routes/Admin/UserCheck';
 import ProtectedRoute from './components/ProtectedRoute';
-// import EditUser from './routes/Auth/EditUser';
-import MyAccount from './routes/Auth/Myaccount';
-import AdminProductView from './routes/Admin/AdminProductView.tsx';
+import ConnectAccount from './routes/Account/ConnectAccount';
+import DeleteAccount from './routes/Account/DeleteAccount';
+import AccountList from './routes/Account/AccountList';
+import AccountPage from './routes/Account/AccountPage';
 
 function App() {
   return (
@@ -27,7 +28,6 @@ function App() {
         />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
-        <Route path="/myaccount" element={<MyAccount />} />
         <Route
           path="/admin"
           element={<ProtectedRoute adminRequired element={<Admin />} />}
@@ -35,8 +35,15 @@ function App() {
           <Route path="addProduct" element={<AddProduct />} />
           <Route path="deleteProduct" element={<DeleteProduct />} />
           <Route path="updateProduct" element={<UpdateProduct />} />
-          <Route path="searchProduct" element={<AdminProductView />} />
           <Route path="userCheck" element={<UserCheck />} />
+        </Route>
+        <Route
+          path="/account"
+          element={<AccountPage />}
+        >
+          <Route path="connectAccount" element={<ConnectAccount />} />
+          <Route path="accountList" element={<AccountList />} />
+          <Route path="deleteAccount" element={<DeleteAccount />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Route>

@@ -28,6 +28,31 @@ interface UpdatedProduct {
   discountRate?: number; // 제품 할인율
 }
 
+interface ProductId {
+  productId: string;
+}
+
+interface Bank {
+  name: string;
+  code: string;
+  digits: number[];
+  disabled: boolean;
+}
+
+interface UserAccount {
+  id: string;
+  bankName: string;
+  bankCode: string;
+  accountNumber: string;
+  balance: number;
+}
+
+interface TotalBalance {
+  totalBalance: number;
+  accounts: UserAccount[];
+}
+
+
 // 어드민에서 사용자들 정보를 조회할 때 오는 사용자 정보 타입
 interface CheckUser {
   email: string; // 사용자 아이디
