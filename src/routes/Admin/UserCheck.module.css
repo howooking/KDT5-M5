@@ -1,11 +1,36 @@
 .title {
   background-color: beige;
+  height: 40px;
+  text-align: center; 
+  vertical-align: middle;
 }
 
 .even {
-  background-color: skyblue;
+  background-color: rgb(230, 161, 161);
 }
 
 .user {
-  background-color: chartreuse;
+  background-color: red;
+}
+
+.email {
+  height: 50px;
+  text-align: center; 
+  vertical-align: middle;
+}
+
+.Name {
+  text-align: center; 
+  vertical-align: middle;
+}
+
+.number {
+  text-align: center; 
+  vertical-align: middle;
+}
+
+.profileImg {
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
 }
