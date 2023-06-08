@@ -25,22 +25,18 @@ export default function Navbar() {
           {userInfo?.accessToken ? (
             <>
               <li>
-                <Link
-                  to="#"
-                  onClick={logoutUser}
-                  className="font-bold text-gray-400"
-                >
+                <Link to="#" onClick={logoutUser} className="text-gray-500">
                   로그아웃
                 </Link>
               </li>
               {userInfo.isAdmin ? (
-                <Link to="/admin" className="font-bold text-gray-400">
+                <Link to="/admin" className="text-gray-500">
                   관리자
                 </Link>
               ) : (
                 <></>
               )}
-              <Link to="/myaccount" className="font-bold text-gray-400">
+              <Link to="/myaccount" className="text-gray-500">
                 {userInfo.user.displayName}님
               </Link>
               <img
@@ -52,12 +48,12 @@ export default function Navbar() {
           ) : (
             <>
               <li>
-                <Link to="/login" className="font-bold text-gray-400">
+                <Link to="/login" className="text-gray-500">
                   로그인
                 </Link>
               </li>
               <li>
-                <Link to="/signup" className="font-bold text-gray-400">
+                <Link to="/signup" className="text-gray-500">
                   회원가입
                 </Link>
               </li>
