@@ -2,7 +2,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { userStore } from '../../store';
 import { editUser } from '../../api/authApi';
-import Button from '../../components/ui/Button';
 
 function EditUser() {
   const { userInfo, authMe } = userStore();
