@@ -1,3 +1,12 @@
+// 어드민 이메일 목록
+export const ADMINS = [
+  'admin@naver.com',
+  'admin1@naver.com',
+  'admin2@naver.com',
+  'admin3@naver.com',
+  'admin4@naver.com',
+];
+
 export const EMAIL_REGEX =
   /^[0-9a-zA-Z]([-_\\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
 
@@ -24,15 +33,6 @@ export const SUB_MENUS = [
   },
 ];
 
-// 어드민 이메일 목록
-export const ADMINS = [
-  'admin@naver.com',
-  'admin1@naver.com',
-  'admin2@naver.com',
-  'admin3@naver.com',
-  'admin4@naver.com',
-];
-
 // myAccount nav menu
 export const SUB_MENUS_MYACCOUNT = [
   {
@@ -49,29 +49,18 @@ export const SUB_MENUS_MYACCOUNT = [
   },
 ];
 
-export const url  = 'https://asia-northeast3-heropy-api.cloudfunctions.net/api/products/'
-export const headers  = {
-  'Content-Type': 'application/json',
-  'apikey': 'KDT5_nREmPe9B',
-  'username': 'KDT5_Team1',
-  'masterKey': 'true'
-}
 // admin 패널 sub anvbar
 export const SUB_MENUS_ADMIN = [
   {
+    label: '회원관리',
+    href: '/admin/clients',
+  },
+  {
+    label: '제품관리',
+    href: '/admin/products',
+  },
+  {
     label: '제품추가',
-    href: '/products',
-  },
-  {
-    label: '제품삭제',
-    href: '/products',
-  },
-  {
-    label: '유져관리',
-    href: '/products',
-  },
-  {
-    label: '상품',
-    href: '/products',
+    href: '/admin/addProduct',
   },
 ];

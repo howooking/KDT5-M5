@@ -73,3 +73,35 @@ export const getUsers = async () => {
     console.log('Error while getUser: ', error);
   }
 };
+
+export async function getProducts() {
+  try {
+    const res = await fetch(`${API_URL}/products`, {
+      method: 'GET',
+      headers: api_headers,
+    });
+    if (res.ok) {
+      const products: Product[] = await res.json();
+      return products;
+    }
+    const error = await res.json;
+    console.log(error);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function getProduct(productId: { text: string }) {
+  try {
+    const res = await fetch(`${API_URL}/products/${productId}`, {
+      method: 'GET',
+      headers: api_headers,
+    });
+    if (res.ok) {
+      const productDetail: ProductDetail = await res.json();
+      return productDetail;
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
