@@ -63,16 +63,4 @@ export const SUB_MENUS_ADMIN = [
     label: '제품추가',
     href: '/admin/addproduct',
   },
-  {
-    label: '제품삭제',
-    href: '/admin/deleteproduct',
-  },
-  {
-    label: '유져관리',
-    href: '/admin/UserCheck', // 수정된 경로
-  },
-  {
-    label: '상품',
-    href: '/admin/UpdateProduct',
-  },
 ];

@@ -16,7 +16,7 @@ export default function Navbar() {
 
   return (
     <div>
-      <header className="container relative mx-auto flex h-20 items-center justify-between px-20">
+      <header className="container relative mx-auto flex h-20 items-center justify-between px-20 text-sm">
         <Link to="/">
           <img src="/mainlogo.png" alt="logo" className="h-16" />
         </Link>
@@ -30,7 +30,7 @@ export default function Navbar() {
                 </Link>
               </li>
               {userInfo.isAdmin ? (
-                <Link to="/admin" className="text-gray-500">
+                <Link to="/admin/clients" className="text-gray-500">
                   관리자
                 </Link>
               ) : (

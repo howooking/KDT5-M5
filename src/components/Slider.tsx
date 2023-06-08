@@ -6,9 +6,10 @@ export default function Slider() {
   return (
     <Carousel
       autoplay
-      autoplayInterval={4000}
+      autoplayInterval={3000}
       // adaptiveHeight
       cellAlign="center"
+      dragThreshold={0.1}
       cellSpacing={600}
       disableEdgeSwiping={false} //처음 마지막 슬라이드에서 앞 or 뒤로 스와이핑 안된다.
       enableKeyboardControls
@@ -31,7 +32,7 @@ export default function Slider() {
         <img
           src={`slider/mainSlide${slide}.jpg`}
           alt={`/mainSlide${slide}`}
-          className="mx-auto select-none hover:opacity-90"
+          className="mx-auto select-none hover:opacity-80"
         />
       ))}
     </Carousel>

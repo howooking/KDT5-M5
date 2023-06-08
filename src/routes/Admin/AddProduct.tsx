@@ -3,10 +3,6 @@ import { addProduct } from '../../api/adminApi';
 
 const AddProduct = () => {
   const [productData, setProductData] = useState<ProductData>();
-  // const [thumbnailBase64, setThumbnailBase64] = useState('');
-  // const [photoBase64, setPhotoBase64] = useState('');
-  // const handleThumbnailBase64 = (event) => setThumbnailBase64(event.target.value);
-  // const handlePhotoBase64 = (event) => setPhotoBase64(event.target.value);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
