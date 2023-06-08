@@ -1,6 +1,6 @@
 import {ChangeEvent, FormEvent, useEffect, useState} from "react";
-import AdminFetchProductAll from "../../api/AdminFetchProductAll.tsx";
-import AdminFetchProductDetail from "../../api/AdminFetchProductDetail.tsx";
+import AdminFetchProductAll from "./AdminFetchProductAll.tsx";
+import AdminFetchProductDetail from "./AdminFetchProductDetail.tsx";
 
 
 export default function AdminProductView() {
