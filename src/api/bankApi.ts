@@ -1,56 +1,95 @@
-import axios from 'axios';
-
 const API_BASE_URL = 'https://asia-northeast3-heropy-api.cloudfunctions.net/api';
 
-export const fetchBanks = async (): Promise<Bank[]> => {
-  const response = await axios.get(`${API_BASE_URL}/account/banks`, {
+
+const api_headers = {
+  "content-type": "application/json",
+  "apikey": "KDT5_nREmPe9B",
+  "username": "KDT5_Team1",
+};
+
+// 선택 가능한 은행 목록 조회 
+export const getBankList = async (accessToken: string): Promise<Bank[]> => {
+  const response = await fetch(`${API_BASE_URL}/account/banks`, {
+    method: "GET",
     headers: {
-      Authorization: `Bearer <accessToken>`
+      ...api_headers,
+      Authorization: `Bearer ${accessToken}`
+    }});
+
+  if (response.ok) {
+    const data: Bank[] = await response.json();
+    return data;
+  } else {
+    throw new Error("Failed to get bank list");
+  }
+};
+
+// 계좌 목록 및 잔액 조회 
+export const getAccountList = async (accessToken: string): Promise<TotalBalance> => {
+  const response = await fetch(`${API_BASE_URL}/account`, {
+    method: "GET",
+    headers: {
+      ...api_headers,
+      Authorization: `Bearer ${accessToken}`
     }
   });
 
-  return response.data;
+  if (response.ok) {
+    const data: TotalBalance = await response.json();
+    return data;
+  } else {
+    throw new Error("Failed to get account list");
+  }
 };
 
-export const fetchAccounts = async (): Promise<AccountList> => {
-  const response = await axios.get(`${API_BASE_URL}/account`, {
+// 계좌 연결 
+export const connectAccount = async (
+  requestBody: {
+    bankCode: string;
+    accountNumber: string;
+    phoneNumber: string;
+    signature: boolean;
+  },
+  accessToken: string
+  ): Promise<UserAccount> => {
+  const response = await fetch(`${API_BASE_URL}/account`, {
+    method: "POST",
     headers: {
-      Authorization: `Bearer <accessToken>`
-    }
-  });
-
-  return response.data;
-};
-
-export const addAccount = async (newAccount: {
-  bankCode: string;
-  accountNumber: string;
-  phoneNumber: string;
-  signature: boolean;
-}): Promise<Account> => {
-  const response = await axios.post(
-    `${API_BASE_URL}/account`,
-    newAccount,
-    {
-      headers: {
-        Authorization: `Bearer <accessToken>`
-      }
-    }
-  );
-
-  return response.data;
-};
-
-export const deleteAccount = async (accountId: string): Promise<boolean> => {
-  const response = await axios.delete(`${API_BASE_URL}/account`, {
-    headers: {
-      Authorization: `Bearer <accessToken>`
+      ...api_headers,
+      Authorization: `Bearer ${accessToken}`
     },
-    data: {
-      accountId,
-      signature: true
-    }
+    body: JSON.stringify(requestBody),
   });
 
-  return response.data;
+  if (response.ok) {
+    const data: UserAccount = await response.json();
+    return data;
+  } else {
+    throw new Error("Failed to connect account");
+  }
+};
+
+// 계좌 해지 
+export const deleteAccount = async (
+  requestBody: {
+    accountId: string;
+    signature: boolean;
+  },
+  accessToken:string
+  ): Promise<boolean> => {
+  const response = await fetch(`${API_BASE_URL}/account`, {
+    method: "DELETE",
+    headers: {
+      ...api_headers,
+      Authorization: `Bearer ${accessToken}`
+    },
+    body: JSON.stringify(requestBody),
+  });
+
+  if (response.ok) {
+    const data: boolean = await response.json();
+    return data;
+  } else {
+    throw new Error("Failed to delete account");
+  }
 };

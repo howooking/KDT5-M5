@@ -12,6 +12,10 @@ import DeleteProduct from './routes/Admin/DeleteProduct';
 import UpdateProduct from './routes/Admin/UpdateProduct';
 import UserCheck from './routes/Admin/UserCheck';
 import ProtectedRoute from './components/ProtectedRoute';
+import ConnectAccount from './routes/Account/ConnectAccount';
+import DeleteAccount from './routes/Account/DeleteAccount';
+import AccountList from './routes/Account/AccountList';
+import AccountPage from './routes/Account/AccountPage';
 
 function App() {
   return (
@@ -32,6 +36,14 @@ function App() {
           <Route path="deleteProduct" element={<DeleteProduct />} />
           <Route path="updateProduct" element={<UpdateProduct />} />
           <Route path="userCheck" element={<UserCheck />} />
+        </Route>
+        <Route
+          path="/account"
+          element={<AccountPage />}
+        >
+          <Route path="connectAccount" element={<ConnectAccount />} />
+          <Route path="accountList" element={<AccountList />} />
+          <Route path="deleteAccount" element={<DeleteAccount />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Route>

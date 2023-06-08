@@ -32,14 +32,14 @@ interface ProductId {
   productId: string;
 }
 
-declare interface Bank {
+interface Bank {
   name: string;
   code: string;
   digits: number[];
   disabled: boolean;
 }
 
-declare interface Account {
+interface UserAccount {
   id: string;
   bankName: string;
   bankCode: string;
@@ -47,10 +47,12 @@ declare interface Account {
   balance: number;
 }
 
-declare interface AccountList {
+interface TotalBalance {
   totalBalance: number;
-  accounts: Account[];
+  accounts: UserAccount[];
 }
+
+
 // 어드민에서 사용자들 정보를 조회할 때 오는 사용자 정보 타입
 interface CheckUser {
   email: string; // 사용자 아이디
