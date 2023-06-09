@@ -7,6 +7,7 @@ import Button from '../../components/ui/Button';
 import AlertMessage from '../../components/ui/AlertMessage';
 import Input from '../../components/ui/Input';
 import LoadingSpinner from '../../components/ui/LoadingSpinner';
+import ImageUpload from '../../components/ui/ImageUpload';
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -23,8 +24,6 @@ export default function SignUp() {
 
   // 서버와 전송상태에 따라 버튼의 상태를 바꿔주기 위해서 스테이트 지정
   const [isSending, setIsSending] = useState(false);
-  // input type file과 다른 input 태그들 간의 스타일 통일성을 위해서
-  const [isImageUploaded, setIsImageUploaded] = useState(false);
   // 에러메세지 타임아웃
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
 
@@ -35,7 +34,6 @@ export default function SignUp() {
       const reader = new FileReader();
       reader.readAsDataURL(files[0]);
       reader.onloadend = () => {
-        setIsImageUploaded(true);
         setSignData({ ...signUpData, [name]: reader.result as string });
       };
     }
@@ -163,19 +161,11 @@ export default function SignUp() {
             type="displayName"
             value={signUpData.displayName}
           />
-          <div
-            className={`mb-2 px-3 py-3 ring-1 ring-gray-400  ${
-              isImageUploaded ? 'text-black' : 'text-gray-400'
-            }`}
-          >
-            <label htmlFor="profileImgBase64">프로필사진 </label>
-            <input
-              id="profileImgBase64"
-              type="file"
-              name="profileImgBase64"
-              onChange={handleChange}
-            />
-          </div>
+          <ImageUpload
+            korName="프로필사진"
+            name="profileImgBase64"
+            onChange={handleChange}
+          />
           <AlertMessage message={message} />
           <div>
             <Button

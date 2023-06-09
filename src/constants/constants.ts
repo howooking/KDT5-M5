@@ -24,7 +24,7 @@ export const SUB_MENUS = [
     href: 'footvolley',
   },
   {
-    label: '운동화/슬리퍼',
+    label: '운동화',
     href: 'sneakers',
   },
   {
@@ -63,4 +63,12 @@ export const SUB_MENUS_ADMIN = [
     label: '제품추가',
     href: '/admin/addproduct',
   },
+];
+
+const SELECT_CATEGORY = [
+  { name: '축구화', value: 'soccer' },
+  { name: '풋살화', value: 'footsal' },
+  { name: '족구화', value: 'footvolley' },
+  { name: '운동화', value: 'sneakers' },
+  { name: '의류', value: 'wear' },
 ];
