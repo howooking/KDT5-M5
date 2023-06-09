@@ -9,6 +9,7 @@ import Select from '../../components/ui/Select';
 import { SELECT_BRAND, SELECT_CATEGORY } from '../../constants/constants';
 
 export default function AddProduct() {
+  const [positive, setPositive] = useState(false);
   const [productInputData, setProductInputData] = useState<ProductInputData>();
   const [isSending, setIsSending] = useState(false);
   const [message, setMessage] = useState('');
@@ -43,6 +44,7 @@ export default function AddProduct() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setPositive(false);
     // 이전 타임아웃이 아직 작동중이 초기화
     if (timeoutId) {
       clearTimeout(timeoutId);
@@ -100,6 +102,7 @@ export default function AddProduct() {
     });
     // 제품등록이 성공한 경우
     if (!res) {
+      setPositive(true);
       setMessage('제품을 등록하였습니다.');
       setIsSending(false);
       const id = setTimeout(() => {
@@ -173,7 +176,7 @@ export default function AddProduct() {
               />
             </div>
           </div>
-          <AlertMessage message={message} />
+          <AlertMessage message={message} positive={positive} />
           <div>
             <Button
               text={isSending ? <LoadingSpinner color="white" /> : '상품등록'}

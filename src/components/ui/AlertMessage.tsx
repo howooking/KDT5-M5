@@ -1,8 +1,13 @@
-export default function AlertMessage({ message }: { message: string }) {
+interface AlertMessageProps {
+  message: string;
+  positive?: boolean;
+}
+
+export default function AlertMessage({ message, positive }: AlertMessageProps) {
   return (
     <div
       className={`h-5 text-xs font-bold  ${
-        message === '제품을 등록하였습니다.' ? 'text-green-500' : 'text-accent'
+        positive ? 'text-green-500' : 'text-accent'
       }`}
     >
       {message}

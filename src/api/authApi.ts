@@ -179,7 +179,7 @@ interface EditUserResponseValue {
 }
 
 export const editUser = async (
-  accessToken: string | null | undefined,
+  accessToken: string,
   editData: {
     displayName?: string;
     profileImgBase64?: string;
@@ -187,8 +187,6 @@ export const editUser = async (
     newPassword?: string;
   }
 ) => {
-  console.log({ editData, accessToken });
-
   if (!accessToken) {
     return;
   }
@@ -208,10 +206,14 @@ export const editUser = async (
         }),
       }
     );
-    if (!res.ok) {
-      const error: string = await res.json();
-      return error;
+    if (res.ok) {
+      console.log({ res });
+      return true;
     }
+    // 기존 비번이 안맞는경우
+    const error: string = await res.json();
+    console.log({ error });
+    return error;
   } catch (error) {
     console.log('Error while EditUser: ', error);
     return '회원정보 수정 도중 오류발생, 잠시 후 다시 시도해 주세요.';
