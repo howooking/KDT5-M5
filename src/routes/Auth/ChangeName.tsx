@@ -17,7 +17,7 @@ export default function ChangeName() {
   const [message, setMessage] = useState('');
   const [editData, setEditData] = useState({
     displayName: '',
-    oldPassword: '',
+    // oldPassword: '',
   });
   console.log(editData);
 
@@ -41,10 +41,10 @@ export default function ChangeName() {
       setMessage('닉네임은 20자 이하로 작성해주세요');
       return;
     }
-    if (editData.oldPassword.trim() === '') {
-      setMessage('비밀번호를 입력해 주세요');
-      return;
-    }
+    // if (editData.oldPassword.trim() === '') {
+    //   setMessage('비밀번호를 입력해 주세요');
+    //   return;
+    // }
     //유효성 검사2
     const res = await editUser(userInfo?.accessToken, editData);
     if (typeof res === 'string') {
@@ -52,6 +52,7 @@ export default function ChangeName() {
       return;
     }
     navigate('/myaccount/info', { replace: true });
+    authMe()
   };
 
   return (
@@ -63,13 +64,13 @@ export default function ChangeName() {
         type="text"
         value={editData.displayName}
       />
-      <Input
+      {/* <Input
         type="password"
         name="oldPassword"
         value={editData.oldPassword}
         onChange={handleChange}
         placeholder="비밀번호"
-      />
+      /> */}
       <AlertMessage message={message} />
       <Button text={'아이디수정'} />
     </form>

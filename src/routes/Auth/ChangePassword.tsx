@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { userStore } from '../../store';
 import { editUser } from '../../api/authApi';
 import { useNavigate } from 'react-router-dom';
+import Input from '../../components/ui/Input';
+import Button from '../../components/ui/Button';
 
 export default function ChangePassword() {
   const navigate = useNavigate();
@@ -16,7 +18,8 @@ export default function ChangePassword() {
     e.preventDefault();
     //유효성 검사 1
     if (
-      editData.newPassword.trim() === '' ||
+      editData.newPassword.trim() === ''
+      ||
       editData.oldPassword.trim() === ''
     ) {
       setMessage('비밀번호를 입력해주세요.');
@@ -51,27 +54,30 @@ export default function ChangePassword() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label htmlFor="newpassword">이전 비밀번호</label>
-      <input
+    <form onSubmit={handleSubmit} className="mx-auto w-1/2">
+      <Input
         onChange={handleChange}
         type="password"
-        id="oldPassword"
         name="oldPassword"
         value={editData.oldPassword}
+        placeholder="이전 비밀번호를 입력하세요."
       />
-      <label htmlFor="newpassword">변경할 비밀번호</label>
-      <input
+      <Input
         onChange={handleChange}
         type="password"
-        id="newPassword"
         name="newPassword"
         value={editData.newPassword}
+        placeholder="변경할 비밀번호를 입력하세요."
       />
-      <label htmlFor="checktopw">변경할 비밀번호 확인</label>
-      <input onChange={ctp} type="password" id="checktopw" value={checktopw} />
+      <Input
+        onChange={ctp}
+        name="checktopw"
+        type="password"
+        value={checktopw}
+        placeholder="변경할 비밀번호 확인"
+      />
       {message}
-      <button>완료</button>
+      <Button text="수정" />
     </form>
   );
 }

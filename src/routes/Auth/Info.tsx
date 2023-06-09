@@ -1,3 +1,4 @@
+import Input from '../../components/ui/Input';
 import { userStore } from '../../store';
 
 export default function Info() {
@@ -11,16 +12,23 @@ export default function Info() {
   return (
     <>
       <div className="container">
-        <img src={userInfo?.user.profileImg || '/defaultProfile.jpg'}></img>
-        <label htmlFor="profileImgBase64">프로필사진 변경</label>
-        {/* <input
-          id="profileImgBase64"
-          type="file"
-          name="profileImgBase64"
-          onChange={handleChange}
-        /> */}
+        <div className="aline-center flex justify-center">
+          <img
+            className="w-40 rounded-full"
+            src={userInfo?.user.profileImg || '/defaultProfile.jpg'}
+          ></img>
+        </div>
+        <div className="mx-auto w-1/2">
+          <label htmlFor="profileImgBase64">프로필사진 변경</label>
+          <Input
+            // id="profileImgBase64"
+            type="file"
+            name="profileImgBase64"
+            onChange={handleChange}
+          />
+        </div>
       </div>
-      <h1>{userInfo?.user.displayName}</h1>
+      <h1 className='mx-auto w-1/2'>{userInfo?.user.displayName}</h1>
     </>
   );
 }

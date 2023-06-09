@@ -21,7 +21,7 @@ export default function Input({
       name={name}
       value={value}
       onChange={onChange}
-      className="px-3 py-4 ring-1 ring-gray-400 focus:outline-none"
+      className="px-3 py-4 ring-1 ring-gray-400 focus:outline-none block w-full"
     />
   );
 }
