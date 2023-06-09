@@ -132,41 +132,43 @@ export default function SignUp() {
     <div className="flex justify-center p-20">
       <div className="flex w-[436px] flex-col">
         <h3 className="py-3 text-3xl text-gray-800">회원가입</h3>
-        <form onSubmit={handleSubmit} className="flex flex-col">
-          <Input
-            placeholder="이메일*"
-            name="email"
-            onChange={handleChange}
-            type="text"
-            value={signUpData.email}
-          />
-          <Input
-            placeholder="비밀번호* (8자이상)"
-            name="password"
-            onChange={handleChange}
-            type="password"
-            value={signUpData.password}
-          />
-          <Input
-            placeholder="비밀번호 획인*"
-            name="passwordRepeat"
-            onChange={handleChange}
-            type="password"
-            value={signUpData.passwordRepeat}
-          />
-          <Input
-            placeholder="닉네임* (20자 이하)"
-            name="displayName"
-            onChange={handleChange}
-            type="displayName"
-            value={signUpData.displayName}
-          />
-          <ImageUpload
-            korName="프로필사진"
-            name="profileImgBase64"
-            onChange={handleChange}
-          />
-          <AlertMessage message={message} />
+        <form onSubmit={handleSubmit}>
+          <div className="space-y-3">
+            <Input
+              placeholder="이메일*"
+              name="email"
+              onChange={handleChange}
+              type="text"
+              value={signUpData.email}
+            />
+            <Input
+              placeholder="비밀번호* (8자이상)"
+              name="password"
+              onChange={handleChange}
+              type="password"
+              value={signUpData.password}
+            />
+            <Input
+              placeholder="비밀번호 획인*"
+              name="passwordRepeat"
+              onChange={handleChange}
+              type="password"
+              value={signUpData.passwordRepeat}
+            />
+            <Input
+              placeholder="닉네임* (20자 이하)"
+              name="displayName"
+              onChange={handleChange}
+              type="displayName"
+              value={signUpData.displayName}
+            />
+            <ImageUpload
+              korName="프로필사진"
+              name="profileImgBase64"
+              onChange={handleChange}
+            />
+            <AlertMessage message={message} />
+          </div>
           <div>
             <Button
               text={isSending ? <LoadingSpinner color="white" /> : '회원가입'}

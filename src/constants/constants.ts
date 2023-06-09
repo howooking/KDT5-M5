@@ -65,7 +65,16 @@ export const SUB_MENUS_ADMIN = [
   },
 ];
 
-const SELECT_CATEGORY = [
+export const SELECT_CATEGORY = [
+  { name: '카테고리선택', value: '' },
+  { name: '축구화', value: 'soccer' },
+  { name: '풋살화', value: 'footsal' },
+  { name: '족구화', value: 'footvolley' },
+  { name: '운동화', value: 'sneakers' },
+  { name: '의류', value: 'wear' },
+];
+export const SELECT_BRAND = [
+  { name: '브랜드선택', value: '' },
   { name: '축구화', value: 'soccer' },
   { name: '풋살화', value: 'footsal' },
   { name: '족구화', value: 'footvolley' },

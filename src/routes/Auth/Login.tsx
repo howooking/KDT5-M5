@@ -92,7 +92,7 @@ export default function Login() {
       <div className="flex w-[436px] flex-col">
         <h3 className="py-3 text-3xl text-gray-800">로그인</h3>
         <form onSubmit={handleLogin} className="flex flex-col">
-          <div className="flex-1">
+          <div className="space-y-3">
             <Input
               placeholder="이메일"
               name="email"

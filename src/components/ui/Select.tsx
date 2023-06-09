@@ -1,13 +1,17 @@
-export default function Select() {
+interface SelectProps {
+  options: {
+    name: string;
+    value: string;
+  }[];
+}
+
+export default function Select({ options }: SelectProps) {
   return (
     <div className="px-3 py-4 ring-1 ring-gray-400 focus:outline-none">
       <select name="카테고리">
-        <option value="">카테고리</option>
-        <option value="">축구화</option>
-        <option value="">풋살화</option>
-        <option value="">족구화</option>
-        <option value="">운동화</option>
-        <option value="">의류</option>
+        {options.map((option) => (
+          <option value={option.value}>{option.name}</option>
+        ))}
       </select>
     </div>
   );

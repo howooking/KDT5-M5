@@ -1,5 +1,5 @@
 interface InputProps {
-  placeholder: string;
+  placeholder?: string;
   type?: string;
   name: string;
   value?: string | number;
@@ -21,7 +21,7 @@ export default function Input({
       name={name}
       value={value}
       onChange={onChange}
-      className="px-3 py-4 ring-1 ring-gray-400 focus:outline-none"
+      className="w-full px-3 py-4 ring-1 ring-gray-400 focus:outline-none"
     />
   );
 }

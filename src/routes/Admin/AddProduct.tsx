@@ -6,6 +6,7 @@ import AlertMessage from '../../components/ui/AlertMessage';
 import LoadingSpinner from '../../components/ui/LoadingSpinner';
 import ImageUpload from '../../components/ui/ImageUpload';
 import Select from '../../components/ui/Select';
+import { SELECT_BRAND, SELECT_CATEGORY } from '../../constants/constants';
 
 export default function AddProduct() {
   const [productInputData, setProductInputData] = useState<ProductInputData>();
@@ -127,53 +128,51 @@ export default function AddProduct() {
 
   return (
     <div className="flex justify-center p-3">
-      <div className="flex w-[436px] flex-col">
+      <div className="flex flex-col">
         <h3 className="py-3 text-3xl text-gray-800">제품 추가</h3>
-        {/* <select name="">
-          <option value="">브랜드</option>
-          <option value="">나이키</option>
-          <option value="">아디다스</option>
-          <option value="">미즈노</option>
-          <option value="">푸마</option>
-          <option value="">기타</option>
-        </select> */}
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-          <Select />
-          <Select />
-          <Input
-            placeholder="제품이름*"
-            name="title"
-            onChange={handleChange}
-            value={productInputData?.title}
-          />
-          <Input
-            placeholder="가격*"
-            name="price"
-            onChange={handleChange}
-            value={productInputData?.price}
-          />
-          <Input
-            placeholder="제품설명*"
-            name="description"
-            onChange={handleChange}
-            value={productInputData?.description}
-          />
-          <Input
-            placeholder="할인율 (0 ~ 99, 입력 안할 경우 0) "
-            name="discountRate"
-            onChange={handleChange}
-            value={productInputData?.discountRate}
-          />
-          <ImageUpload
-            korName="썸네일사진"
-            name="thumbnailBase64"
-            onChange={handleChange}
-          />
-          <ImageUpload
-            korName="상세사진"
-            name="photoBase64"
-            onChange={handleChange}
-          />
+          <div className="flex gap-10">
+            <div className="flex-1  space-y-3">
+              <Select options={SELECT_CATEGORY} />
+              <Select options={SELECT_BRAND} />
+              <Input
+                placeholder="제품이름*"
+                name="title"
+                onChange={handleChange}
+                value={productInputData?.title}
+              />
+              <Input
+                placeholder="가격*"
+                name="price"
+                onChange={handleChange}
+                value={productInputData?.price}
+              />
+              <Input
+                placeholder="제품설명*"
+                name="description"
+                onChange={handleChange}
+                value={productInputData?.description}
+              />
+              <Input
+                placeholder="할인율 (0 ~ 99, 입력 안할 경우 0) "
+                name="discountRate"
+                onChange={handleChange}
+                value={productInputData?.discountRate}
+              />
+            </div>
+            <div className="flex-1  space-y-3">
+              <ImageUpload
+                korName="썸네일사진"
+                name="thumbnailBase64"
+                onChange={handleChange}
+              />
+              <ImageUpload
+                korName="상세사진"
+                name="photoBase64"
+                onChange={handleChange}
+              />
+            </div>
+          </div>
           <AlertMessage message={message} />
           <div>
             <Button
