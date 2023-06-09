@@ -36,7 +36,7 @@ export default function Navbar() {
               ) : (
                 <></>
               )}
-              <Link to="/myaccount" className="text-gray-500">
+              <Link to="/myaccount/info" className="text-gray-500">
                 {userInfo.user.displayName}님
               </Link>
               <img
