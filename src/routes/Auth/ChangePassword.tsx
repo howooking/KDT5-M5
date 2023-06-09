@@ -3,9 +3,8 @@ import { userStore } from '../../store';
 import { editUser } from '../../api/authApi';
 import { useNavigate } from 'react-router-dom';
 
-
 export default function ChangePassword() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [message, setMessage] = useState('');
   const { userInfo } = userStore();
   const [checktopw, setChecktopw] = useState('');
@@ -36,7 +35,7 @@ export default function ChangePassword() {
       setMessage(res);
       return;
     }
-    navigate('/myaccount', { replace: true });
+    navigate('/myaccount/info', { replace: true });
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,16 +56,16 @@ export default function ChangePassword() {
       <input
         onChange={handleChange}
         type="password"
-        id="oldpassword"
-        name="oldpassword"
+        id="oldPassword"
+        name="oldPassword"
         value={editData.oldPassword}
       />
       <label htmlFor="newpassword">변경할 비밀번호</label>
       <input
         onChange={handleChange}
         type="password"
-        id="newpassword"
-        name="newpassword"
+        id="newPassword"
+        name="newPassword"
         value={editData.newPassword}
       />
       <label htmlFor="checktopw">변경할 비밀번호 확인</label>

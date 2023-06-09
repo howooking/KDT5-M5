@@ -16,6 +16,7 @@ import MyAccount from './routes/Auth/MyAccount';
 import AdminClients from './routes/Admin/AdminClients.tsx';
 import ChangeName from './routes/Auth/ChangeName.tsx';
 import ChangePassword from './routes/Auth/ChangePassword.tsx';
+import Info from './routes/Auth/Info.tsx';
 
 export default function App() {
   return (
@@ -29,6 +30,7 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/myaccount" element={<MyAccount />}>
+          <Route path="info" element={<Info />} />
           <Route path="changename" element={<ChangeName />} />
           <Route path="changepw" element={<ChangePassword />} />
         </Route>

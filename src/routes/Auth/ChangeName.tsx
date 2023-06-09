@@ -1,29 +1,41 @@
-import { useEffect, useState} from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect, useState } from 'react';
 import { userStore } from '../../store';
 import { editUser } from '../../api/authApi';
 import { useNavigate } from 'react-router-dom';
+import Input from '../../components/ui/Input';
+import Button from '../../components/ui/Button';
+import AlertMessage from '../../components/ui/AlertMessage';
 
 export default function ChangeName() {
   const navigate = useNavigate();
-  const { userInfo, authMe } = userStore();
+  const { authMe, userInfo } = userStore();
   useEffect(() => {
     authMe();
   }, []);
-  
+
   const [message, setMessage] = useState('');
   const [editData, setEditData] = useState({
     displayName: '',
     oldPassword: '',
   });
+  console.log(editData);
 
-  const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    console.log({ name, value });
+    setEditData({
+      ...editData,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     //유효성 검사1
     if (editData.displayName.trim() === '') {
-      setEditData({
-        ...editData,
-        displayName: userInfo?.user.displayName as string,
-      });
+      setMessage('아이디를 입력해주세요.');
+      return;
     }
     if (editData.displayName.length > 20) {
       setMessage('닉네임은 20자 이하로 작성해주세요');
@@ -39,37 +51,27 @@ export default function ChangeName() {
       setMessage(res);
       return;
     }
-    navigate('/myaccount', { replace: true });
+    navigate('/myaccount/info', { replace: true });
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setEditData({
-      ...editData,
-      [name]: value,
-    });
-  };
   return (
-    <form onSubmit={handleSubmit}>
-      <label htmlFor="displayName">닉네임 : </label>
-      <input
+    <form onSubmit={handleSubmit} className="mx-auto w-1/2">
+      <Input
+        name="displayName"
         onChange={handleChange}
-        id="displayName"
-        type="text"
-        name="displayname"
-        value={editData.displayName}
         placeholder={userInfo?.user.displayName}
+        type="text"
+        value={editData.displayName}
       />
-      <label htmlFor="oldpassword">비밀번호</label>
-      <input
-        onChange={handleChange}
-        id="oldpassword"
+      <Input
         type="password"
-        name="oldpassword"
+        name="oldPassword"
         value={editData.oldPassword}
+        onChange={handleChange}
+        placeholder="비밀번호"
       />
-      <h1>{message}</h1>
-      <button>완료</button>
+      <AlertMessage message={message} />
+      <Button text={'아이디수정'} />
     </form>
   );
 }
