@@ -8,13 +8,24 @@ interface User {
   isAdmin: boolean;
 }
 
-interface ProductData {
+//체품 추가시 사용자가 입력하는 값
+interface ProductInputData {
+  title: string;
+  price: string;
+  description: string;
+  tags?: string[];
+  thumbnailBase64?: string;
+  photoBase64?: string;
+  discountRate?: string;
+}
+// 실제 제품 추가시 요구되는 값
+interface AddProductData {
   title: string;
   price: number;
   description: string;
   tags?: string[];
-  // thumbnailBase64?: string
-  // photoBase64?: string
+  thumbnailBase64?: string;
+  photoBase64?: string;
   discountRate?: number;
 }
 

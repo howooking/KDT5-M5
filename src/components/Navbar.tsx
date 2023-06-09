@@ -12,7 +12,7 @@ export default function Navbar() {
   useEffect(() => {
     authMe();
   }, []);
-  console.log(userInfo);
+  // console.log(userInfo);
 
   return (
     <div>
