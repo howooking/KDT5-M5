@@ -13,6 +13,9 @@ const AccountPage = () => {
       <nav>
         <ul>
           <li>
+            <Link to="selectBank">계좌 선택</Link>
+          </li>
+          <li>
             <Link to="connectAccount">계좌 연결</Link>
           </li>
           <li>

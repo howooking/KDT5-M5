@@ -18,6 +18,7 @@ import ConnectAccount from './routes/Account/ConnectAccount';
 import DeleteAccount from './routes/Account/DeleteAccount';
 import AccountList from './routes/Account/AccountList';
 import AccountPage from './routes/Account/AccountPage';
+import SelectBank from './routes/Account/SelectBank'
 
 function App() {
   return (
@@ -47,6 +48,7 @@ function App() {
           <Route path="connectAccount" element={<ConnectAccount />} />
           <Route path="accountList" element={<AccountList />} />
           <Route path="deleteAccount" element={<DeleteAccount />} />
+          <Route path="selectbank" element={<SelectBank />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Route>

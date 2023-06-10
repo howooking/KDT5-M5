@@ -1,20 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connectAccount } from '../../api/bankApi';
+import {Banks} from './Banks'
 
 interface ConnectAccountProps {
-  bankList: Bank[];
   accessToken: string
   onAccountConnected: (account: UserAccount) => void;
 }
 
 const ConnectAccount: React.FC<ConnectAccountProps> = ({
-  bankList,
   accessToken,
   onAccountConnected,
 }) => {
   const [bankCode, setBankCode] = useState<string>('');
   const [accountNumber, setAccountNumber] = useState<string>('');
   const [phoneNumber, setPhoneNumber] = useState<string>('');
+  const [bankData, setBankData] = useState<Bank[]>([]);
+
+  useEffect(() => {
+    const fetchBanks = async () => {
+      const fetchedBanks = await Banks();
+      setBankData(fetchedBanks);
+    };
+
+    fetchBanks();
+  }, []);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -41,7 +50,7 @@ const ConnectAccount: React.FC<ConnectAccountProps> = ({
           onChange={(e) => setBankCode(e.target.value)}
         >
           <option value="">은행을 선택해 주세요</option>
-          {bankList.map((bank) => (
+          {bankData.map((bank) => (
             <option key={bank.code} value={bank.code}>
               {bank.name}
             </option>
