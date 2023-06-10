@@ -13,23 +13,15 @@ export const EMAIL_REGEX =
 export const SUB_MENUS = [
   {
     label: '축구화',
-    href: 'soccer',
+    href: '/products/soccer',
   },
   {
     label: '풋살화',
-    href: 'footsal',
+    href: '/products/footsal',
   },
   {
-    label: '족구',
-    href: 'footvolley',
-  },
-  {
-    label: '운동화',
-    href: 'sneakers',
-  },
-  {
-    label: '의류',
-    href: 'wear',
+    label: '운동화/슬리퍼',
+    href: '/products/sneakers',
   },
 ];
 
@@ -69,9 +61,7 @@ export const SELECT_CATEGORY = [
   { name: '카테고리 선택', value: 'category' },
   { name: '축구화', value: 'soccer' },
   { name: '풋살화', value: 'footsal' },
-  { name: '족구화', value: 'footvolley' },
-  { name: '운동화', value: 'sneakers' },
-  { name: '의류', value: 'wear' },
+  { name: '운동화/슬리퍼', value: 'sneakers' },
 ];
 export const SELECT_BRAND = [
   { name: '브랜드 선택', value: 'brand' },

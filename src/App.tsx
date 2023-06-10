@@ -17,15 +17,17 @@ import AdminClients from './routes/Admin/AdminClients.tsx';
 import ChangeName from './routes/Auth/ChangeName.tsx';
 import ChangePassword from './routes/Auth/ChangePassword.tsx';
 import Info from './routes/Auth/Info.tsx';
+import ProductDetail from './routes/ProductDetail.tsx';
 
 export default function App() {
   return (
     <Routes>
       <Route element={<Layout />}>
         <Route path="/" element={<Home />} />
+        <Route path="/products/:category" element={<Products />} />
         <Route
-          path="/products"
-          element={<ProtectedRoute element={<Products />} />}
+          path="/products/:category/:productId"
+          element={<ProductDetail />}
         />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
