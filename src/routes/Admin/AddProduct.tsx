@@ -10,16 +10,25 @@ import { SELECT_BRAND, SELECT_CATEGORY } from '../../constants/constants';
 
 export default function AddProduct() {
   const [positive, setPositive] = useState(false);
-  const [productInputData, setProductInputData] = useState<ProductInputData>();
+  const [productInputData, setProductInputData] = useState<ProductInputData>({
+    title: '',
+    price: '',
+    description: '',
+    tags: [],
+    thumbnailBase64: '',
+    photoBase64: '',
+    discountRate: '',
+  });
   const [isSending, setIsSending] = useState(false);
   const [message, setMessage] = useState('');
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
 
-  console.log(Number(productInputData?.discountRate));
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value, type } = event.target;
     if (type === 'file') {
-      const files = event.target.files as FileList;
+      const files = (event.target as HTMLInputElement).files as FileList;
       const reader = new FileReader();
       reader.readAsDataURL(files[0]);
       reader.onloadend = () => {
@@ -31,6 +40,22 @@ export default function AddProduct() {
             } as ProductInputData)
         );
       };
+    } else if (name === 'category') {
+      setProductInputData(
+        (prevData) =>
+          ({
+            ...prevData,
+            tags: [value, prevData?.tags?.[1] || ''],
+          } as ProductInputData)
+      );
+    } else if (name === 'brand') {
+      setProductInputData(
+        (prevData) =>
+          ({
+            ...prevData,
+            tags: [prevData?.tags?.[0] || '', value],
+          } as ProductInputData)
+      );
     } else {
       setProductInputData(
         (prevData) =>
@@ -115,7 +140,7 @@ export default function AddProduct() {
         title: '',
         discountRate: '',
         photoBase64: '',
-        tags: [],
+        tags: ['카테고리 선택', '브랜드 선택'],
         thumbnailBase64: '',
       });
       return;
@@ -136,8 +161,8 @@ export default function AddProduct() {
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           <div className="flex gap-10">
             <div className="flex-1  space-y-3">
-              <Select options={SELECT_CATEGORY} />
-              <Select options={SELECT_BRAND} />
+              <Select options={SELECT_CATEGORY} onChange={handleChange} />
+              <Select options={SELECT_BRAND} onChange={handleChange} />
               <Input
                 placeholder="제품이름*"
                 name="title"

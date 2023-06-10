@@ -66,7 +66,7 @@ export const SUB_MENUS_ADMIN = [
 ];
 
 export const SELECT_CATEGORY = [
-  { name: '카테고리선택', value: '' },
+  { name: '카테고리 선택', value: 'category' },
   { name: '축구화', value: 'soccer' },
   { name: '풋살화', value: 'footsal' },
   { name: '족구화', value: 'footvolley' },
@@ -74,10 +74,10 @@ export const SELECT_CATEGORY = [
   { name: '의류', value: 'wear' },
 ];
 export const SELECT_BRAND = [
-  { name: '브랜드선택', value: '' },
-  { name: '축구화', value: 'soccer' },
-  { name: '풋살화', value: 'footsal' },
-  { name: '족구화', value: 'footvolley' },
-  { name: '운동화', value: 'sneakers' },
-  { name: '의류', value: 'wear' },
+  { name: '브랜드 선택', value: 'brand' },
+  { name: '나이키', value: 'nike' },
+  { name: '아디다스', value: 'adidas' },
+  { name: '미즈노', value: 'mizno' },
+  { name: '푸마', value: 'puma' },
+  { name: '기타', value: 'etc' },
 ];

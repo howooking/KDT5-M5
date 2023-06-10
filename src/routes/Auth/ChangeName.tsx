@@ -46,13 +46,13 @@ export default function ChangeName() {
     //   return;
     // }
     //유효성 검사2
-    const res = await editUser(userInfo?.accessToken, editData);
+    const res = await editUser(userInfo?.accessToken as string, editData);
     if (typeof res === 'string') {
       setMessage(res);
       return;
     }
     navigate('/myaccount/info', { replace: true });
-    authMe()
+    authMe();
   };
 
   return (
@@ -64,13 +64,6 @@ export default function ChangeName() {
         type="text"
         value={editData.displayName}
       />
-      {/* <Input
-        type="password"
-        name="oldPassword"
-        value={editData.oldPassword}
-        onChange={handleChange}
-        placeholder="비밀번호"
-      /> */}
       <AlertMessage message={message} />
       <Button text={'아이디수정'} />
     </form>
