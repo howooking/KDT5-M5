@@ -19,7 +19,6 @@ export default function ChangePassword() {
 
   // 서버와 전송상태에 따라 버튼의 상태를 바꿔주기 위해서 스테이트 지정
   // 에러메세지 타임아웃
-  
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,7 +40,6 @@ export default function ChangePassword() {
     }
 
     // 변경전 비번, 변경 후 비번 입력 안했을 때
-    setIsSending(false);
     if (
       editData.newPassword.trim() === '' ||
       editData.oldPassword.trim() === ''
@@ -71,6 +69,7 @@ export default function ChangePassword() {
       setTimeoutId(id);
       return;
     }
+
     setIsSending(true);
     const res = await editUser(userInfo?.accessToken as string, {
       newPassword: editData.newPassword,
@@ -88,42 +87,48 @@ export default function ChangePassword() {
     }
     setPositive(true);
     setMessage('비밀번호를 수정하였습니다.');
+    const id = setTimeout(() => {
+      setMessage('');
+    }, 2000);
+    setTimeoutId(id);
     setIsSending(false);
     setEditData({
       oldPassword: '',
       newPassword: '',
       checkPassword: '',
-    })
+    });
   };
 
   return (
-    <form onSubmit={handleSubmit} className="mx-auto w-1/2 mt-10">
-      <Input
-        onChange={handleChange}
-        type="password"
-        name="oldPassword"
-        value={editData.oldPassword}
-        placeholder="이전 비밀번호를 입력하세요."
-      />
-      <Input
-        onChange={handleChange}
-        type="password"
-        name="newPassword"
-        value={editData.newPassword}
-        placeholder="변경할 비밀번호를 입력하세요."
-      />
-      <Input
-        onChange={handleChange}
-        name="checkPassword"
-        type="password"
-        value={editData.checkPassword}
-        placeholder="변경할 비밀번호 확인"
-      />
-      <AlertMessage message={message} positive={positive} />
-      <Button
-        text={isSending ? <LoadingSpinner color="white" /> : '비밀번호 변경'}
-        disabled={isSending}
-      />
-    </form>
+    <div className="flex justify-center p-20">
+      <form onSubmit={handleSubmit} className="flex w-96 flex-col gap-3">
+        <Input
+          onChange={handleChange}
+          type="password"
+          name="oldPassword"
+          value={editData.oldPassword}
+          placeholder="이전 비밀번호를 입력하세요."
+        />
+        <Input
+          onChange={handleChange}
+          type="password"
+          name="newPassword"
+          value={editData.newPassword}
+          placeholder="변경할 비밀번호를 입력하세요."
+        />
+        <Input
+          onChange={handleChange}
+          name="checkPassword"
+          type="password"
+          value={editData.checkPassword}
+          placeholder="변경할 비밀번호 확인"
+        />
+        <AlertMessage message={message} positive={positive} />
+        <Button
+          text={isSending ? <LoadingSpinner color="white" /> : '비밀번호 변경'}
+          disabled={isSending}
+        />
+      </form>
+    </div>
   );
 }
