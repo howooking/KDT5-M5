@@ -1,17 +1,20 @@
-const API_URL = 'https://asia-northeast3-heropy-api.cloudfunctions.net/api';
+import { headers, url } from '../constants/constants.ts';
+// import AdminFetchProductDetail from './AdminFetchProductDetail.tsx';
 
-const api_headers = {
+// const API_URL = 'https://asia-northeast3-heropy-api.cloudfunctions.net/api';
+
+/*const api_headers = {
   'content-type': 'application/json',
   apikey: 'KDT5_nREmPe9B',
   username: 'KDT5_Team1',
   masterKey: 'true',
-};
+};*/
 
 export const addProduct = async (productData: ProductData | undefined) => {
   try {
-    const response = await fetch(`${API_URL}/products`, {
+    const response = await fetch(url, {
       method: 'POST',
-      headers: api_headers,
+      headers,
       body: JSON.stringify(productData),
     });
     const data = await response.json();
@@ -23,12 +26,12 @@ export const addProduct = async (productData: ProductData | undefined) => {
 
 export const updateProduct = async (
   productId: string,
-  updateData: UpdatedProduct
+  updateData: UpdatedProduct,
 ) => {
   try {
-    const response = await fetch(`${API_URL}/products/${productId}`, {
+    const response = await fetch(url + `/${productId}`, {
       method: 'PUT',
-      headers: api_headers,
+      headers,
       body: JSON.stringify(updateData),
     });
     const data = await response.json();
@@ -40,9 +43,9 @@ export const updateProduct = async (
 
 export const deleteProduct = async (productId: string) => {
   try {
-    await fetch(`${API_URL}/products/${productId}`, {
+    await fetch(url + `${productId}`, {
       method: 'DELETE',
-      headers: api_headers,
+      headers,
     });
     return true;
   } catch (error) {
@@ -57,8 +60,8 @@ export const getUsers = async () => {
       'https://asia-northeast3-heropy-api.cloudfunctions.net/api/auth/users',
       {
         method: 'GET',
-        headers: api_headers,
-      }
+        headers,
+      },
     );
     // 유저들 조회가 성공한 경우
     if (res.ok) {
@@ -73,3 +76,37 @@ export const getUsers = async () => {
     console.log('Error while getUser: ', error);
   }
 };
+
+export const getFetchProducts = async () => {
+  try {
+    const res =
+      await fetch(url, {
+        method: 'GET',
+        headers,
+      });
+    if (res.ok) {
+      const products: Product[] = await res.json();
+      return products;
+    }
+    const error = await res.json;
+    console.log(error);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getFetchProductDetail = async (productId :ProductId)=>
+{
+  try {
+    const res = await fetch(url + `${productId.text}`, {
+      method: 'GET',
+      headers,
+    });
+    if (res.ok) {
+      const productDetail: ProductDetail = await res.json();
+      return productDetail;
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}

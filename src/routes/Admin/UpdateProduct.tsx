@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { updateProduct } from '../../api/adminApi';
 
 const UpdateProduct: React.FC<ProductId> = ({ productId }) => {
   const [product, setProduct] = useState<UpdatedProduct>({});
-  const [rawTags, setRawTags] = useState<string>('');
-  
+  // const [rawTags, setRawTags] = useState<string>('');
+  const [rawTags, ] = useState<string>('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   const { name, value, checked } = e.target;
