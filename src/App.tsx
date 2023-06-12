@@ -1,23 +1,22 @@
-import './App.css';
 import { Route, Routes } from 'react-router-dom';
-import Layout from './components/Layout';
-import Home from './routes/Home';
-import NotFound from './routes/NotFound';
-import Products from './routes/Products';
-import Login from './routes/Auth/Login';
-import SignUp from './routes/Auth/SignUp';
-import Admin from './routes/Admin/Admin';
-import AddProduct from './routes/Admin/AddProduct';
-import ProtectedRoute from './components/ProtectedRoute';
-import AccountList from './routes/Account/AccountList';
-import AccountPage from './routes/Account/AccountPage';
-import AdminProducts from './routes/Admin/AdminProducts.tsx';
-import MyAccount from './routes/Auth/MyAccount';
-import AdminClients from './routes/Admin/AdminClients.tsx';
-import ChangeName from './routes/Auth/ChangeName.tsx';
-import ChangePassword from './routes/Auth/ChangePassword.tsx';
-import Info from './routes/Auth/Info.tsx';
-import ProductDetail from './routes/ProductDetail.tsx';
+import Layout from '@/components/Layout';
+import Home from '@/routes/Home';
+import NotFound from '@/routes/NotFound';
+import Products from '@/routes/Products';
+import Login from '@/routes/Auth/Login';
+import SignUp from '@/routes/Auth/SignUp';
+import Admin from '@/routes/Admin/Admin';
+import AddProduct from '@/routes/Admin/AddProduct';
+import ProtectedRoute from '@/components/ProtectedRoute';
+import AccountList from '@/routes/Account/AccountList';
+import AccountPage from '@/routes/Account/AccountPage';
+import AdminProducts from '@/routes/Admin/AdminProducts';
+import MyAccount from '@/routes/Auth/MyAccount';
+import AdminClients from '@/routes/Admin/AdminClients';
+import ChangeName from '@/routes/Auth/ChangeName';
+import ChangePassword from '@/routes/Auth/ChangePassword';
+import Info from '@/routes/Auth/Info';
+import ProductDetail from '@/routes/ProductDetail';
 
 export default function App() {
   return (

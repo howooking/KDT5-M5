@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import SectionTitle from './ui/SectionTitle';
-import { getProducts } from '../api/adminApi';
-import ProductCard from './ProductCard';
+import SectionTitle from '@/components/ui/SectionTitle';
+import { getProducts } from '@/api/adminApi';
+import ProductCard from '@/components/ProductCard';
 import { Link } from 'react-router-dom';
 
 interface ProductSectionProps {

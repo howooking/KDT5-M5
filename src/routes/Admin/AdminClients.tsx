@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { getUsers } from '../../api/adminApi';
-import SingleUser from '../../components/SingleUser';
-import { ADMINS } from '../../constants/constants';
+import { getUsers } from '@/api/adminApi';
+import SingleUser from '@/components/SingleUser';
+import { ADMINS } from '@/constants/constants';
 
 export default function AdminClients() {
   const [users, setUsers] = useState<CheckUser[]>([]);

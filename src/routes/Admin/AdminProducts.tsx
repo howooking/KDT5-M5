@@ -1,5 +1,5 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
-import { getProduct, getProducts } from '../../api/adminApi';
+import { getProduct, getProducts } from '@/api/adminApi';
 
 export default function AdminProducts() {
   const [products, setProducts] = useState<Product[]>();

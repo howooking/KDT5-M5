@@ -1,4 +1,4 @@
-import ProfileImage from './ui/ProfileImage';
+import ProfileImage from '@/components/ui/ProfileImage';
 
 interface SingleUserProps {
   email: string;

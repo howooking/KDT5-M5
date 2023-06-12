@@ -1,12 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Link } from 'react-router-dom';
-import { userStore } from '../store';
 import { useEffect } from 'react';
-import Search from './Search';
+import { Link } from 'react-router-dom';
+import { userStore } from '@/store';
+import Search from '@/components/Search';
 import { BsCart } from 'react-icons/bs';
-import SubNavbar from './SubNavbar';
-import { SUB_MENUS } from '../constants/constants';
-import ProfileImage from './ui/ProfileImage';
+import SubNavbar from '@/components/SubNavbar';
+import { SUB_MENUS } from '@/constants/constants';
+import ProfileImage from '@/components/ui/ProfileImage';
 
 export default function Navbar() {
   // store에서 필요한 메소드(로그아웃, 인증), 유져정보를 가져옴

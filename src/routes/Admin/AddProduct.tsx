@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { addProduct } from '../../api/adminApi';
-import Input from '../../components/ui/Input';
-import Button from '../../components/ui/Button';
-import AlertMessage from '../../components/ui/AlertMessage';
-import LoadingSpinner from '../../components/ui/LoadingSpinner';
-import ImageUpload from '../../components/ui/ImageUpload';
-import Select from '../../components/ui/Select';
-import { SELECT_BRAND, SELECT_CATEGORY } from '../../constants/constants';
+import { addProduct } from '@/api/adminApi';
+import Input from '@/components/ui/Input';
+import Button from '@/components/ui/Button';
+import AlertMessage from '@/components/ui/AlertMessage';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import ImageUpload from '@/components/ui/ImageUpload';
+import Select from '@/components/ui/Select';
+import { SELECT_BRAND, SELECT_CATEGORY } from '@/constants/constants';
 
 export default function AddProduct() {
   // 성공적으로 제품을 등록하였을 경우 message색을 초록색으로 바꾸기 위한 state
