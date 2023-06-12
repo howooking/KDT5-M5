@@ -14,9 +14,12 @@ export default function ProductSection({ category }: ProductSectionProps) {
   useEffect(() => {
     async function fetchData() {
       const res = await getProducts();
+      // return 값이 없는경우(상품조회에 실패한 경우)
+      // 일단은 아무 작업도 안함.. 나중에 기능 추가
       if (!res) {
         return;
       }
+      // 카테고리에 따라서 products을 setting
       const filteredProducts = res.filter((product) =>
         category ? product.tags[0] === category : product
       );
@@ -33,7 +36,7 @@ export default function ProductSection({ category }: ProductSectionProps) {
           <li
             className={`p-2 ${
               product.isSoldOut ? 'opacity-20' : ''
-            } cursor-pointer shadow-md`}
+            } group cursor-pointer shadow-md`}
           >
             <Link to={`/products/${product.tags[0]}/${product.id}`}>
               <ProductCard

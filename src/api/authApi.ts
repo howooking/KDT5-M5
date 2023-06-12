@@ -172,11 +172,11 @@ export const authenticate = async (accessToken: string | null) => {
 //사용자 정보수정
 
 //수정 성공시 응답값의 타입
-interface EditUserResponseValue {
-  email: string;
-  displayName: string;
-  profileImg: string | null;
-}
+// interface EditUserResponseValue {
+//   email: string;
+//   displayName: string;
+//   profileImg: string | null;
+// }
 
 export const editUser = async (
   accessToken: string,

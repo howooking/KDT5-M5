@@ -13,9 +13,9 @@ export default function Admin() {
   }, []);
 
   return (
-    <div className="flex flex-col">
-      <SubNavbar menus={SUB_MENUS_ADMIN} sub />
+    <>
+      <SubNavbar menus={SUB_MENUS_ADMIN} gray />
       <Outlet />
-    </div>
+    </>
   );
 }

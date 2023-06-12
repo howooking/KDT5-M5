@@ -28,6 +28,10 @@ export const SUB_MENUS = [
 // myAccount nav menu
 export const SUB_MENUS_MYACCOUNT = [
   {
+    label: '내 정보',
+    href: '/myaccount/info',
+  },
+  {
     label: '닉네임 변경',
     href: '/myaccount/changename',
   },
@@ -35,10 +39,10 @@ export const SUB_MENUS_MYACCOUNT = [
     label: '비밀번호 변경',
     href: '/myaccount/changepw',
   },
-  {
-    label: '구입목록',
-    href: '/myaccount/purchased',
-  },
+  // {
+  //   label: '구입목록',
+  //   href: '/myaccount/purchased',
+  // },
 ];
 
 // admin 패널 sub anvbar
