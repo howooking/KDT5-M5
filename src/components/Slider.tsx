@@ -29,6 +29,7 @@ export default function Slider() {
     >
       {SLIDES.map((slide) => (
         <img
+          key={slide}
           src={`slider/mainSlide${slide}.jpg`}
           alt={`/mainSlide${slide}`}
           className="mx-auto select-none hover:opacity-80"

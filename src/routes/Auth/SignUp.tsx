@@ -122,7 +122,7 @@ export default function SignUp() {
       return;
     }
     // 회원가입에 성공하는 경우
-    localStorage.setItem('token', res.accessToken);
+    localStorage.setItem('user', JSON.stringify(res));
     setUser({ ...res, isAdmin: false });
     setIsSending(true);
     navigate('/', { replace: true });

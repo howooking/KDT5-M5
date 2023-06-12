@@ -1,9 +1,6 @@
-const API_URL = 'https://asia-northeast3-heropy-api.cloudfunctions.net/api';
-
-const API_HEADERS = {
-  'content-type': 'application/json',
-  apikey: 'KDT5_nREmPe9B',
-  username: 'KDT5_Team1',
+import { API_URL, HEADERS } from '@/constants/constants';
+const MASTER_HEADERS = {
+  ...HEADERS,
   masterKey: 'true',
 };
 
@@ -23,7 +20,7 @@ export const addProduct = async (productData: AddProductData) => {
   try {
     const response = await fetch(`${API_URL}/products`, {
       method: 'POST',
-      headers: API_HEADERS,
+      headers: MASTER_HEADERS,
       body: JSON.stringify(productData),
     });
     if (response.ok) {
@@ -46,7 +43,7 @@ export const updateProduct = async (
   try {
     const response = await fetch(`${API_URL}/products/${productId}`, {
       method: 'PUT',
-      headers: API_HEADERS,
+      headers: MASTER_HEADERS,
       body: JSON.stringify(updateData),
     });
     const data = await response.json();
@@ -61,7 +58,7 @@ export const deleteProduct = async (productId: string) => {
     console.log(productId)
     await fetch(`${API_URL}`+/products/+`${productId}`, {
       method: 'DELETE',
-      headers: API_HEADERS,
+      headers: MASTER_HEADERS,
     });
     return true;
   } catch (error) {
@@ -76,7 +73,7 @@ export const getUsers = async () => {
       'https://asia-northeast3-heropy-api.cloudfunctions.net/api/auth/users',
       {
         method: 'GET',
-        headers: API_HEADERS,
+        headers: MASTER_HEADERS,
       }
     );
     // 유저들 조회가 성공한 경우
@@ -98,7 +95,7 @@ export async function getProducts() {
   try {
     const res = await fetch(`${API_URL}/products`, {
       method: 'GET',
-      headers: API_HEADERS,
+      headers: MASTER_HEADERS,
     });
     if (res.ok) {
       const products: Product[] = await res.json();
@@ -116,7 +113,7 @@ export async function getProductDetail(productId: { text: string }) {
     console.log(productId)
     const res = await fetch(`${API_URL}`+/products/+`${productId.text}`, {
       method: 'GET',
-      headers: API_HEADERS,
+      headers: MASTER_HEADERS,
     });
     if (res.ok) {
       const productDetail: ProductDetail = await res.json();

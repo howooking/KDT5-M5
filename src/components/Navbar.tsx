@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { userStore } from '@/store';
 import Search from '@/components/Search';
@@ -10,12 +9,7 @@ import ProfileImage from '@/components/ui/ProfileImage';
 
 export default function Navbar() {
   // store에서 필요한 메소드(로그아웃, 인증), 유져정보를 가져옴
-  const { userInfo, logoutUser, authMe } = userStore();
-
-  // 인증
-  useEffect(() => {
-    authMe();
-  }, []);
+  const { userInfo, logoutUser } = userStore();
 
   return (
     <>

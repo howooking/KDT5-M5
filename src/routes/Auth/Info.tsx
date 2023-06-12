@@ -7,7 +7,6 @@ import Button from '../../components/ui/Button';
 export default function Info() {
   const { userInfo } = userStore();
   const [profileImage, setProfileImage] = useState('');
-  console.log(profileImage);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files as FileList;
@@ -20,10 +19,11 @@ export default function Info() {
 
   const handleSubmit = () => {
     // 프로필 사진 변경 통신 로직
+    console.log(profileImage);
   };
 
   return (
-    <div className="flex justify-center p-10">
+    <div className="flex justify-center p-20">
       <div className="flex w-96 flex-col items-center gap-3 text-gray-700">
         <ProfileImage src={userInfo?.user.profileImg} />
         <h2 className="py-5 text-3xl font-bold">
