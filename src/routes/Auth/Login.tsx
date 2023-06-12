@@ -97,7 +97,6 @@ export default function Login() {
               placeholder="이메일"
               name="email"
               onChange={handleChange}
-              type="text"
               value={loginData.email}
             />
             <Input

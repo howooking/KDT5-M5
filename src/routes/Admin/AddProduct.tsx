@@ -83,7 +83,7 @@ export default function AddProduct() {
     // 제품이름 or 제품가격 or 제품설명을 입력하지 않은 경우
     if (
       productInputData.title.trim() === '' ||
-      !productInputData.price ||
+      productInputData.price.trim() === '' ||
       productInputData.description.trim() === ''
     ) {
       setMessage('제품이름, 가격, 제품설명을 모두 입력해주세요.');
@@ -97,7 +97,7 @@ export default function AddProduct() {
     // 할인율 0 ~ 99 가 아닌경우
     if (productInputData.discountRate) {
       if (!Number(productInputData.discountRate)) {
-        setMessage('할인율은 숫자값을 입력해주세요.');
+        setMessage('할인율은 0 ~ 99를 입력해주세요.');
         const id = setTimeout(() => {
           setMessage('');
         }, 2000);

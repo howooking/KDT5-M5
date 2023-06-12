@@ -20,7 +20,6 @@ interface AddProductResponseValue {
   discountRate: number; // 제품 할인율
 }
 export const addProduct = async (productData: AddProductData) => {
-  console.log(productData);
   try {
     const response = await fetch(`${API_URL}/products`, {
       method: 'POST',
