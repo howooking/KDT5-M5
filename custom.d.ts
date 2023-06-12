@@ -8,15 +8,27 @@ interface User {
   isAdmin: boolean;
 }
 
-interface ProductData {
+//체품 추가시 사용자가 입력하는 값
+interface ProductInputData {
+  title: string;
+  price: string;
+  description: string;
+  tags?: string[];
+  thumbnailBase64?: string;
+  photoBase64?: string;
+  discountRate?: string;
+}
+// 실제 제품 추가시 요구되는 값
+interface AddProductData {
   title: string;
   price: number;
   description: string;
   tags?: string[];
-  // thumbnailBase64?: string
-  // photoBase64?: string
+  thumbnailBase64?: string;
+  photoBase64?: string;
   discountRate?: number;
 }
+
 interface UpdatedProduct {
   title?: string; // 제품 이름
   price?: number; // 제품 가격
@@ -52,7 +64,6 @@ interface TotalBalance {
   accounts: UserAccount[];
 }
 
-
 // 어드민에서 사용자들 정보를 조회할 때 오는 사용자 정보 타입
 interface CheckUser {
   email: string; // 사용자 아이디
@@ -61,25 +72,24 @@ interface CheckUser {
 }
 
 interface ProductDetail {
-  id: string
-  title: string
-  price: number
-  description: string
-  tags: string[] // 제품 태그
-  thumbnail: string | null // 제품 썸네일
-  photo: string | null //상세이미지 URL
-  isSoldOut: boolean // 제품 매진여부
+  id: string;
+  title: string;
+  price: number;
+  description: string;
+  tags: string[]; // 제품 태그
+  thumbnail: string | null; // 제품 썸네일
+  photo: string | null; //상세이미지 URL
+  isSoldOut: boolean; // 제품 매진여부
   // reservations: Reservation[] | null //예약부분
-  discountRate: number
+  discountRate: number;
 }
 interface Product {
-  id: string // 제품 ID
-  title: string // 제품 이름
-  price: number // 제품 가격
-  description: string // 제품 설명(최대 100자)
-  tags: string[] // 제품 태그
-  thumbnail: string | null // 제품 썸네일 이미지(URL)
-  isSoldOut: boolean // 제품 매진 여부
-  discountRate: number // 제품 할인율
+  id: string; // 제품 ID
+  title: string; // 제품 이름
+  price: number; // 제품 가격
+  description: string; // 제품 설명(최대 100자)
+  tags: string[]; // 제품 태그
+  thumbnail: string | null; // 제품 썸네일 이미지(URL)
+  isSoldOut: boolean; // 제품 매진 여부
+  discountRate: number; // 제품 할인율
 }
-

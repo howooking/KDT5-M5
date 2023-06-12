@@ -20,6 +20,9 @@ export default function Login() {
 
   const [isSending, setIsSending] = useState(false);
 
+  // 에러메세지 타임아웃
+  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
+
   // 로그인 과정 사용자와 상호작용
   const [message, setMessage] = useState(' ');
   const [loginData, setLoginData] = useState({ email: '', password: '' });
@@ -28,17 +31,31 @@ export default function Login() {
     // form이벤트의 기본 새로고침을 막음
     event.preventDefault();
 
+    // 이전 타임아웃이 아직 작동중이 초기화
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+      setTimeoutId(null);
+    }
+
     //// 클라이언트 사이드 유효성 검사
 
     // 이메일과 비밀번호를 입력하지 않은경우
     if (loginData.email.trim() === '' || loginData.password.trim() === '') {
       setMessage('이메일 또는 비밀번호를 입력해주세요.');
+      const id = setTimeout(() => {
+        setMessage('');
+      }, 2000);
+      setTimeoutId(id);
       return;
     }
 
     // 이메일의 유효성 검사
     if (!EMAIL_REGEX.test(loginData.email)) {
       setMessage('올바른 이메일을 입력해주세요.');
+      const id = setTimeout(() => {
+        setMessage('');
+      }, 2000);
+      setTimeoutId(id);
       return;
     }
 
@@ -47,6 +64,10 @@ export default function Login() {
     // 기타오류, 없는 이메일 or 비번 입력 오류 or 유효성 오류 or apikey오류
     if (typeof res === 'string') {
       setMessage(res);
+      const id = setTimeout(() => {
+        setMessage('');
+      }, 2000);
+      setTimeoutId(id);
       setIsSending(false);
       return;
     }
@@ -71,12 +92,11 @@ export default function Login() {
       <div className="flex w-[436px] flex-col">
         <h3 className="py-3 text-3xl text-gray-800">로그인</h3>
         <form onSubmit={handleLogin} className="flex flex-col">
-          <div className="flex-1">
+          <div className="space-y-3">
             <Input
               placeholder="이메일"
               name="email"
               onChange={handleChange}
-              type="text"
               value={loginData.email}
             />
             <Input
