@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { getUsers } from '../../api/adminApi';
 import SingleUser from '../../components/SingleUser';
 
-import React from 'react';
+// import React from 'react';
 
 interface CheckUser {
   email: string; // 사용자 아이디
