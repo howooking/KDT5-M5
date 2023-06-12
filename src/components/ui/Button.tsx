@@ -4,7 +4,7 @@
 interface ButtonProps {
   text: string | JSX.Element;
   secondary?: boolean;
-  onClick?: (event: React.FormEvent<HTMLFormElement> | void) => void;
+  // onClick?: (event: React.FormEvent<HTMLFormElement> | void) => void;
   disabled?: boolean;
 }
 

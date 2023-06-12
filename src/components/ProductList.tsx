@@ -1,18 +1,22 @@
-export default function ProductList(products:Product[]) {
+import React from 'react';
+
+export default function ProductList(
+  products:Product[] ,handleSearch, handleDelete, handleUpdate ) {
   console.log(products)
   return (
     <div className={'m-4 border-2 border-red-300'}>
       <h2 className={'mb-8 mt-10 text-2xl'}>제품 전체 조회</h2>
       <div className={'divider'} />
       <div>
-        <button className={'btn-info btn mr-4 w-[200px] text-2xl'}>
-          제품 추가
-        </button>
+        <div
+          className={'btn btn-primary'}
+        >
+          제품추가</div>
       </div>
       <div className={'divider'} />
       <table
         className={
-          'table-zebra mx-auto table w-[90%] table-fixed border-spacing-4 text-center text-xl'
+          'table-zebra mx-auto table w-[90%] table-fixed  text-xl'
         }
       >
         <thead>
@@ -34,10 +38,10 @@ export default function ProductList(products:Product[]) {
               {/*<td>{product.id}</td>*/}
               <td>
                 <img
-                  // src={product.thumbnail}
+                  src={product.thumbnail}
                   // src={image}
                   className={'w-[100px]'}
-                  alt="썸네일"
+                  alt='썸네일'
                 />
               </td>
               <td>
@@ -54,24 +58,29 @@ export default function ProductList(products:Product[]) {
               <td>{product.tags}</td>
               <td className={'w-[100px]'}>{product.isSoldOut}</td>
               <td className={'w-[100px]'}>{product.discountRate}</td>
-              {/*<td>
+              <td>
                 <button
-                  className={'btn-primary btn pb-0 text-xl'}
+                  className={'btn-primary btn pb-0 text-xl mb-1'}
                   onClick={handleSearch}
                   value={product.id}
                 >
-                  조회
-                </button>
-                <button className={'btn text-xl'} onClick={handleUpdate}>
-                  수정
+                  상세조회
                 </button>
                 <button
-                  className={'btn-info btn text-xl'}
-                  onClick={handleDelete}
+                  className={'btn text-xl btn-info mb-1'}
+                  onClick={handleUpdate}
+                  value={product.id}
                 >
-                  삭제
+                  상품수정
                 </button>
-              </td>*/}
+                <button
+                  className={'btn-accent btn text-xl'}
+                  onClick={handleDelete}
+                  value={product.id}
+                >
+                  상품삭제
+                </button>
+              </td>
             </tr>
           );
         })}

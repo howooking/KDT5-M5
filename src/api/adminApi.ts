@@ -58,7 +58,8 @@ export const updateProduct = async (
 
 export const deleteProduct = async (productId: string) => {
   try {
-    await fetch(`${API_URL}/products/${productId}`, {
+    console.log(productId)
+    await fetch(`${API_URL}`+/products/+`${productId}`, {
       method: 'DELETE',
       headers: API_HEADERS,
     });
@@ -110,9 +111,10 @@ export async function getProducts() {
   }
 }
 
-export async function getProduct(productId: { text: string }) {
+export async function getProductDetail(productId: { text: string }) {
   try {
-    const res = await fetch(`${API_URL}/products/${productId}`, {
+    console.log(productId)
+    const res = await fetch(`${API_URL}`+/products/+`${productId.text}`, {
       method: 'GET',
       headers: API_HEADERS,
     });
