@@ -34,6 +34,7 @@ export default function ProductSection({ category }: ProductSectionProps) {
       <ul className="grid grid-cols-5 gap-10">
         {products?.map((product) => (
           <li
+            key={product.id}
             className={`p-2 ${
               product.isSoldOut ? 'opacity-20' : ''
             } group cursor-pointer shadow-md`}

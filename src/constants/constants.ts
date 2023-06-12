@@ -1,3 +1,13 @@
+// API
+export const API_URL =
+  'https://asia-northeast3-heropy-api.cloudfunctions.net/api';
+
+export const HEADERS = {
+  'content-type': 'application/json',
+  apikey: 'KDT5_nREmPe9B',
+  username: 'KDT5_Team1',
+};
+
 // 어드민 이메일 목록
 export const ADMINS = [
   'admin@naver.com',

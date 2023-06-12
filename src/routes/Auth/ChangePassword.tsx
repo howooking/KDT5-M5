@@ -58,31 +58,33 @@ export default function ChangePassword() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="mx-auto w-1/2">
-      <Input
-        onChange={handleChange}
-        type="password"
-        name="oldPassword"
-        value={editData.oldPassword}
-        placeholder="이전 비밀번호를 입력하세요."
-      />
-      <Input
-        onChange={handleChange}
-        type="password"
-        name="newPassword"
-        value={editData.newPassword}
-        placeholder="변경할 비밀번호를 입력하세요."
-      />
-      <Input
-        onChange={handleChange}
-        name="checkPassword"
-        type="password"
-        value={editData.checkPassword}
-        placeholder="변경할 비밀번호 확인"
-      />
-      <AlertMessage message={message} positive={positive} />
+    <div className="flex justify-center p-20">
+      <form onSubmit={handleSubmit} className="flex w-96 flex-col gap-3">
+        <Input
+          onChange={handleChange}
+          type="password"
+          name="oldPassword"
+          value={editData.oldPassword}
+          placeholder="이전 비밀번호를 입력하세요."
+        />
+        <Input
+          onChange={handleChange}
+          type="password"
+          name="newPassword"
+          value={editData.newPassword}
+          placeholder="변경할 비밀번호를 입력하세요."
+        />
+        <Input
+          onChange={handleChange}
+          name="checkPassword"
+          type="password"
+          value={editData.checkPassword}
+          placeholder="변경할 비밀번호 확인"
+        />
+        <AlertMessage message={message} positive={positive} />
 
-      <Button text="수정" />
-    </form>
+        <Button text="수정" />
+      </form>
+    </div>
   );
 }
