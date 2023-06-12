@@ -96,19 +96,12 @@ export default function AddProduct() {
 
     // 할인율 0 ~ 99 가 아닌경우
     if (productInputData.discountRate) {
-      if (!Number(productInputData.discountRate)) {
-        setMessage('할인율은 0 ~ 99를 입력해주세요.');
-        const id = setTimeout(() => {
-          setMessage('');
-        }, 2000);
-        setTimeoutId(id);
-        return;
-      }
       if (
+        !Number(productInputData.discountRate) ||
         Number(productInputData.discountRate) <= 0 ||
         Number(productInputData.discountRate) >= 100
       ) {
-        setMessage('할인율은 0 ~ 99 사이값으로 입력해주세요.');
+        setMessage('할인율은 0 ~ 99를 입력해주세요.');
         const id = setTimeout(() => {
           setMessage('');
         }, 2000);
