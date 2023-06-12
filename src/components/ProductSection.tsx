@@ -1,35 +1,44 @@
 import { useEffect, useState } from 'react';
-import SectionTitle from './ui/SectionTitle';
-import { getProducts } from '../api/adminApi';
-import ProductCard from './ProductCard';
+import SectionTitle from '@/components/ui/SectionTitle';
+import { getProducts } from '@/api/adminApi';
+import ProductCard from '@/components/ProductCard';
 import { Link } from 'react-router-dom';
 
-export default function ProductSection() {
+interface ProductSectionProps {
+  category?: string;
+}
+
+export default function ProductSection({ category }: ProductSectionProps) {
   const [products, setProducts] = useState<Product[]>();
 
   useEffect(() => {
     async function fetchData() {
-      const data = await getProducts();
-      if (!data) {
+      const res = await getProducts();
+      // return 값이 없는경우(상품조회에 실패한 경우)
+      // 일단은 아무 작업도 안함.. 나중에 기능 추가
+      if (!res) {
         return;
       }
-      setProducts(data);
+      // 카테고리에 따라서 products을 setting
+      const filteredProducts = res.filter((product) =>
+        category ? product.tags[0] === category : product
+      );
+      setProducts(filteredProducts);
     }
     fetchData();
-  }, []);
-  console.log(products);
+  }, [category]);
 
   return (
     <section className="container mx-auto px-20">
-      <SectionTitle text="신상품 초이스" />
+      <SectionTitle text={category} />
       <ul className="grid grid-cols-5 gap-10">
         {products?.map((product) => (
           <li
             className={`p-2 ${
               product.isSoldOut ? 'opacity-20' : ''
-            } cursor-pointer shadow-md`}
+            } group cursor-pointer shadow-md`}
           >
-            <Link to={`/products/${product.id}`}>
+            <Link to={`/products/${product.tags[0]}/${product.id}`}>
               <ProductCard
                 key={product.id}
                 title={product.title}

@@ -24,7 +24,6 @@ export default function Slider() {
           margin: '4px 6px',
           border: '2px solid #e41717',
           borderRadius: '50%',
-          color: '#e41717',
         },
       }}
     >

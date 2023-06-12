@@ -13,28 +13,24 @@ export const EMAIL_REGEX =
 export const SUB_MENUS = [
   {
     label: '축구화',
-    href: 'soccer',
+    href: '/products/soccer',
   },
   {
     label: '풋살화',
-    href: 'footsal',
+    href: '/products/footsal',
   },
   {
-    label: '족구',
-    href: 'footvolley',
-  },
-  {
-    label: '운동화',
-    href: 'sneakers',
-  },
-  {
-    label: '의류',
-    href: 'wear',
+    label: '운동화/슬리퍼',
+    href: '/products/sneakers',
   },
 ];
 
 // myAccount nav menu
 export const SUB_MENUS_MYACCOUNT = [
+  {
+    label: '내 정보',
+    href: '/myaccount/info',
+  },
   {
     label: '닉네임 변경',
     href: '/myaccount/changename',
@@ -43,10 +39,10 @@ export const SUB_MENUS_MYACCOUNT = [
     label: '비밀번호 변경',
     href: '/myaccount/changepw',
   },
-  {
-    label: '구입목록',
-    href: '/myaccount/purchased',
-  },
+  // {
+  //   label: '구입목록',
+  //   href: '/myaccount/purchased',
+  // },
 ];
 
 // admin 패널 sub anvbar
@@ -66,18 +62,16 @@ export const SUB_MENUS_ADMIN = [
 ];
 
 export const SELECT_CATEGORY = [
-  { name: '카테고리선택', value: '' },
+  { name: '카테고리 선택', value: 'category' },
   { name: '축구화', value: 'soccer' },
   { name: '풋살화', value: 'footsal' },
-  { name: '족구화', value: 'footvolley' },
-  { name: '운동화', value: 'sneakers' },
-  { name: '의류', value: 'wear' },
+  { name: '운동화/슬리퍼', value: 'sneakers' },
 ];
 export const SELECT_BRAND = [
-  { name: '브랜드선택', value: '' },
-  { name: '축구화', value: 'soccer' },
-  { name: '풋살화', value: 'footsal' },
-  { name: '족구화', value: 'footvolley' },
-  { name: '운동화', value: 'sneakers' },
-  { name: '의류', value: 'wear' },
+  { name: '브랜드 선택', value: 'brand' },
+  { name: '나이키', value: 'nike' },
+  { name: '아디다스', value: 'adidas' },
+  { name: '미즈노', value: 'mizno' },
+  { name: '푸마', value: 'puma' },
+  { name: '기타', value: 'etc' },
 ];

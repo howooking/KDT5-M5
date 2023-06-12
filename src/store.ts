@@ -1,6 +1,6 @@
 import { create } from 'zustand';
-import { authenticate, logOut } from './api/authApi';
-import { ADMINS } from './constants/constants';
+import { authenticate, logOut } from '@/api/authApi';
+import { ADMINS } from '@/constants/constants';
 
 // user관련 전역state(store)에 무엇이 들어가는지 타입지정
 interface UserState {

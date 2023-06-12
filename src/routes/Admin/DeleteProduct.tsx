@@ -1,4 +1,4 @@
-import { deleteProduct } from '../../api/adminApi';
+import { deleteProduct } from '@/api/adminApi';
 
 const DeleteProduct: React.FC<ProductId> = ({ productId }) => {
   const handleDelete = async () => {

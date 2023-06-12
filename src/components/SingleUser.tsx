@@ -1,3 +1,5 @@
+import ProfileImage from '@/components/ui/ProfileImage';
+
 interface SingleUserProps {
   email: string;
   displayName: string;
@@ -20,11 +22,7 @@ export default function SingleUser({
       }`}
     >
       <td className="py-2">
-        <img
-          src={profileImg || '/defaultProfile.jpg'}
-          alt="Profile"
-          className="mx-auto inline-block h-8 w-8 rounded-full object-cover"
-        />
+        <ProfileImage small src={profileImg} />
       </td>
       <td>{email}</td>
       <td>{displayName}</td>

@@ -1,11 +1,7 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect } from 'react';
-import { userStore } from '../store';
+import { useParams } from 'react-router-dom';
+import ProductSection from '@/components/ProductSection';
 
 export default function Products() {
-  const { authMe, userInfo } = userStore();
-  useEffect(() => {
-    authMe();
-  }, []);
-  return <div>{userInfo?.user.displayName}</div>;
+  const { category } = useParams();
+  return <ProductSection category={category} />;
 }
