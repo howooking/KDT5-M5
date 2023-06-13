@@ -9,7 +9,6 @@ const AccountPage = () => {
   }, [authMe]);
   return (
     <div>
-      <h2>계좌 관리</h2>
       <nav>
         <ul>
           <li>
@@ -20,9 +19,6 @@ const AccountPage = () => {
           </li>
           <li>
             <Link to="accountList">계좌 리스트</Link>
-          </li>
-          <li>
-            <Link to="deleteAccount">계좌 삭제</Link>
           </li>
         </ul>
       </nav>

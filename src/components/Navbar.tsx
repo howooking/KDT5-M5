@@ -12,11 +12,11 @@ export default function Navbar() {
   useEffect(() => {
     authMe();
   }, []);
-  console.log(userInfo);
+  // console.log(userInfo);
 
   return (
     <div>
-      <header className="container relative mx-auto flex h-20 items-center justify-between px-20">
+      <header className="container relative mx-auto flex h-20 items-center justify-between px-20 text-sm">
         <Link to="/">
           <img src="/mainlogo.png" alt="logo" className="h-16" />
         </Link>
@@ -30,13 +30,13 @@ export default function Navbar() {
                 </Link>
               </li>
               {userInfo.isAdmin ? (
-                <Link to="/admin" className="text-gray-500">
+                <Link to="/admin/clients" className="text-gray-500">
                   관리자
                 </Link>
               ) : (
                 <></>
               )}
-              <Link to="/myaccount" className="text-gray-500">
+              <Link to="/myaccount/info" className="text-gray-500">
                 {userInfo.user.displayName}님
               </Link>
               <img

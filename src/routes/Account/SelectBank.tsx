@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getBankList } from '../../api/bankApi';
 
-const BankList: React.FC<{ accessToken: string}> = ({ accessToken }) => {
+const SelectBank= () => {
   const [banks, setBanks] = useState<Bank[]>([]);
+
+  const getAccessToken = () => localStorage.getItem('token');
+  const accessToken = getAccessToken() || '';
 
   useEffect(() => {
     const fetchBanks = async () => {
@@ -43,4 +46,4 @@ const BankList: React.FC<{ accessToken: string}> = ({ accessToken }) => {
   );
 };
 
-export default BankList;
+export default SelectBank;

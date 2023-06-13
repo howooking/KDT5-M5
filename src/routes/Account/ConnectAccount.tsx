@@ -3,22 +3,24 @@ import { connectAccount } from '../../api/bankApi';
 import {Banks} from './Banks'
 
 interface ConnectAccountProps {
-  accessToken: string
   onAccountConnected: (account: UserAccount) => void;
 }
 
 const ConnectAccount: React.FC<ConnectAccountProps> = ({
-  accessToken,
   onAccountConnected,
 }) => {
   const [bankCode, setBankCode] = useState<string>('');
   const [accountNumber, setAccountNumber] = useState<string>('');
   const [phoneNumber, setPhoneNumber] = useState<string>('');
+  const [signature, setSignature] = useState(false);
   const [bankData, setBankData] = useState<Bank[]>([]);
+  
+  const getAccessToken = () => localStorage.getItem('token');
+  const accessToken = getAccessToken() || '';
 
   useEffect(() => {
-    const fetchBanks = async () => {
-      const fetchedBanks = await Banks();
+    const fetchBanks = () => {
+      const fetchedBanks = Banks();
       setBankData(fetchedBanks);
     };
 
@@ -32,12 +34,16 @@ const ConnectAccount: React.FC<ConnectAccountProps> = ({
         bankCode,
         accountNumber,
         phoneNumber,
-        signature: false,
+        signature,
       }, accessToken);
       onAccountConnected(account);
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const handleSignature = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSignature(event.target.checked);
   };
 
   return (
@@ -76,6 +82,11 @@ const ConnectAccount: React.FC<ConnectAccountProps> = ({
           value={phoneNumber}
           onChange={(e) => setPhoneNumber(e.target.value)}
         />
+      </label>
+      <br />
+      <label>
+      동의
+      <input type="checkbox" checked={signature} onChange={handleSignature} />
       </label>
       <br />
       <button type="submit">계좌 연결</button>

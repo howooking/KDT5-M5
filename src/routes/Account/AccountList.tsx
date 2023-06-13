@@ -1,9 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { getAccountList } from '../../api/bankApi';
+import DeleteAccount from './DeleteAccount';
 
-const AccountList: React.FC<{ accessToken: string}> = ({accessToken}) => {
+const AccountList = () => {
   const [totalBalance, setTotalBalance] = useState<number>(0);
   const [accounts, setAccounts] = useState<UserAccount[]>([]);
+  const [selectedAccounts, setSelectedAccounts] = useState<Set<string>>(new Set());
+
+  const getAccessToken = () => localStorage.getItem('token');
+  const accessToken = getAccessToken() || '';
 
   useEffect(() => {
     const fetchAccountList = async () => {
@@ -16,8 +21,24 @@ const AccountList: React.FC<{ accessToken: string}> = ({accessToken}) => {
       }
     };
 
-    fetchAccountList();
-  }, []);
+    if (accessToken) {
+      fetchAccountList();
+    }
+  }, [accessToken]);
+
+  const handleAccountDeleted = (deletedAccount: UserAccount) => {
+    setAccounts(accounts.filter(account => account.id !== deletedAccount.id));
+  };
+
+  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>, accountId: string) => {
+    const newSelectedAccounts = new Set(selectedAccounts);
+    if (event.target.checked) {
+      newSelectedAccounts.add(accountId);
+    } else {
+      newSelectedAccounts.delete(accountId);
+    }
+    setSelectedAccounts(newSelectedAccounts);
+  };
 
   return (
     <div>
@@ -25,6 +46,7 @@ const AccountList: React.FC<{ accessToken: string}> = ({accessToken}) => {
       <table>
         <thead>
           <tr>
+            <th>체크</th>
             <th>은행명</th>
             <th>계좌번호</th>
             <th>잔액</th>
@@ -33,6 +55,12 @@ const AccountList: React.FC<{ accessToken: string}> = ({accessToken}) => {
         <tbody>
           {accounts.map((account) => (
             <tr key={account.id}>
+              <td>
+                <input
+                  type="checkbox"
+                  onChange={(event) => handleCheckboxChange(event, account.id)}
+                />
+              </td>
               <td>{account.bankName}</td>
               <td>{account.accountNumber}</td>
               <td>{account.balance}</td>
@@ -40,6 +68,20 @@ const AccountList: React.FC<{ accessToken: string}> = ({accessToken}) => {
           ))}
         </tbody>
       </table>
+      <DeleteAccount
+      accounts={Array.from(selectedAccounts).reduce((result: UserAccount[], accountId) => {
+        const account = accounts.find(account => account.id === accountId);
+      if (account) {
+        result.push(account);
+      }
+      return result;
+      }, [])}
+      onAccountsDeleted={(deletedAccounts) => {
+        deletedAccounts.forEach(deletedAccount =>
+          handleAccountDeleted(deletedAccount)
+    );
+  }}
+/>
     </div>
   );
 };

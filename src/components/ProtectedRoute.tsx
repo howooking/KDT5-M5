@@ -16,6 +16,7 @@ export default function ProtectedRoute({
   const [loading, setLoading] = useState(true);
   const { authMe } = userStore();
   const [loggedInUser, setLoggedInUser] = useState<User | void>();
+
   useEffect(() => {
     async function getLoggedInUser() {
       const user = await authMe();

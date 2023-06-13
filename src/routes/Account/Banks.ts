@@ -1,4 +1,4 @@
-export async function Banks() {
+export function Banks() {
   return [
     { name: 'KB국민은행', code: '004', digits: [3, 2, 4, 3], disabled: false },
     { name: '신한은행', code: '088', digits: [3, 3, 6], disabled: false },

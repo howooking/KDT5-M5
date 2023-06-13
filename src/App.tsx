@@ -1,5 +1,5 @@
-import { Route, Routes } from 'react-router-dom';
 import './App.css';
+import { Route, Routes } from 'react-router-dom';
 import Layout from './components/Layout';
 import Home from './routes/Home';
 import NotFound from './routes/NotFound';
@@ -8,52 +8,52 @@ import Login from './routes/Auth/Login';
 import SignUp from './routes/Auth/SignUp';
 import Admin from './routes/Admin/Admin';
 import AddProduct from './routes/Admin/AddProduct';
-import DeleteProduct from './routes/Admin/DeleteProduct';
-import UpdateProduct from './routes/Admin/UpdateProduct';
-import UserCheck from './routes/Admin/UserCheck';
 import ProtectedRoute from './components/ProtectedRoute';
-import EditUser from './routes/Auth/EditUser';
 import MyAccount from './routes/Auth/MyAccount';
 import ConnectAccount from './routes/Account/ConnectAccount';
-import DeleteAccount from './routes/Account/DeleteAccount';
+import SelectBank from './routes/Account/SelectBank'
 import AccountList from './routes/Account/AccountList';
 import AccountPage from './routes/Account/AccountPage';
-import SelectBank from './routes/Account/SelectBank'
+import AdminProducts from './routes/Admin/AdminProducts.tsx';
+import AdminClients from './routes/Admin/AdminClients.tsx';
+import ChangeName from './routes/Auth/ChangeName.tsx';
+import ChangePassword from './routes/Auth/ChangePassword.tsx';
+import Info from './routes/Auth/Info.tsx';
+import ProductDetail from './routes/ProductDetail.tsx';
 
-function App() {
+export default function App() {
   return (
     <Routes>
       <Route element={<Layout />}>
         <Route path="/" element={<Home />} />
+        <Route path="/products/:category" element={<Products />} />
         <Route
-          path="/products"
-          element={<ProtectedRoute element={<Products />} />}
+          path="/products/:category/:productId"
+          element={<ProductDetail />}
         />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
-        <Route path="/myaccount" element={<MyAccount />} />
+        <Route path="/myaccount" element={<MyAccount />}>
+          <Route path="info" element={<Info />} />
+          <Route path="changename" element={<ChangeName />} />
+          <Route path="changepw" element={<ChangePassword />} />
+          
+          <Route path="bank" element={<AccountPage/> }>
+            <Route path="connectAccount" element={<ConnectAccount />} />
+            <Route path="accountList" element={<AccountList />} />
+            <Route path="selectBank" element={<SelectBank />} />
+          </Route>
+        </Route>
         <Route
           path="/admin"
           element={<ProtectedRoute adminRequired element={<Admin />} />}
         >
+          <Route path="clients" element={<AdminClients />} />
+          <Route path="products" element={<AdminProducts />} />
           <Route path="addProduct" element={<AddProduct />} />
-          <Route path="deleteProduct" element={<DeleteProduct />} />
-          <Route path="updateProduct" element={<UpdateProduct />} />
-          <Route path="userCheck" element={<UserCheck />} />
-        </Route>
-        <Route
-          path="/account"
-          element={<AccountPage />}
-        >
-          <Route path="connectAccount" element={<ConnectAccount />} />
-          <Route path="accountList" element={<AccountList />} />
-          <Route path="deleteAccount" element={<DeleteAccount />} />
-          <Route path="selectbank" element={<SelectBank />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
   );
 }
-
-export default App;

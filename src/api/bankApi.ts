@@ -52,6 +52,8 @@ export const connectAccount = async (
   },
   accessToken: string
   ): Promise<UserAccount> => {
+    console.log("API 호출 전 requestBody: ", requestBody);
+    console.log("API 호출 전 accessToken: ", accessToken);
   const response = await fetch(`${API_BASE_URL}/account`, {
     method: "POST",
     headers: {
@@ -61,10 +63,13 @@ export const connectAccount = async (
     body: JSON.stringify(requestBody),
   });
 
+  console.log("API 호출 후 response: ", response);
+
   if (response.ok) {
     const data: UserAccount = await response.json();
     return data;
   } else {
+    console.error("API 호출 실패 response: ", response);
     throw new Error("Failed to connect account");
   }
 };

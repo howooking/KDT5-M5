@@ -7,17 +7,36 @@ const api_headers = {
   masterKey: 'true',
 };
 
-export const addProduct = async (productData: ProductData | undefined) => {
+interface AddProductResponseValue {
+  // 추가한 제품의 상세 내용
+  id: string; // 제품 ID
+  title: string; // 제품 이름
+  price: number; // 제품 가격
+  description: string; // 제품 상세 설명
+  tags: string[]; // 제품 태그
+  thumbnail: string | null; // 제품 썸네일 이미지(URL)
+  photo: string | null; // 제품 상세 이미지(URL)
+  isSoldOut: boolean; // 제품 매진 여부
+  discountRate: number; // 제품 할인율
+}
+export const addProduct = async (productData: AddProductData) => {
+  console.log(productData);
   try {
     const response = await fetch(`${API_URL}/products`, {
       method: 'POST',
       headers: api_headers,
       body: JSON.stringify(productData),
     });
-    const data = await response.json();
-    return data;
+    if (response.ok) {
+      const addedData: AddProductResponseValue = await response.json();
+      console.log(addedData);
+      return;
+    }
+    const error: string = await response.json();
+    return error;
   } catch (error) {
-    throw new Error('Failed to add product.');
+    console.log('Error while getUser: ', error);
+    return '상품 추가 중 에러가 발생하였습니다.';
   }
 };
 
@@ -73,3 +92,35 @@ export const getUsers = async () => {
     console.log('Error while getUser: ', error);
   }
 };
+
+export async function getProducts() {
+  try {
+    const res = await fetch(`${API_URL}/products`, {
+      method: 'GET',
+      headers: api_headers,
+    });
+    if (res.ok) {
+      const products: Product[] = await res.json();
+      return products;
+    }
+    const error = await res.json;
+    console.log(error);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function getProduct(productId: { text: string }) {
+  try {
+    const res = await fetch(`${API_URL}/products/${productId}`, {
+      method: 'GET',
+      headers: api_headers,
+    });
+    if (res.ok) {
+      const productDetail: ProductDetail = await res.json();
+      return productDetail;
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
