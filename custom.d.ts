@@ -13,7 +13,7 @@ interface ProductInputData {
   title: string;
   price: string;
   description: string;
-  tags?: string[];
+  tags: string[];
   thumbnailBase64?: string;
   photoBase64?: string;
   discountRate?: string;
