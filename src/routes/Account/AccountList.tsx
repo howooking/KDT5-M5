@@ -11,16 +11,12 @@ const AccountList = () => {
   const accessToken = getAccessToken() || '';
 
   useEffect(() => {
-    const fetchAccountList = async () => {
-      try {
-        const data = await getAccountList(accessToken);
-        setTotalBalance(data.totalBalance);
-        setAccounts(data.accounts);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
+    async function fetchAccountList() {
+      const data = await getAccountList(accessToken);
+      setTotalBalance(data.totalBalance);
+      setAccounts(data.accounts);
+    }
+  
     if (accessToken) {
       fetchAccountList();
     }

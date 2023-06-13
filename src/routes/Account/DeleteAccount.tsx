@@ -13,26 +13,24 @@ const DeleteAccount: React.FC<DeleteAccountProps> = ({
   const getAccessToken = () => localStorage.getItem('token');
   const accessToken = getAccessToken() || '';
 
-  const handleDelete = async () => {
-    try {
-      const deletedAccounts: UserAccount[] = [];
-
-      for (const account of accounts) {
-        const isSuccess = await deleteAccount({
-          accountId: account.id,
-          signature: true,
-        }, accessToken);
-
-        if (isSuccess) {
-          deletedAccounts.push(account);
-        }
+  async function handleDelete() {
+    const deletedAccounts: UserAccount[] = [];
+  
+    for (const account of accounts) {
+      const isSuccess = await deleteAccount({
+        accountId: account.id,
+        signature: true,
+      },
+        accessToken
+      );
+  
+      if (isSuccess) {
+        deletedAccounts.push(account);
       }
-
-      onAccountsDeleted(deletedAccounts);
-    } catch (error) {
-      console.error(error);
     }
-  };
+  onAccountsDeleted(deletedAccounts);
+  }
+  
 
   return (
     <button onClick={handleDelete}>계좌 삭제</button>

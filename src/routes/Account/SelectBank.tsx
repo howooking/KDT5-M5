@@ -8,14 +8,10 @@ const SelectBank= () => {
   const accessToken = getAccessToken() || '';
 
   useEffect(() => {
-    const fetchBanks = async () => {
-      try {
-        const bankList = await getBankList(accessToken);
-        setBanks(bankList);
-      } catch (error) {
-        console.error("Failed to fetch bank list:", error);
-      }
-    };
+    async function fetchBanks() {
+      const bankList = await getBankList(accessToken);
+      setBanks(bankList);
+    }
     fetchBanks();
   }, [accessToken]);
 

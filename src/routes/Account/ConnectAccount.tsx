@@ -19,32 +19,31 @@ const ConnectAccount: React.FC<ConnectAccountProps> = ({
   const accessToken = getAccessToken() || '';
 
   useEffect(() => {
-    const fetchBanks = () => {
+    function fetchBanks() {
       const fetchedBanks = Banks();
       setBankData(fetchedBanks);
-    };
-
+    }
     fetchBanks();
   }, []);
+  
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    try {
-      const account = await connectAccount({
-        bankCode,
-        accountNumber,
-        phoneNumber,
-        signature,
-      }, accessToken);
-      onAccountConnected(account);
-    } catch (error) {
-      console.error(error);
-    }
+  
+    const account = await connectAccount({
+      bankCode,
+      accountNumber,
+      phoneNumber,
+      signature,
+    }, accessToken);
+  
+    onAccountConnected(account);
   };
+  
 
-  const handleSignature = (event: React.ChangeEvent<HTMLInputElement>) => {
+  function handleSignature(event: React.ChangeEvent<HTMLInputElement>) {
     setSignature(event.target.checked);
-  };
+  }  
 
   return (
     <form onSubmit={handleSubmit}>
