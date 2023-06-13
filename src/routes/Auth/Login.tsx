@@ -1,19 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { userStore } from '../../store';
 import { signIn } from '../../api/authApi';
-import { EMAIL_REGEX } from '../../constants/constants';
+import { ADMINS, EMAIL_REGEX } from '../../constants/constants';
 import Input from '../../components/ui/Input';
 import AlertMessage from '../../components/ui/AlertMessage';
 import Button from '../../components/ui/Button';
 import LoadingSpinner from '../../components/ui/LoadingSpinner';
 
 export default function Login() {
-  const { authMe, setUser } = userStore();
-  useEffect(() => {
-    authMe();
-  }, []);
+  const { setUser } = userStore();
 
   //로그인 후 직전의 페이지로 이동하기 위해
   const navigate = useNavigate();
@@ -31,7 +28,7 @@ export default function Login() {
     // form이벤트의 기본 새로고침을 막음
     event.preventDefault();
 
-    // 이전 타임아웃이 아직 작동중이 초기화
+    // 이전 타임아웃이 아직 작동중인 경우 초기화
     if (timeoutId) {
       clearTimeout(timeoutId);
       setTimeoutId(null);
@@ -73,8 +70,13 @@ export default function Login() {
     }
 
     // 로그인에 성공하는 경우
-    localStorage.setItem('token', res.accessToken);
-    setUser({ ...res, isAdmin: false });
+
+    // 어드민 여부 확인(보안상 매우 안좋음)
+    const isAdmin = ADMINS.includes(res.user.email);
+    // 로컬 저장소에 user정보와 isAdmin을 문자열화시켜서 저장
+    localStorage.setItem('user', JSON.stringify({ ...res, isAdmin }));
+    // 로컬 user의 상태도 저장
+    setUser({ ...res, isAdmin });
     setIsSending(false);
     navigate('/', { replace: true });
   };
@@ -97,7 +99,6 @@ export default function Login() {
               placeholder="이메일"
               name="email"
               onChange={handleChange}
-              type="text"
               value={loginData.email}
             />
             <Input

@@ -9,7 +9,7 @@ interface ProductCardProps {
 export default function ProductCard({
   discountRate,
   price,
-  tags,
+  // tags,
   thumbnail,
   title,
 }: ProductCardProps) {
@@ -19,7 +19,7 @@ export default function ProductCard({
       <img
         src={thumbnail || `/products/dummy.jpg`}
         alt={title}
-        className="hover:scale-1 duration-300"
+        className="p-1 duration-300 group-hover:scale-105"
       />
       <h3>{title}</h3>
       <div className="flex gap-2">
@@ -29,6 +29,7 @@ export default function ProductCard({
             discountRate ? '' : 'hidden'
           }`}
         >
+          {/* 100원 단위 0으로 만드는 로직 필요 */}
           {priceBeforeDiscount.toFixed(0)}원
         </span>
       </div>

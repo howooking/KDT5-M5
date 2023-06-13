@@ -13,7 +13,7 @@ interface ProductInputData {
   title: string;
   price: string;
   description: string;
-  tags?: string[];
+  tags: string[];
   thumbnailBase64?: string;
   photoBase64?: string;
   discountRate?: string;
@@ -51,6 +51,11 @@ interface Bank {
   disabled: boolean;
 }
 
+interface TotalBalance {
+  totalBalance: number;
+  accounts: UserAccount[];
+}
+
 interface UserAccount {
   id: string;
   bankName: string;
@@ -60,15 +65,10 @@ interface UserAccount {
 }
 
 interface ConnectAccount {
-  bankCode: string // 연결할 은행 코드 (필수!)
-  accountNumber: string // 연결할 계좌번호 (필수!)
-  phoneNumber: string // 사용자 전화번호 (필수!)
-  signature: boolean // 사용자 서명 (필수!)
-}
-
-interface TotalBalance {
-  totalBalance: number;
-  accounts: UserAccount[];
+  bankCode: string; // 연결할 은행 코드 (필수!)
+  accountNumber: string; // 연결할 계좌번호 (필수!)
+  phoneNumber: string; // 사용자 전화번호 (필수!)
+  signature: boolean; // 사용자 서명 (필수!)
 }
 
 // 어드민에서 사용자들 정보를 조회할 때 오는 사용자 정보 타입
@@ -87,7 +87,6 @@ interface ProductDetail {
   thumbnail: string | null; // 제품 썸네일
   photo: string | null; //상세이미지 URL
   isSoldOut: boolean; // 제품 매진여부
-  // reservations: Reservation[] | null //예약부분
   discountRate: number;
 }
 interface Product {
@@ -99,4 +98,9 @@ interface Product {
   thumbnail: string | null; // 제품 썸네일 이미지(URL)
   isSoldOut: boolean; // 제품 매진 여부
   discountRate: number; // 제품 할인율
+}
+
+interface Window {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  my_modal_2: any;
 }

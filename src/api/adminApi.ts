@@ -1,9 +1,6 @@
-const API_URL = 'https://asia-northeast3-heropy-api.cloudfunctions.net/api';
-
-const api_headers = {
-  'content-type': 'application/json',
-  apikey: 'KDT5_nREmPe9B',
-  username: 'KDT5_Team1',
+import { API_URL, HEADERS } from '@/constants/constants';
+const MASTER_HEADERS = {
+  ...HEADERS,
   masterKey: 'true',
 };
 
@@ -20,11 +17,10 @@ interface AddProductResponseValue {
   discountRate: number; // 제품 할인율
 }
 export const addProduct = async (productData: AddProductData) => {
-  console.log(productData);
   try {
     const response = await fetch(`${API_URL}/products`, {
       method: 'POST',
-      headers: api_headers,
+      headers: MASTER_HEADERS,
       body: JSON.stringify(productData),
     });
     if (response.ok) {
@@ -47,7 +43,7 @@ export const updateProduct = async (
   try {
     const response = await fetch(`${API_URL}/products/${productId}`, {
       method: 'PUT',
-      headers: api_headers,
+      headers: MASTER_HEADERS,
       body: JSON.stringify(updateData),
     });
     const data = await response.json();
@@ -59,11 +55,16 @@ export const updateProduct = async (
 
 export const deleteProduct = async (productId: string) => {
   try {
-    await fetch(`${API_URL}/products/${productId}`, {
+    const res = await fetch(`${API_URL}/products/${productId}`, {
       method: 'DELETE',
-      headers: api_headers,
+      headers: MASTER_HEADERS,
     });
-    return true;
+    if (res.ok) {
+      const response: boolean = await res.json();
+      return response;
+    }
+    const error: string = await res.json();
+    console.log(error);
   } catch (error) {
     throw new Error('Failed to delete product.');
   }
@@ -76,7 +77,7 @@ export const getUsers = async () => {
       'https://asia-northeast3-heropy-api.cloudfunctions.net/api/auth/users',
       {
         method: 'GET',
-        headers: api_headers,
+        headers: MASTER_HEADERS,
       }
     );
     // 유저들 조회가 성공한 경우
@@ -93,33 +94,36 @@ export const getUsers = async () => {
   }
 };
 
+// 상품 조회
 export async function getProducts() {
   try {
     const res = await fetch(`${API_URL}/products`, {
       method: 'GET',
-      headers: api_headers,
+      headers: MASTER_HEADERS,
     });
     if (res.ok) {
       const products: Product[] = await res.json();
       return products;
     }
-    const error = await res.json;
+    const error: string = await res.json();
     console.log(error);
   } catch (error) {
     console.log(error);
   }
 }
 
-export async function getProduct(productId: { text: string }) {
+export async function getProductDetail(productId: string) {
   try {
     const res = await fetch(`${API_URL}/products/${productId}`, {
       method: 'GET',
-      headers: api_headers,
+      headers: MASTER_HEADERS,
     });
     if (res.ok) {
       const productDetail: ProductDetail = await res.json();
       return productDetail;
     }
+    const error: string = await res.json();
+    console.log(error);
   } catch (error) {
     console.log(error);
   }

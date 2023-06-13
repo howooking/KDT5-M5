@@ -37,17 +37,17 @@ export default function SignUp() {
         setSignData({ ...signUpData, [name]: reader.result as string });
       };
     }
-    setSignData({
-      ...signUpData,
+    setSignData((prevData) => ({
+      ...prevData,
       [name]: value,
-    });
+    }));
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     // form이벤트의 기본 새로고침을 막음
     event.preventDefault();
 
-    // 이전 타임아웃이 아직 작동중이 초기화
+    // 이전 타임아웃이 아직 작동중인경우 초기화
     if (timeoutId) {
       clearTimeout(timeoutId);
       setTimeoutId(null);
@@ -122,7 +122,7 @@ export default function SignUp() {
       return;
     }
     // 회원가입에 성공하는 경우
-    localStorage.setItem('token', res.accessToken);
+    localStorage.setItem('user', JSON.stringify(res));
     setUser({ ...res, isAdmin: false });
     setIsSending(true);
     navigate('/', { replace: true });

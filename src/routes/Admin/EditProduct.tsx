@@ -7,8 +7,15 @@ import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import ImageUpload from '@/components/ui/ImageUpload';
 import Select from '@/components/ui/Select';
 import { SELECT_BRAND, SELECT_CATEGORY } from '@/constants/constants';
+import { useLocation } from 'react-router-dom';
 
-export default function AddProduct() {
+export default function EditProduct() {
+  const {
+    state: { productTitle, productId },
+  } = useLocation();
+  console.log({ productTitle, productId });
+  //이 아이디로 제품 단일 정보 가져오시면 됩니다.
+
   // 성공적으로 제품을 등록하였을 경우 message색을 초록색으로 바꾸기 위한 state
   const [positive, setPositive] = useState(false);
 
@@ -22,7 +29,6 @@ export default function AddProduct() {
     photoBase64: '',
     discountRate: '',
   });
-  console.log(productInputData);
 
   const [isSending, setIsSending] = useState(false);
   const [message, setMessage] = useState('');
@@ -85,15 +91,9 @@ export default function AddProduct() {
     if (
       productInputData.title.trim() === '' ||
       productInputData.price.trim() === '' ||
-      productInputData.description.trim() === '' ||
-      productInputData.tags[0] === '' ||
-      productInputData.tags[0] === 'category' ||
-      productInputData.tags[1] === '' ||
-      productInputData.tags[1] === 'brand'
+      productInputData.description.trim() === ''
     ) {
-      setMessage(
-        '카테고리, 브랜드, 제품이름, 가격, 제품설명을 모두 입력해주세요.'
-      );
+      setMessage('제품이름, 가격, 제품설명을 모두 입력해주세요.');
       const id = setTimeout(() => {
         setMessage('');
       }, 2000);
@@ -139,7 +139,7 @@ export default function AddProduct() {
         title: '',
         discountRate: '',
         photoBase64: '',
-        tags: ['category', 'brand'],
+        tags: ['', ''],
         thumbnailBase64: '',
       });
       return;
@@ -157,7 +157,7 @@ export default function AddProduct() {
   return (
     <div className="flex justify-center p-3">
       <div className="flex flex-col">
-        <h3 className="py-3 text-3xl text-gray-800">제품 추가</h3>
+        <h3 className="py-3 text-3xl text-gray-800">{productTitle}</h3>
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           <div className="flex gap-10">
             <div className="flex-1  space-y-3">
@@ -212,7 +212,7 @@ export default function AddProduct() {
           <AlertMessage message={message} positive={positive} />
           <div>
             <Button
-              text={isSending ? <LoadingSpinner color="white" /> : '상품등록'}
+              text={isSending ? <LoadingSpinner color="white" /> : '제품 등록'}
               disabled={isSending}
             />
           </div>

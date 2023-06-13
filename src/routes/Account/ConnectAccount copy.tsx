@@ -2,7 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { connectAccount } from '../../api/bankApi';
 import { Banks } from './Banks';
 
-export default function ConnectAccount() {
+interface ConnectAccountProps {
+  onAccountConnected: (account: UserAccount) => void;
+}
+
+const ConnectAccount: React.FC<ConnectAccountProps> = ({
+  onAccountConnected,
+}) => {
   const [bankCode, setBankCode] = useState<string>('');
   const [accountNumber, setAccountNumber] = useState<string>('');
   const [phoneNumber, setPhoneNumber] = useState<string>('');
@@ -32,6 +38,7 @@ export default function ConnectAccount() {
       },
       accessToken
     );
+    onAccountConnected(account);
   }
 
   function handleSignature(event: React.ChangeEvent<HTMLInputElement>) {
@@ -84,4 +91,6 @@ export default function ConnectAccount() {
       <button type="submit">계좌 연결</button>
     </form>
   );
-}
+};
+
+export default ConnectAccount;

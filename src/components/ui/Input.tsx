@@ -3,7 +3,7 @@ interface InputProps {
   type?: string;
   name: string;
   value?: string | number;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export default function Input({

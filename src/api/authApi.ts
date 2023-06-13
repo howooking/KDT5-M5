@@ -1,11 +1,4 @@
-const AUTH_URL =
-  'https://asia-northeast3-heropy-api.cloudfunctions.net/api/auth';
-
-const HEADERS = {
-  'content-type': 'application/json',
-  apikey: 'KDT5_nREmPe9B',
-  username: 'KDT5_Team1',
-};
+import { API_URL, HEADERS } from '@/constants/constants';
 
 // 1. 로그인
 
@@ -24,7 +17,7 @@ export const signIn = async (loginData: {
   password: string;
 }) => {
   try {
-    const res = await fetch(`${AUTH_URL}/login`, {
+    const res = await fetch(`${API_URL}/auth/login`, {
       method: 'POST',
       headers: HEADERS,
       body: JSON.stringify({
@@ -69,19 +62,16 @@ export const signUp = async (signUpData: {
   profileImgBase64?: string;
 }) => {
   try {
-    const res = await fetch(
-      'https://asia-northeast3-heropy-api.cloudfunctions.net/api/auth/signup',
-      {
-        method: 'POST',
-        headers: HEADERS,
-        body: JSON.stringify({
-          email: signUpData.email,
-          password: signUpData.password,
-          displayName: signUpData.displayName,
-          profileImgBase64: signUpData.profileImgBase64,
-        }),
-      }
-    );
+    const res = await fetch(`${API_URL}/auth/auth/signup`, {
+      method: 'POST',
+      headers: HEADERS,
+      body: JSON.stringify({
+        email: signUpData.email,
+        password: signUpData.password,
+        displayName: signUpData.displayName,
+        profileImgBase64: signUpData.profileImgBase64,
+      }),
+    });
 
     // 회원가입 성공
     if (res.ok) {
@@ -102,24 +92,25 @@ export const signUp = async (signUpData: {
 };
 
 // 3. 로그아웃
-export const logOut = async (accessToken: string | null) => {
+export const logOut = async (accessToken: string) => {
   // accessToken 이 없다면 로그아웃상태이므로 함수 종료
   if (!accessToken) {
     return;
   }
   try {
-    const res = await fetch(
-      'https://asia-northeast3-heropy-api.cloudfunctions.net/api/auth/logout',
-      {
-        method: 'POST',
-        headers: {
-          ...HEADERS,
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
-    const isLoggedOut: boolean = await res.json();
-    return isLoggedOut;
+    const res = await fetch(`${API_URL}/auth/logout`, {
+      method: 'POST',
+      headers: {
+        ...HEADERS,
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    if (res.ok) {
+      const isLoggedOut: boolean = await res.json();
+      console.log(isLoggedOut);
+    }
+    const error: string = await res.json();
+    console.log(error);
   } catch (error) {
     console.log('Error while logout: ', error);
   }
@@ -134,24 +125,22 @@ interface AuthenticateResponseValue {
   profileImg: string | null;
 }
 
-export const authenticate = async (accessToken: string | null) => {
-  // 토큰이 없는 경우, 이미 요청단계에서 rule out되긴함
+export const authenticate = async (accessToken: string) => {
+  // 토큰이 없는 경우
   if (!accessToken) {
+    localStorage.removeItem('user');
     return;
   }
 
   // 토큰이 있는경우
   try {
-    const res = await fetch(
-      'https://asia-northeast3-heropy-api.cloudfunctions.net/api/auth/me',
-      {
-        method: 'POST',
-        headers: {
-          ...HEADERS,
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
+    const res = await fetch(`${API_URL}/auth/me`, {
+      method: 'POST',
+      headers: {
+        ...HEADERS,
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
 
     // 유효한 토큰이 맞는 경우
     if (res.ok) {
@@ -161,6 +150,7 @@ export const authenticate = async (accessToken: string | null) => {
 
     // 유효한 토큰이 아닌경우(expired 또는 임의의 토큰을 입력한 경우)
     const error: string = await res.json();
+    localStorage.removeItem('user');
     console.log(error);
 
     // 기타 오류(서버 문제, url이 잘못된 경우)
@@ -172,11 +162,11 @@ export const authenticate = async (accessToken: string | null) => {
 //사용자 정보수정
 
 //수정 성공시 응답값의 타입
-interface EditUserResponseValue {
-  email: string;
-  displayName: string;
-  profileImg: string | null;
-}
+// interface EditUserResponseValue {
+//   email: string;
+//   displayName: string;
+//   profileImg: string | null;
+// }
 
 export const editUser = async (
   accessToken: string,
@@ -191,21 +181,18 @@ export const editUser = async (
     return;
   }
   try {
-    const res = await fetch(
-      'https://asia-northeast3-heropy-api.cloudfunctions.net/api/auth/user',
-      {
-        method: 'PUT',
-        headers: {
-          ...HEADERS,
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify({
-          displayName: editData.displayName,
-          oldPassword: editData.oldPassword,
-          newPassword: editData.newPassword,
-        }),
-      }
-    );
+    const res = await fetch(`${API_URL}/auth/user`, {
+      method: 'PUT',
+      headers: {
+        ...HEADERS,
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({
+        displayName: editData.displayName,
+        oldPassword: editData.oldPassword,
+        newPassword: editData.newPassword,
+      }),
+    });
     if (res.ok) {
       console.log({ res });
       return true;

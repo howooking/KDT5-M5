@@ -24,12 +24,12 @@ export default function Slider() {
           margin: '4px 6px',
           border: '2px solid #e41717',
           borderRadius: '50%',
-          color: '#e41717',
         },
       }}
     >
       {SLIDES.map((slide) => (
         <img
+          key={slide}
           src={`slider/mainSlide${slide}.jpg`}
           alt={`/mainSlide${slide}`}
           className="mx-auto select-none hover:opacity-80"
