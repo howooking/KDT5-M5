@@ -15,9 +15,9 @@ import Info from '@/routes/Auth/Info';
 import AdminProductView from '@/routes/Admin/AdminProductView.tsx';
 import EditProduct from './routes/Admin/EditProduct';
 import ConnectAccount from './routes/Account/ConnectAccount';
-import AccountList from './routes/Account/AccountListCopy';
 import Products from './routes/Products';
 import ProductDetail from './routes/ProductDetail';
+import AccountList from './routes/Account/AccountList';
 
 export default function App() {
   return (
