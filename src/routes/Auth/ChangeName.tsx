@@ -13,14 +13,10 @@ export default function ChangeName() {
   const [isSending, setIsSending] = useState(false);
   const navigate = useNavigate();
   const { authMe, userInfo } = userStore();
-  useEffect(() => {
-    authMe();
-  }, []);
 
   const [message, setMessage] = useState('');
   const [editData, setEditData] = useState({
     displayName: '',
-    // oldPassword: '',
   });
   console.log(editData);
 
