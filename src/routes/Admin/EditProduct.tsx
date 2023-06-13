@@ -162,11 +162,13 @@ export default function EditProduct() {
           <div className="flex gap-10">
             <div className="flex-1  space-y-3">
               <Select
+                name="category"
                 options={SELECT_CATEGORY}
                 onChange={handleChange}
                 value={productInputData.tags[0]}
               />
               <Select
+                name="brand"
                 options={SELECT_BRAND}
                 onChange={handleChange}
                 value={productInputData.tags[1]}

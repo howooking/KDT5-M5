@@ -17,9 +17,7 @@ export default function ChangeName() {
   const [message, setMessage] = useState('');
   const [editData, setEditData] = useState({
     displayName: '',
-    // oldPassword: '',
   });
-  console.log(editData);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

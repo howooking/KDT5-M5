@@ -1,20 +1,23 @@
 import { API_URL, HEADERS } from '@/constants/constants';
 
 // 선택 가능한 은행 목록 조회
-export const getBankList = async (accessToken: string): Promise<Bank[]> => {
-  const response = await fetch(`${API_URL}/account/banks`, {
-    method: 'GET',
-    headers: {
-      ...HEADERS,
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
-
-  if (response.ok) {
-    const data: Bank[] = await response.json();
-    return data;
-  } else {
-    throw new Error('Failed to get bank list');
+export const getBankList = async (accessToken: string) => {
+  try {
+    const response = await fetch(`${API_URL}/account/banks`, {
+      method: 'GET',
+      headers: {
+        ...HEADERS,
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    if (response.ok) {
+      const data: Bank[] = await response.json();
+      return data;
+    }
+    const error = await response.json();
+    console.log(error);
+  } catch (error) {
+    console.log(error);
   }
 };
 
@@ -29,8 +32,8 @@ export const getAccountsAndBalance = async (accessToken: string) => {
       },
     });
     if (response.ok) {
-      const data: TotalBalance = await response.json();
-      return data;
+      const banks: TotalBalance = await response.json();
+      return banks;
     }
     const error: string = await response.json();
     console.log(error);
@@ -48,26 +51,25 @@ export const connectAccount = async (
     signature: boolean;
   },
   accessToken: string
-): Promise<UserAccount> => {
-  console.log('API 호출 전 requestBody: ', requestBody);
-  console.log('API 호출 전 accessToken: ', accessToken);
-  const response = await fetch(`${API_URL}/account`, {
-    method: 'POST',
-    headers: {
-      ...HEADERS,
-      Authorization: `Bearer ${accessToken}`,
-    },
-    body: JSON.stringify(requestBody),
-  });
-
-  console.log('API 호출 후 response: ', response);
-
-  if (response.ok) {
-    const data: UserAccount = await response.json();
-    return data;
-  } else {
-    console.error('API 호출 실패 response: ', response);
-    throw new Error('Failed to connect account');
+) => {
+  try {
+    const response = await fetch(`${API_URL}/account`, {
+      method: 'POST',
+      headers: {
+        ...HEADERS,
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify(requestBody),
+    });
+    if (response.ok) {
+      const data: UserAccount = await response.json();
+      return data;
+    }
+    const errorMessage: string = await response.json();
+    return errorMessage;
+  } catch (error) {
+    console.log('error while conncting bank account', error);
+    return '계좌 생성 중 에러발생, 잠시 후 다시 시도해주세요.';
   }
 };
 

@@ -93,8 +93,19 @@ export const SELECT_BRAND = [
 interface Translate {
   [key: string]: string;
 }
-export const dictionary: Translate = {
+export const DICTIONARY_SHOES: Translate = {
   soccer: '축구화',
   footsal: '풋살화',
   sneakers: '운동화/슬리퍼',
 };
+
+// 은행 정보
+export const BANKS = [
+  { name: 'KB국민은행', code: '004', digits: [3, 2, 4, 3] },
+  { name: '신한은행', code: '088', digits: [3, 3, 6] },
+  { name: '우리은행', code: '020', digits: [4, 3, 6] },
+  { name: '하나은행', code: '081', digits: [3, 6, 5] },
+  { name: '케이뱅크', code: '089', digits: [3, 3, 6] },
+  { name: '카카오뱅크', code: '090', digits: [4, 2, 7] },
+  { name: 'NH농협은행', code: '011', digits: [3, 4, 4, 2] },
+];

@@ -104,3 +104,10 @@ interface Window {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   my_modal_2: any;
 }
+
+interface ConnectAccountBody {
+  bankCode: string;
+  accountNumber: string;
+  phoneNumber: string;
+  signature: boolean;
+}
