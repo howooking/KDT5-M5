@@ -58,15 +58,15 @@ export const SUB_MENUS_MYACCOUNT = [
 // admin 패널 sub anvbar
 export const SUB_MENUS_ADMIN = [
   {
-    label: '회원관리',
+    label: '회원 관리',
     href: '/admin/clients',
   },
   {
-    label: '제품관리',
+    label: '제품 관리',
     href: '/admin/products',
   },
   {
-    label: '제품추가',
+    label: '제품 추가',
     href: '/admin/addproduct',
   },
 ];
@@ -85,3 +85,12 @@ export const SELECT_BRAND = [
   { name: '푸마', value: 'puma' },
   { name: '기타', value: 'etc' },
 ];
+
+interface Translate {
+  [key: string]: string;
+}
+export const dictionary: Translate = {
+  soccer: '축구화',
+  footsal: '풋살화',
+  sneakers: '운동화/슬리퍼',
+};

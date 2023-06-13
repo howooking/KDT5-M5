@@ -10,13 +10,14 @@ import AddProduct from '@/routes/Admin/AddProduct';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import AccountList from '@/routes/Account/AccountList';
 import AccountPage from '@/routes/Account/AccountPage';
-import AdminProducts from '@/routes/Admin/AdminProducts';
 import MyAccount from '@/routes/Auth/MyAccount';
 import AdminClients from '@/routes/Admin/AdminClients';
 import ChangeName from '@/routes/Auth/ChangeName';
 import ChangePassword from '@/routes/Auth/ChangePassword';
 import Info from '@/routes/Auth/Info';
 import ProductDetail from '@/routes/ProductDetail';
+import AdminProductView from '@/routes/Admin/AdminProductView.tsx';
+import EditProduct from './routes/Admin/EditProduct';
 
 export default function App() {
   return (
@@ -47,8 +48,9 @@ export default function App() {
           element={<ProtectedRoute adminRequired element={<Admin />} />}
         >
           <Route path="clients" element={<AdminClients />} />
-          <Route path="products" element={<AdminProducts />} />
+          <Route path="products" element={<AdminProductView />} />
           <Route path="addProduct" element={<AddProduct />} />
+          <Route path="editProduct" element={<EditProduct />} />
         </Route>
 
         {/* 제품 */}

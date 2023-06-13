@@ -80,7 +80,6 @@ interface ProductDetail {
   thumbnail: string | null; // 제품 썸네일
   photo: string | null; //상세이미지 URL
   isSoldOut: boolean; // 제품 매진여부
-  // reservations: Reservation[] | null //예약부분
   discountRate: number;
 }
 interface Product {
@@ -92,4 +91,9 @@ interface Product {
   thumbnail: string | null; // 제품 썸네일 이미지(URL)
   isSoldOut: boolean; // 제품 매진 여부
   discountRate: number; // 제품 할인율
+}
+
+interface Window {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  my_modal_2: any;
 }

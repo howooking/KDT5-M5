@@ -55,11 +55,16 @@ export const updateProduct = async (
 
 export const deleteProduct = async (productId: string) => {
   try {
-    await fetch(`${API_URL}/products/${productId}`, {
+    const res = await fetch(`${API_URL}/products/${productId}`, {
       method: 'DELETE',
       headers: MASTER_HEADERS,
     });
-    return true;
+    if (res.ok) {
+      const response: boolean = await res.json();
+      return response;
+    }
+    const error: string = await res.json();
+    console.log(error);
   } catch (error) {
     throw new Error('Failed to delete product.');
   }
@@ -100,15 +105,16 @@ export async function getProducts() {
       const products: Product[] = await res.json();
       return products;
     }
-    const error = await res.json();
+    const error: string = await res.json();
     console.log(error);
   } catch (error) {
     console.log(error);
   }
 }
 
-export async function getProduct(productId: { text: string }) {
+export async function getProductDetail(productId: string) {
   try {
+    console.log(productId);
     const res = await fetch(`${API_URL}/products/${productId}`, {
       method: 'GET',
       headers: MASTER_HEADERS,
@@ -117,6 +123,8 @@ export async function getProduct(productId: { text: string }) {
       const productDetail: ProductDetail = await res.json();
       return productDetail;
     }
+    const error: string = await res.json();
+    console.log(error);
   } catch (error) {
     console.log(error);
   }
