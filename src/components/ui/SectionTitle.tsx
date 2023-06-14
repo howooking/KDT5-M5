@@ -3,5 +3,5 @@ export default function SectionTitle({
 }: {
   text?: string;
 }) {
-  return <div className="text-3xl font-bold">{text}</div>;
+  return <div className="pb-3 text-3xl font-bold">{text}</div>;
 }

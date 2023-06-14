@@ -87,7 +87,6 @@ export const SELECT_BRAND = [
   { name: '아디다스', value: 'adidas' },
   { name: '미즈노', value: 'mizno' },
   { name: '푸마', value: 'puma' },
-  { name: '기타', value: 'etc' },
 ];
 
 interface Translate {
@@ -108,4 +107,19 @@ export const BANKS = [
   { name: '케이뱅크', code: '089', digits: [3, 3, 6] },
   { name: '카카오뱅크', code: '090', digits: [4, 2, 7] },
   { name: 'NH농협은행', code: '011', digits: [3, 4, 4, 2] },
+];
+
+// 상품 sorting 옵션
+export const PRODUCT_SORT = [
+  { name: '낮은가격', value: 'lowPrice' },
+  { name: '높은가격', value: 'highPrice' },
+];
+
+// 상품 brand sorting 옵션
+export const PRODUCT_BRAND = [
+  { name: '모두', value: 'all' },
+  { name: '나이키', value: 'nike' },
+  { name: '아디다스', value: 'adidas' },
+  { name: '미즈노', value: 'mizno' },
+  { name: '푸마', value: 'puma' },
 ];
