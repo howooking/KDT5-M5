@@ -191,6 +191,7 @@ export const editUser = async (
         displayName: editData.displayName,
         oldPassword: editData.oldPassword,
         newPassword: editData.newPassword,
+        profileImgBase64: editData.profileImgBase64
       }),
     });
     if (res.ok) {
