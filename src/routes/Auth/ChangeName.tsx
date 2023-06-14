@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { userStore } from '../../store';
 import { editUser } from '../../api/authApi';
 import { useNavigate } from 'react-router-dom';
@@ -13,16 +13,11 @@ export default function ChangeName() {
   const [isSending, setIsSending] = useState(false);
   const navigate = useNavigate();
   const { authMe, userInfo } = userStore();
-  useEffect(() => {
-    authMe();
-  }, []);
 
   const [message, setMessage] = useState('');
   const [editData, setEditData] = useState({
     displayName: '',
-    // oldPassword: '',
   });
-  console.log(editData);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

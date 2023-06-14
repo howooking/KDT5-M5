@@ -2,30 +2,38 @@ import React from 'react';
 import { deleteAccount } from '../../api/bankApi';
 
 interface DeleteAccountProps {
-  account: UserAccount;
-  onAccountDeleted: (account: UserAccount) => void;
+  accounts: UserAccount[];
+  onAccountsDeleted: (account: UserAccount[]) => void;
 }
 
 const DeleteAccount: React.FC<DeleteAccountProps> = ({
-  account,
-  onAccountDeleted,
+  accounts,
+  onAccountsDeleted,
 }) => {
-  const handleDelete = async () => {
-    try {
+  const getAccessToken = () => localStorage.getItem('token');
+  const accessToken = getAccessToken() || '';
+
+  async function handleDelete() {
+    const deletedAccounts: UserAccount[] = [];
+  
+    for (const account of accounts) {
       const isSuccess = await deleteAccount({
         accountId: account.id,
-        signature: false,
-      });
+        signature: true,
+      },
+        accessToken
+      );
+  
       if (isSuccess) {
-        onAccountDeleted(account);
+        deletedAccounts.push(account);
       }
-    } catch (error) {
-      console.error(error);
     }
-  };
+  onAccountsDeleted(deletedAccounts);
+  }
+  
 
   return (
-    <button onClick={handleDelete}>Delete Account</button>
+    <button onClick={handleDelete}>계좌 삭제</button>
   );
 };
 
