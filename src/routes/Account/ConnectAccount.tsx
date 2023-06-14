@@ -66,8 +66,11 @@ export default function ConnectAccount() {
     [bankInputData.bankCode]
   );
 
-  // digits 수
-  const totalDigits = selectedBankDigits?.reduce((acc, curr) => acc + curr);
+  // digits 합
+  const totalDigits = useMemo(
+    () => selectedBankDigits?.reduce((acc, curr) => acc + curr),
+    [selectedBankDigits]
+  );
 
   // 전송함수
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
