@@ -103,7 +103,7 @@ export default function ConnectAccount() {
           onChange={handleChange}
           maxLength={totalDigits}
           placeholder={`${
-            totalDigits ? totalDigits + '자리 계좌번호' : '계좌번호'
+            totalDigits ? totalDigits + "자리 계좌번호 '-' 없이" : '계좌번호'
           }`}
         />
         <Input
@@ -122,7 +122,7 @@ export default function ConnectAccount() {
             onChange={handleChange}
           />
           <label htmlFor="signature" className="select-none">
-            귀하는 간편결제 계좌 등록에 동의합니다.
+            간편결제 계좌 등록에 동의합니다.
           </label>
         </div>
         <AlertMessage message={message} />

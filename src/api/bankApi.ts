@@ -22,7 +22,7 @@ export const getBankList = async (accessToken: string) => {
 };
 
 // 계좌 목록 및 잔액 조회
-export const getAccountsAndBalance = async (accessToken: string) => {
+export const getAccountList = async (accessToken: string) => {
   try {
     const response = await fetch(`${API_URL}/account`, {
       method: 'GET',
