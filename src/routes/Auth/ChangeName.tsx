@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { userStore } from '../../store';
 import { editUser } from '../../api/authApi';
 import { useNavigate } from 'react-router-dom';
@@ -18,7 +18,6 @@ export default function ChangeName() {
   const [editData, setEditData] = useState({
     displayName: '',
   });
-  console.log(editData);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

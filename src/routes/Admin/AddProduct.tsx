@@ -22,6 +22,7 @@ export default function AddProduct() {
     photoBase64: '',
     discountRate: '',
   });
+  console.log(productInputData);
 
   const [isSending, setIsSending] = useState(false);
   const [message, setMessage] = useState('');
@@ -84,9 +85,15 @@ export default function AddProduct() {
     if (
       productInputData.title.trim() === '' ||
       productInputData.price.trim() === '' ||
-      productInputData.description.trim() === ''
+      productInputData.description.trim() === '' ||
+      productInputData.tags[0] === '' ||
+      productInputData.tags[0] === 'category' ||
+      productInputData.tags[1] === '' ||
+      productInputData.tags[1] === 'brand'
     ) {
-      setMessage('제품이름, 가격, 제품설명을 모두 입력해주세요.');
+      setMessage(
+        '카테고리, 브랜드, 제품이름, 가격, 제품설명을 모두 입력해주세요.'
+      );
       const id = setTimeout(() => {
         setMessage('');
       }, 2000);
@@ -132,7 +139,7 @@ export default function AddProduct() {
         title: '',
         discountRate: '',
         photoBase64: '',
-        tags: ['', ''],
+        tags: ['category', 'brand'],
         thumbnailBase64: '',
       });
       return;
@@ -154,8 +161,18 @@ export default function AddProduct() {
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           <div className="flex gap-10">
             <div className="flex-1  space-y-3">
-              <Select options={SELECT_CATEGORY} onChange={handleChange} />
-              <Select options={SELECT_BRAND} onChange={handleChange} />
+              <Select
+                options={SELECT_CATEGORY}
+                onChange={handleChange}
+                name="category"
+                value={productInputData.tags[0]}
+              />
+              <Select
+                options={SELECT_BRAND}
+                onChange={handleChange}
+                name="brand"
+                value={productInputData.tags[1]}
+              />
               <Input
                 placeholder="제품이름*"
                 name="title"
