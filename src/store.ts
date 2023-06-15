@@ -1,12 +1,12 @@
 import { create } from 'zustand';
-import { authenticate, logOut } from '@/api/authApi';
+import { authenticate } from '@/api/authApi';
 import { ADMINS } from '@/constants/constants';
 
 // user관련 전역state(store)에 무엇이 들어가는지 타입지정
 interface UserState {
   userInfo: User | null;
   setUser: (user: User | null) => void;
-  authMe: () => void | Promise<User | undefined>;
+  authMe: () => void;
 }
 
 export const userStore = create<UserState>((set) => ({
@@ -37,29 +37,32 @@ export const userStore = create<UserState>((set) => ({
       return;
     }
     // 로컬저장소에 user가 있는 경우
-    const response = await authenticate(userInfo.accessToken as string);
-    // 인증에 실패하는 경우 경우(유효하지 않은 토큰 or 기타오류)
-    if (!response) {
-      // 로컬저장소에 무효화된 유져를 삭제
-      localStorage.removeItem('user');
-      // 유져 초기화
-      set({
-        userInfo: null,
-      });
-      // 인증에 성공하는 경우
-    } else {
-      // admin여부 확인
-      const isAdmin = ADMINS.includes(response.email);
-      // 해당유저를 클라이언트 유저상태에 세팅
+    const res = await authenticate(userInfo.accessToken);
+    // access토큰이 없는 경우(누군가 의도적으로 로컬저장소에서 user는 남겨두고 access토큰만 삭제하는 경우)
+    if (!res) {
+      return;
+    }
+
+    // 인증에 성공하는 경우
+    if (res.statusCode === 200) {
+      const user = res.data as AuthenticateResponseValue;
+      const isAdmin = ADMINS.includes(user.email);
+      // 해당유저를 클라이언트 전역 유저상태에 세팅
       set({
         userInfo: {
-          user: response,
+          user: user,
           accessToken: userInfo.accessToken,
           isAdmin,
         },
       });
-      // protected route에서 사용할 return 값
-      return { user: response, accessToken: userInfo.accessToken, isAdmin };
+      return;
     }
+    // 인증실패(유효한 토큰이 아닌경우, expired)
+    // 로컬저장소에 무효화된 유져를 삭제
+    localStorage.removeItem('user');
+    // 유져 초기화
+    set({
+      userInfo: null,
+    });
   },
 }));

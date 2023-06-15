@@ -121,3 +121,10 @@ interface UserResponseValue {
   };
   accessToken: string;
 }
+
+// 인증확인 성공시 응답값의 타입
+interface AuthenticateResponseValue {
+  email: string;
+  displayName: string;
+  profileImg: string | null;
+}

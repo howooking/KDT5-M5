@@ -1,9 +1,6 @@
 import { API_URL, HEADERS } from '@/constants/constants';
 
 // 1. 로그인
-
-// 로그인에 성공시 응답값의 타입
-
 export const signIn = async (loginData: {
   email: string;
   password: string;
@@ -22,7 +19,7 @@ export const signIn = async (loginData: {
       const user: UserResponseValue = await res.json();
       return { data: user, statusCode: res.status };
     }
-    // 로그인 실패(없는 이메일 or 비번 입력 오류 or 유효성 오류(클라이언트에서 막음) or api키가 잘못된 경우)
+    // 로그인 실패(없는 이메일 or 비번 입력 오류 or 유효성 오류(클라이언트에서 유효성검사함) or api키가 잘못된 경우)
     const errorMessage: string = await res.json();
     return { data: errorMessage, statusCode: res.status };
 
@@ -31,7 +28,7 @@ export const signIn = async (loginData: {
     console.log('Error while login: ', error);
     return {
       data: '로그인 도중 오류발생, 잠시 후 다시 시도해 주세요.',
-      status: 400,
+      statusCode: 400,
     };
   }
 };
@@ -100,14 +97,7 @@ export const logOut = async (accessToken: string) => {
 
 // 4. 인증확인
 
-// 인증확인 성공시 응답값의 타입
-interface AuthenticateResponseValue {
-  email: string;
-  displayName: string;
-  profileImg: string | null;
-}
-
-export const authenticate = async (accessToken: string) => {
+export const authenticate = async (accessToken: string | null) => {
   // 토큰이 없는 경우
   if (!accessToken) {
     localStorage.removeItem('user');
@@ -127,17 +117,19 @@ export const authenticate = async (accessToken: string) => {
     // 유효한 토큰이 맞는 경우
     if (res.ok) {
       const user: AuthenticateResponseValue = await res.json();
-      return user;
+      return { data: user, statusCode: res.status };
     }
 
     // 유효한 토큰이 아닌경우(expired 또는 임의의 토큰을 입력한 경우)
-    const error: string = await res.json();
-    localStorage.removeItem('user');
-    console.log(error);
-
+    const errorMessage: string = await res.json();
+    return { data: errorMessage, statusCode: res.status };
     // 기타 오류(서버 문제, url이 잘못된 경우)
   } catch (error) {
     console.log('Error while authenticate: ', error);
+    return {
+      data: '로그아웃 도중 에러 발생, 잠시 후 다시 시도해 주세요.',
+      statusCode: 400,
+    };
   }
 };
 
