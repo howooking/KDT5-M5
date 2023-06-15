@@ -1,6 +1,5 @@
-// 클라이언트사이드 유효성 검사를 생략하겠습니다.
 import { useState, useEffect, useMemo } from 'react';
-import { connectAccount, getBankList } from '../../api/bankApi';
+import { connectAccount, getBankList } from '@/api/bankApi';
 import Select from '@/components/ui/Select';
 import { userStore } from '@/store';
 import Input from '@/components/ui/Input';
