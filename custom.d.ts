@@ -111,3 +111,14 @@ interface ConnectAccountBody {
   phoneNumber: string;
   signature: boolean;
 }
+
+type ResponseValue = Product[] // 관리하는 모든 제품의 목록
+interface Product { // 제품 정보
+  id: string // 제품 ID
+  title: string // 제품 이름
+  price: number // 제품 가격
+  description: string // 제품 설명(최대 100자)
+  tags: string[] // 제품 태그
+  thumbnail: string | null // 제품 썸네일 이미지(URL)
+  discountRate: number // 제품 할인율
+}

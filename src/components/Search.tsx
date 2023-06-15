@@ -1,20 +1,36 @@
+import { getproduct } from '@/api/transactionApi';
 import { useState } from 'react';
 import { BiSearch } from 'react-icons/bi';
+import { useNavigate } from 'react-router-dom';
 
 export default function Search() {
   // 검색어를 state에 저장
-  const [searchTerm, setSearchTerm] = useState('');
+  const navigate= useNavigate()
+  const [searchTerm, setSearchTerm] = useState({
+    searchText: '',
+    // searchTags: []
+  });
 
   // 검색 input에서 변화가 발생할 때 입력값을 state에 저장
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
+    const {name, value} = event.target
+    setSearchTerm({
+      ...searchTerm,
+      [name]: value
+    })
   };
 
   // 검색(검색 아이콘을 누르거나 엔터를 눌렀을 때)
-  const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSearch = async(event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     console.log(searchTerm);
-    setSearchTerm('');
+    const res = await getproduct(searchTerm)
+    
+    // navigate('/') 제품나오는 화면으로 가게하기.
+    setSearchTerm({
+      searchText: '',
+      // searchTags: []
+    });//검색창 초기화
   };
 
   return (
@@ -24,7 +40,8 @@ export default function Search() {
     >
       <input
         className="w-full focus:outline-none"
-        value={searchTerm}
+        name='searchText'
+        value={searchTerm.searchText}
         onChange={handleChange}
       />
       <div className="absolute right-2 cursor-pointer text-accent">
