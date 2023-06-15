@@ -20,7 +20,7 @@ export default function SearchProducts() {
   useEffect(() => {
     async function fetchData() {
       setMessage('');
-      const res = await searchProducts({ searchText: searchText.trim() });
+      const res = await searchProducts({ searchText: searchText });
       if (res.statusCode === 200) {
         const products = res.data as Product[];
         if (products.length === 0) {
