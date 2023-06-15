@@ -12,12 +12,12 @@ import AdminClients from '@/routes/Admin/AdminClients';
 import ChangeName from '@/routes/Auth/ChangeName';
 import ChangePassword from '@/routes/Auth/ChangePassword';
 import Info from '@/routes/Auth/Info';
-import AdminProductView from '@/routes/Admin/AdminProductView.tsx';
-import EditProduct from './routes/Admin/EditProduct';
-import ConnectAccount from './routes/Account/ConnectAccount';
-import Products from './routes/Products';
-import ProductDetail from './routes/ProductDetail';
-import AccountList from './routes/Account/AccountList';
+import AdminProductView from '@/routes/Admin/AdminProductView';
+import EditProduct from '@/routes/Admin/EditProduct';
+import ConnectAccount from '@/routes/Account/ConnectAccount';
+import Products from '@/routes/Products';
+import ProductDetail from '@/routes/ProductDetail';
+import AccountList from '@/routes/Account/AccountList';
 
 export default function App() {
   return (

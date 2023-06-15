@@ -3,7 +3,7 @@ import { API_URL, HEADERS } from '@/constants/constants';
 // 1. 로그인
 
 // 로그인에 성공시 응답값의 타입
-interface SignIResponseValue {
+interface SignInResponseValue {
   user: {
     email: string;
     displayName: string;
@@ -28,7 +28,7 @@ export const signIn = async (loginData: {
 
     // 로그인 성공
     if (res.ok) {
-      const user: SignIResponseValue = await res.json();
+      const user: SignInResponseValue = await res.json();
       return user;
     }
 
@@ -191,7 +191,7 @@ export const editUser = async (
         displayName: editData.displayName,
         oldPassword: editData.oldPassword,
         newPassword: editData.newPassword,
-        profileImgBase64: editData.profileImgBase64
+        profileImgBase64: editData.profileImgBase64,
       }),
     });
     if (res.ok) {

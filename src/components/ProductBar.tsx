@@ -1,8 +1,8 @@
 import { DICTIONARY_SHOES, PRODUCT_BRAND } from '@/constants/constants';
-import Breadcrumbs from './ui/Breadcrumbs';
-import SectionTitle from './ui/SectionTitle';
-import SortOptions from './SortOptions';
+import Breadcrumbs from '@/components/ui/Breadcrumbs';
+import SectionTitle from '@/components/ui/SectionTitle';
 import Button from './ui/Button';
+import SortOptions from '@/components/SortOptions';
 
 interface ProductBarProps {
   category?: string;

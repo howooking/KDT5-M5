@@ -1,7 +1,12 @@
-import { useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 import ProductSection from '@/components/ProductSection';
 
 export default function Products() {
   const { category } = useParams();
-  return <ProductSection category={category} />;
+
+  if (category && ['soccer', 'footsal', 'sneakers'].includes(category)) {
+    return <ProductSection category={category} />;
+  }
+  // 임의로 카테고리를 입력하여 이동하려고 하는 경우
+  return <Navigate to="/" replace />;
 }

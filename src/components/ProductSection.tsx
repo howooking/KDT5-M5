@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import { getProducts } from '@/api/adminApi';
-import ProductCard from '@/components/ProductCard';
 import { Link } from 'react-router-dom';
-import Skeleton from './ui/Skeleton';
-import ProductBar from './ProductBar';
+import ProductBar from '@/components/ProductBar';
+import ProductCard from '@/components/ProductCard';
+import Skeleton from '@/components/ui/Skeleton';
 
 interface ProductSectionProps {
   category?: string;
