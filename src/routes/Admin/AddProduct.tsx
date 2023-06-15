@@ -22,7 +22,6 @@ export default function AddProduct() {
     photoBase64: '',
     discountRate: '',
   });
-  console.log(productInputData);
 
   const [isSending, setIsSending] = useState(false);
   const [message, setMessage] = useState('');

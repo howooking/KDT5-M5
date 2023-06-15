@@ -16,6 +16,7 @@ interface AddProductResponseValue {
   isSoldOut: boolean; // 제품 매진 여부
   discountRate: number; // 제품 할인율
 }
+
 export const addProduct = async (productData: AddProductData) => {
   try {
     const response = await fetch(`${API_URL}/products`, {

@@ -8,7 +8,7 @@ interface User {
   isAdmin: boolean;
 }
 
-//체품 추가시 사용자가 입력하는 값
+//제품 추가시 사용자가 입력하는 값
 interface ProductInputData {
   title: string;
   price: string;
