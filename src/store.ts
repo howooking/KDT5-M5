@@ -5,8 +5,7 @@ import { ADMINS } from '@/constants/constants';
 // user관련 전역state(store)에 무엇이 들어가는지 타입지정
 interface UserState {
   userInfo: User | null;
-  setUser: (user: User) => void;
-  logoutUser: () => void;
+  setUser: (user: User | null) => void;
   authMe: () => void | Promise<User | undefined>;
 }
 
@@ -17,35 +16,11 @@ export const userStore = create<UserState>((set) => ({
     ? JSON.parse(localStorage.getItem('user') as string)
     : null,
 
-  // 로그인(client단에서 user를 세팅함)
-  setUser: (user: User) =>
+  // 사용자 세팅
+  setUser: (user: User | null) =>
     set({
       userInfo: user,
     }),
-
-  // 로그아웃
-  logoutUser: async () => {
-    const userInfo: User | null = localStorage.getItem('user')
-      ? JSON.parse(localStorage.getItem('user') as string)
-      : null;
-    // 로컬저장소에 유져정보가 없는 경우(이러한 경우 클라이언트상에서 logoutUser에 접근 할 수 없긴함)
-    if (!userInfo) {
-      set({
-        userInfo: null,
-      });
-      return;
-    }
-    // 로컬저장소에 유져정보가 있는 경우
-    await logOut(userInfo.accessToken as string);
-    // 서버에서 로그아웃이 성공하든 실패(실패할 확률 0)하든 client state 초기화
-    set({
-      userInfo: null,
-    });
-    // 로컬저장소 user 삭제
-    localStorage.removeItem('user');
-    // protected route에서 로그아웃 한 경우 강제 새로고침 해야함
-    location.reload();
-  },
 
   // 인증
   authMe: async () => {

@@ -111,3 +111,13 @@ interface ConnectAccountBody {
   phoneNumber: string;
   signature: boolean;
 }
+
+// 로그인 or 회원가입 성공하면 서버에서 오는 유져 데이터
+interface UserResponseValue {
+  user: {
+    email: string;
+    displayName: string;
+    profileImg: string | null;
+  };
+  accessToken: string;
+}

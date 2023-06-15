@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { userStore } from '../../store';
-import { editUser } from '../../api/authApi';
-import Input from '../../components/ui/Input';
-import Button from '../../components/ui/Button';
-import AlertMessage from '../../components/ui/AlertMessage';
-import LoadingSpinner from '../../components/ui/LoadingSpinner';
+import { userStore } from '@/store';
+import { editUser } from '@/api/authApi';
+import Input from '@/components/ui/Input';
+import Button from '@/components/ui/Button';
+import AlertMessage from '@/components/ui/AlertMessage';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
 
 export default function ChangePassword() {
   const [positive, setPositive] = useState(false);

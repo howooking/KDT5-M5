@@ -1,12 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState } from 'react';
-import { userStore } from '../../store';
-import { editUser } from '../../api/authApi';
+import { userStore } from '@/store';
+import { editUser } from '@/api/authApi';
 import { useNavigate } from 'react-router-dom';
-import Input from '../../components/ui/Input';
-import Button from '../../components/ui/Button';
-import AlertMessage from '../../components/ui/AlertMessage';
-import LoadingSpinner from '../../components/ui/LoadingSpinner';
+import Input from '@/components/ui/Input';
+import Button from '@/components/ui/Button';
+import AlertMessage from '@/components/ui/AlertMessage';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
 
 export default function ChangeName() {
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);

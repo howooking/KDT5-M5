@@ -3,14 +3,6 @@ import { API_URL, HEADERS } from '@/constants/constants';
 // 1. 로그인
 
 // 로그인에 성공시 응답값의 타입
-interface SignInResponseValue {
-  user: {
-    email: string;
-    displayName: string;
-    profileImg: string | null;
-  };
-  accessToken: string;
-}
 
 export const signIn = async (loginData: {
   email: string;
@@ -25,36 +17,26 @@ export const signIn = async (loginData: {
         password: loginData.password,
       }),
     });
-
     // 로그인 성공
     if (res.ok) {
-      const user: SignInResponseValue = await res.json();
-      return user;
+      const user: UserResponseValue = await res.json();
+      return { data: user, statusCode: res.status };
     }
-
-    // 로그인 실패(없는 이메일 or 비번 입력 오류 or 유효성 오류 or api키가 잘못된 경우)
-    const error: string = await res.json();
-    return error;
+    // 로그인 실패(없는 이메일 or 비번 입력 오류 or 유효성 오류(클라이언트에서 막음) or api키가 잘못된 경우)
+    const errorMessage: string = await res.json();
+    return { data: errorMessage, statusCode: res.status };
 
     // 기타 오류(서버 문제, url이 잘못된 경우)
   } catch (error) {
     console.log('Error while login: ', error);
-    return '로그인 도중 오류발생, 잠시 후 다시 시도해 주세요';
+    return {
+      data: '로그인 도중 오류발생, 잠시 후 다시 시도해 주세요.',
+      status: 400,
+    };
   }
 };
 
 // 2. 회원가입
-
-// 회원가입에 성공시 응답값의 타입
-interface SignUpResponseValue {
-  user: {
-    email: string;
-    displayName: string;
-    profileImg: string | null;
-  };
-  accessToken: string;
-}
-
 export const signUp = async (signUpData: {
   email: string;
   password: string;
@@ -62,7 +44,7 @@ export const signUp = async (signUpData: {
   profileImgBase64?: string;
 }) => {
   try {
-    const res = await fetch(`${API_URL}/auth/auth/signup`, {
+    const res = await fetch(`${API_URL}/auth/signup`, {
       method: 'POST',
       headers: HEADERS,
       body: JSON.stringify({
@@ -72,31 +54,28 @@ export const signUp = async (signUpData: {
         profileImgBase64: signUpData.profileImgBase64,
       }),
     });
-
     // 회원가입 성공
     if (res.ok) {
-      const json: SignUpResponseValue = await res.json();
-      console.log(json);
-      return json;
+      const user: UserResponseValue = await res.json();
+      return { data: user, statusCode: res.status };
     }
-
-    // 회원가입 실패(이미 등록된 이메일 or 유효성 오류 or apikey오류)
-    const error: string = await res.json();
-    return error;
+    // 회원가입 실패(이미 등록된 이메일 or 유효성 오류(클라이언트 유효성에서 막음) or apikey오류)
+    const errorMessage: string = await res.json();
+    return { data: errorMessage, statusCode: res.status };
 
     // 기타 오류(서버 문제, url이 잘못된 경우)
   } catch (error) {
     console.log('Error while signup: ', error);
-    return '회원가입 도중 오류발생, 잠시 후 다시 시도해 주세요';
+    return {
+      data: '회원가입 도중 에러 발생, 잠시 후 다시 시도해 주세요.',
+      statusCode: 400,
+    };
   }
 };
 
 // 3. 로그아웃
 export const logOut = async (accessToken: string) => {
   // accessToken 이 없다면 로그아웃상태이므로 함수 종료
-  if (!accessToken) {
-    return;
-  }
   try {
     const res = await fetch(`${API_URL}/auth/logout`, {
       method: 'POST',
@@ -106,13 +85,16 @@ export const logOut = async (accessToken: string) => {
       },
     });
     if (res.ok) {
-      const isLoggedOut: boolean = await res.json();
-      console.log(isLoggedOut);
+      const isLoggedOut: boolean = await res.json(); // 당연히 true
+      return { data: isLoggedOut, statusCode: res.status };
     }
-    const error: string = await res.json();
-    console.log(error);
+    const errorMessage: string = await res.json();
+    return { data: errorMessage, statusCode: res.status };
   } catch (error) {
-    console.log('Error while logout: ', error);
+    return {
+      data: '로그아웃 도중 에러 발생, 잠시 후 다시 시도해 주세요.',
+      statusCode: 400,
+    };
   }
 };
 
