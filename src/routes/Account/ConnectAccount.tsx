@@ -1,6 +1,5 @@
-// 클라이언트사이드 유효성 검사를 생략하겠습니다.
 import { useState, useEffect, useMemo } from 'react';
-import { connectAccount, getBankList } from '../../api/bankApi';
+import { connectAccount, getBankList } from '@/api/bankApi';
 import Select from '@/components/ui/Select';
 import { userStore } from '@/store';
 import Input from '@/components/ui/Input';
@@ -103,7 +102,7 @@ export default function ConnectAccount() {
           onChange={handleChange}
           maxLength={totalDigits}
           placeholder={`${
-            totalDigits ? totalDigits + '자리 계좌번호' : '계좌번호'
+            totalDigits ? totalDigits + "자리 계좌번호 '-' 없이" : '계좌번호'
           }`}
         />
         <Input
@@ -122,7 +121,7 @@ export default function ConnectAccount() {
             onChange={handleChange}
           />
           <label htmlFor="signature" className="select-none">
-            귀하는 간편결제 계좌 등록에 동의합니다.
+            간편결제 계좌 등록에 동의합니다.
           </label>
         </div>
         <AlertMessage message={message} />
