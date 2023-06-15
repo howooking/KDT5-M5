@@ -169,7 +169,6 @@ export const editUser = async (
       }),
     });
     if (res.ok) {
-      console.log({ res });
       return true;
     }
     // 기존 비번이 안맞는경우

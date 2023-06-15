@@ -18,6 +18,7 @@ import ConnectAccount from '@/routes/Account/ConnectAccount';
 import Products from '@/routes/Products';
 import ProductDetail from '@/routes/ProductDetail';
 import AccountList from '@/routes/Account/AccountList';
+import SearchProducts from './routes/SearchProducts';
 
 export default function App() {
   return (
@@ -25,6 +26,7 @@ export default function App() {
       <Route element={<Layout />}>
         {/* 홈 */}
         <Route path="/" element={<Home />} />
+        <Route path="products/search" element={<SearchProducts />} />
         <Route path="/products/:category" element={<Products />} />
         <Route
           path="/products/:category/:productId"
