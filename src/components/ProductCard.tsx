@@ -13,7 +13,8 @@ export default function ProductCard({
   thumbnail,
   title,
 }: ProductCardProps) {
-  const priceBeforeDiscount = (price * 100) / (100 - discountRate);
+  const priceBeforeDiscount =
+    Math.ceil((price * 100) / (100 - discountRate) / 1000) * 1000;
   return (
     <div className="text-sm">
       <img
