@@ -7,10 +7,12 @@ import {
 } from '@/constants/library';
 import { userStore } from '@/store';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function OrderList() {
   const { userInfo } = userStore();
   const [orders, setOrders] = useState<TransactionDetail[]>([]);
+  const navigate = useNavigate();
 
   // 통신해서 주문 목록을 가져옴
   useEffect(() => {
@@ -37,6 +39,10 @@ export default function OrderList() {
     (a, b) =>
       convertToMilliseconds(b.timePaid) - convertToMilliseconds(a.timePaid)
   );
+
+  const handleDetailButton = (detailId: string) => {
+    navigate(`/myaccount/orderDetail/${detailId}`);
+  };
 
   return (
     <section className="container mx-auto px-20 py-4">
@@ -66,9 +72,8 @@ export default function OrderList() {
               <td>
                 <Button
                   text="상세 내역"
-                  //   onClick={handleSearch}
-
-                  secondary
+                    onClick={() => handleDetailButton(order.detailId)}
+                    secondary
                 />
                 <Button
                   text="구매 확정"

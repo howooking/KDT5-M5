@@ -21,6 +21,7 @@ import AccountList from '@/routes/Account/AccountList';
 import SearchProducts from '@/routes/SearchProducts';
 import OrderList from '@/routes/Auth/OrderList';
 import AllTransactions from './routes/Admin/AllTransactions';
+import OrderDetail from './routes/Auth/OrderDetail';
 
 export default function App() {
   return (
@@ -52,6 +53,7 @@ export default function App() {
           <Route path="accountList" element={<AccountList />} />
           <Route path="connectAccount" element={<ConnectAccount />} />
           <Route path="orderList" element={<OrderList />} />
+          <Route path="/myaccount/orderDetail/:detailId" element={<OrderDetail />} />
         </Route>
 
         {/* 관리자 */}

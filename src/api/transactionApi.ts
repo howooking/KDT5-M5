@@ -84,3 +84,32 @@ export async function getOrderList(accessToken: string) {
     };
   }
 }
+
+export async function getTransactionDetail(
+  accessToken: string,
+  detailId: string
+) {
+  try {
+    const res = await fetch(`${API_URL}/products/transactions/detail`, {
+      method: "POST",
+      headers: {
+        ...HEADERS,
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({ detailId }),
+    });
+    if (res.ok) {
+      const orderDetail = await res.json();
+      return { data: orderDetail, statusCode: res.status };
+    }
+    console.log("error");
+    const errorMessage: string = await res.json();
+    return { data: errorMessage, statusCode: res.status };
+  } catch (error) {
+    console.log("Error while getting transaction detail: ", error);
+    return {
+      data: "거래 내역 상세 조회 중 에러 발생, 잠시 후 다시 시도해 주세요.",
+      statusCode: 400,
+    };
+  }
+}

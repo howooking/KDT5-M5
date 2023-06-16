@@ -161,3 +161,17 @@ interface TransactionDetail {
   isCanceled: boolean; // 거래 취소 여부
   done: boolean; // 거래 완료 여부
 }
+
+interface OrderDetail extends TransactionDetail {
+  account: Account;
+  product: {
+    productId: string;
+    title: string;
+    price: number;
+    description: string;
+    tags: string[];
+    thumbnail: string | null;
+    discountRate: number;
+    photo: string | null;
+  };
+};
