@@ -37,7 +37,8 @@ export default function EditProduct() {
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement >,
   ) => {
-    const { name, value, type, checked } = event.target;
+    const { name, value, type } = event.target;
+    console.log(value)
 
     if (type === 'file') {
       const files = (event.target as HTMLInputElement).files as FileList;
@@ -66,13 +67,6 @@ export default function EditProduct() {
         return {
           ...prevData,
           tags: [prevData?.tags?.[0] || '', value],
-        };
-      });
-    } else if (checked){
-      setDetailProduct((prevdata) => {
-        return {
-          ...prevdata,
-          [name]: checked,
         };
       });
     } else {
@@ -136,18 +130,22 @@ export default function EditProduct() {
       ...detailProduct,
       discountRate: Number(detailProduct?.discountRate),
       price: Number(detailProduct?.price),
+      isSoldOut: Boolean(detailProduct?.isSoldOut),
     });
     console.log(res)
 
     // 제품등록이 성공한 경우
     if (!res) {
       setPositive(true);
-      setMessage('제품을 등록하였습니다.');
+      // setMessage('제품을 등록하였습니다.');
+      alert('제품을 수정하였습니다.')
       setIsSending(false);
       const id = setTimeout(() => {
         setMessage('');
       }, 2000);
       setTimeoutId(id);
+      window.location.reload();
+
       return;
     }
     // 제품등록이 실패한 경우
@@ -208,9 +206,10 @@ export default function EditProduct() {
           </div>
           <div className={'flex'}>
             <label className="swap">
-              <input type="checkbox" checked={detailProduct?.isSoldOut} onChange={handleChange}/>
-              <div className="swap-on text-xl">매진</div>
-              <div className="swap-off">재고가 있습니다</div>
+              {/*value 타입은 string 인테 값은 불리언*/}
+              <input type="checkbox" value={detailProduct?.isSoldOut.toString()} onChange={handleChange}/>
+              <div className="swap-on text-2xl text-accent">매진된 상품입니다.</div>
+              <div className="swap-off text-2xl ">재고가 있습니다</div>
             </label>
             {/*checked={detailProduct?.isSoldOut}*/}
           </div>
