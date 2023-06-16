@@ -130,6 +130,7 @@ export async function getProductDetail(productId: string) {
     }
     const error: string = await res.json();
     console.log(error);
+
   } catch (error) {
     console.log(error);
   }
