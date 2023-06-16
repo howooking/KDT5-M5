@@ -14,31 +14,18 @@ export default function EditProduct() {
     state: { productId, productTitle },
   } = useLocation();
 
-  const [editProductInputData, setEditProductInputData] =
-    useState<EditProductInputData>({
-      isSoldOut: false,
-      title: '',
-      price: '',
-      description: '',
-      tags: ['', ''],
-      thumbnailBase64: '',
-      photoBase64: '',
-      discountRate: '',
-    });
-  // console.log(editProductInputData);
+  const [detailProduct, setDetailProduct] = useState<ProductDetail>();
   const [loading, setLoading] = useState(false);
-  // 성공적으로 제품을 등록하였을 경우 message색을 초록색으로 바꾸기 위한 state
   const [positive, setPositive] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const [message, setMessage] = useState('');
-  // 2초가 지나면 alert message가 없어지는 기능을 위한 state
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const fetchProducts = async () => {
       const res = await getProductDetail(productId);
       if (res) {
-        setEditProductInputData({
+        setDetailProduct({
           description: res.description,
           isSoldOut: res.isSoldOut,
           price: res.price.toString(),
@@ -65,7 +52,7 @@ export default function EditProduct() {
       const reader = new FileReader();
       reader.readAsDataURL(files[0]);
       reader.onloadend = () => {
-        setEditProductInputData((prevData) => {
+        setDetailProduct((prevData) => {
           return {
             ...prevData,
             [name]: reader.result as string,
@@ -76,29 +63,21 @@ export default function EditProduct() {
       // select로 tags의 element를 지정하는 로직
       // tags = ["카테고리(축구화, 족구화...)", "브랜드(나이키, 아디다스...)"]
     } else if (name === 'category') {
-      setEditProductInputData((prevData) => {
+      setDetailProduct((prevData) => {
         return {
           ...prevData,
           tags: [value, prevData?.tags?.[1] || ''],
         };
       });
     } else if (name === 'brand') {
-      setEditProductInputData((prevData) => {
+      setDetailProduct((prevData) => {
         return {
           ...prevData,
           tags: [prevData?.tags?.[0] || '', value],
         };
       });
-    } else if (name === 'isSoldOut') {
-      console.log(event.target.value === 'sold');
-      setEditProductInputData((prevdata) => {
-        return {
-          ...prevdata,
-          [name]: event.target.value === 'sold',
-        };
-      });
     } else {
-      setEditProductInputData((prevdata) => {
+      setDetailProduct((prevdata) => {
         return {
           ...prevdata,
           [name]: value,
@@ -123,9 +102,9 @@ export default function EditProduct() {
 
     // 제품이름 or 제품가격 or 제품설명을 입력하지 않은 경우
     if (
-      editProductInputData?.title.trim() === '' ||
-      editProductInputData?.price.toString().trim() === '' ||
-      editProductInputData?.description.toString().trim() === ''
+      detailProduct?.title.trim() === '' ||
+      detailProduct?.price.toString().trim() === '' ||
+      detailProduct?.description.toString().trim() === ''
     ) {
       setMessage('제품이름, 가격, 제품설명을 모두 입력해주세요.');
       const id = setTimeout(() => {
@@ -136,11 +115,11 @@ export default function EditProduct() {
     }
 
     // 할인율 0 ~ 99 가 아닌경우
-    if (editProductInputData?.discountRate) {
+    if (detailProduct?.discountRate) {
       if (
-        !Number(editProductInputData?.discountRate) ||
-        Number(editProductInputData?.discountRate) <= 0 ||
-        Number(editProductInputData?.discountRate) >= 100
+        !Number(detailProduct?.discountRate) ||
+        Number(detailProduct?.discountRate) <= 0 ||
+        Number(detailProduct?.discountRate) >= 100
       ) {
         setMessage('할인율은 0 ~ 99를 입력해주세요.');
         const id = setTimeout(() => {
@@ -152,16 +131,17 @@ export default function EditProduct() {
     }
 
     setIsSending(true);
-    const res = await updateProduct(productId, {
-      ...editProductInputData,
-      discountRate: Number(editProductInputData.discountRate),
-      price: Number(editProductInputData.price),
+    const res = await updateProduct(detailProduct?.id as string, {
+      ...detailProduct,
+      discountRate: Number(detailProduct?.discountRate),
+      price: Number(detailProduct?.price),
+      isSoldOut: Boolean(detailProduct?.isSoldOut),
     });
 
     // 제품등록이 성공한 경우
-    if (res.statusCode === 200) {
+    if (res) {
       setPositive(true);
-      setMessage('상품을 수정하였습니다.');
+      setMessage('제품이 수정되었습니다.');
       setIsSending(false);
       const id = setTimeout(() => {
         setMessage('');
@@ -191,62 +171,80 @@ export default function EditProduct() {
                 name="category"
                 options={SELECT_CATEGORY}
                 onChange={handleChange}
-                value={editProductInputData.tags[0]}
+                value={detailProduct?.tags[0]}
               />
               <Select
                 name="brand"
                 options={SELECT_BRAND}
                 onChange={handleChange}
-                value={editProductInputData.tags[1]}
+                value={detailProduct?.tags[1]}
               />
               <Input
                 placeholder="제품이름*"
                 name="title"
                 onChange={handleChange}
-                value={editProductInputData.title}
+                value={detailProduct?.title}
               />
               <Input
                 placeholder="가격*"
                 name="price"
                 onChange={handleChange}
-                value={editProductInputData.price}
+                value={detailProduct?.price}
               />
               <Input
                 placeholder="제품설명*"
                 name="description"
                 onChange={handleChange}
-                value={editProductInputData.description}
+                value={detailProduct?.description}
               />
               <Input
                 placeholder="할인율 (0 ~ 99, 입력 안할 경우 0) "
                 name="discountRate"
                 onChange={handleChange}
-                value={editProductInputData.discountRate}
+                value={detailProduct?.discountRate}
               />
-              {/* 재고 radio */}
-              <div className="flex select-none gap-3">
-                <div>
-                  <input
-                    id="notSold"
-                    type="radio"
-                    value="notSold"
-                    name="isSoldOut"
-                    checked={!editProductInputData.isSoldOut}
-                    onChange={handleChange}
-                  />
-                  <label htmlFor="notSold"> 재고 있음</label>
-                </div>
-                <div>
-                  <input
-                    id="sold"
-                    type="radio"
-                    value="sold"
-                    name="isSoldOut"
-                    checked={editProductInputData.isSoldOut}
-                    onChange={handleChange}
-                  />
-                  <label htmlFor="sold"> 재고 없음</label>
-                </div>
+            </div>
+          </div>
+          <div className={'flex'}>
+            <label className="swap">
+              <input
+                type="checkbox"
+                value={detailProduct?.isSoldOut.toString()}
+                onChange={handleChange}
+              />
+              <div className="swap-on text-2xl text-accent">
+                매진된 상품입니다.
+              </div>
+              <div className="swap-off text-2xl ">재고가 있습니다</div>
+            </label>
+            {/*checked={detailProduct?.isSoldOut}*/}
+          </div>
+          <div className={'flex'}>
+            <img
+              src={detailProduct?.thumbnail as string}
+              alt={detailProduct?.title}
+              className="mr-4 w-[200px]"
+            />
+            <ImageUpload
+              korName="썸네일사진"
+              name="thumbnailBase64"
+              onChange={handleChange}
+            />
+          </div>
+          <div className="mb-0 flex w-full border-2 border-orange-300">
+            <div
+              tabIndex={0}
+              className="collapse-plus collapse mr-4 w-[400px] border border-base-300 bg-base-200"
+            >
+              <div className="collapse-title text-xl font-medium">
+                상세이미지 보기
+              </div>
+              <div className="collapse-content flex justify-center">
+                <img
+                  src={detailProduct?.photo as string}
+                  alt={detailProduct?.title}
+                  className="h-auto w-[300px]"
+                />
               </div>
             </div>
             <div className="flex-1 space-y-3">
@@ -256,10 +254,8 @@ export default function EditProduct() {
                 onChange={handleChange}
               />
               <img
-                src={
-                  editProductInputData.thumbnailBase64 || '/defaultThumb.jpg'
-                }
-                alt={editProductInputData.title}
+                src={detailProduct?.thumbnail || '/defaultThumb.jpg'}
+                alt={detailProduct?.title}
                 className="h-20 w-20"
               />
               <ImageUpload
@@ -272,8 +268,8 @@ export default function EditProduct() {
                 <div className="collapse-title">상세사진 보기</div>
                 <div className="collapse-content">
                   <img
-                    src={editProductInputData.photoBase64 as string}
-                    alt={editProductInputData.title}
+                    src={detailProduct?.photo as string}
+                    alt={detailProduct?.title}
                     className="h-auto w-[300px]"
                   />
                 </div>
