@@ -114,7 +114,6 @@ export async function getProducts() {
 
 export async function getProductDetail(productId: string) {
   try {
-    console.log(productId);
     const res = await fetch(`${API_URL}/products/${productId}`, {
       method: 'GET',
       headers: MASTER_HEADERS,
@@ -125,6 +124,7 @@ export async function getProductDetail(productId: string) {
     }
     const error: string = await res.json();
     console.log(error);
+
   } catch (error) {
     console.log(error);
   }
