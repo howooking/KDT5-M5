@@ -5,7 +5,6 @@ const MASTER_HEADERS = {
 };
 
 interface AddProductResponseValue {
-  // 추가한 제품의 상세 내용
   id: string; // 제품 ID
   title: string; // 제품 이름
   price: number; // 제품 가격
@@ -130,7 +129,6 @@ export async function getProductDetail(productId: string) {
     }
     const error: string = await res.json();
     console.log(error);
-
   } catch (error) {
     console.log(error);
   }
@@ -142,12 +140,12 @@ export const getAllTransactions = async () => {
       method: 'GET',
       headers: MASTER_HEADERS,
     });
-    
+
     if (response.ok) {
       const allTransactions = await response.json();
       return allTransactions;
     }
-    
+
     const error: string = await response.json();
     return error;
   } catch (error) {

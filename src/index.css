@@ -37,11 +37,17 @@ table {
 
 thead {
   background-color: #efe9e9;
-  
 }
 
-th, td {
+th,
+td {
   padding: 16px 8px;
   border: 1px solid #ddd;
   text-align: center;
+}
+
+.toaster {
+  border: 2px solid #320b0b;
+  color: '#713200';
+  width: 500px;
 }

@@ -1,3 +1,22 @@
+// !Auth관련 타입들
+
+// 로그인 요청시 or 회원가입 요청시 성공하면 서버에서 오는 유져 데이터
+interface UserResponseValue {
+  user: {
+    email: string;
+    displayName: string;
+    profileImg: string | null;
+  };
+  accessToken: string;
+}
+
+// 수정에 성공하면 서버에서 보내주는 유져값
+interface UpdatedUserResponseValue {
+  email: string;
+  displayName: string;
+  profileImg: string | null;
+}
+
 interface User {
   user: {
     email: string;
@@ -123,16 +142,6 @@ interface ConnectAccountBody {
   accountNumber: string;
   phoneNumber: string;
   signature: boolean;
-}
-
-// 로그인 or 회원가입 성공하면 서버에서 오는 유져 데이터
-interface UserResponseValue {
-  user: {
-    email: string;
-    displayName: string;
-    profileImg: string | null;
-  };
-  accessToken: string;
 }
 
 // 인증확인 성공시 응답값의 타입
