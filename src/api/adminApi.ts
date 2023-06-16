@@ -16,6 +16,7 @@ interface AddProductResponseValue {
   isSoldOut: boolean; // 제품 매진 여부
   discountRate: number; // 제품 할인율
 }
+
 export const addProduct = async (productData: AddProductData) => {
   try {
     const response = await fetch(`${API_URL}/products`, {
@@ -41,15 +42,20 @@ export const updateProduct = async (
   updateData: UpdatedProduct
 ) => {
   try {
+    console.log(updateData);
     const response = await fetch(`${API_URL}/products/${productId}`, {
       method: 'PUT',
       headers: MASTER_HEADERS,
       body: JSON.stringify(updateData),
     });
+    console.log(response.status);
     const data = await response.json();
     return data;
   } catch (error) {
-    throw new Error('Failed to update product.');
+    return {
+      data: '제품 수정 중 에러발생, 잠시 후 다시 실행해 주세요.',
+      statusCode: 400,
+    };
   }
 };
 

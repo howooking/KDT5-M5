@@ -56,10 +56,14 @@ export default function App() {
           path="/admin"
           element={<ProtectedRoute adminRequired element={<Admin />} />}
         >
+          {/*유저관리*/}
           <Route path="clients" element={<AdminClients />} />
+          {/*상품관리*/}
           <Route path="products" element={<AdminProductView />} />
+           {/*상품추가*/}
           <Route path="addProduct" element={<AddProduct />} />
-          <Route path="editProduct" element={<EditProduct />} />
+           {/*상품수정*/}
+          <Route path="editProduct" element={<EditProduct  />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Route>

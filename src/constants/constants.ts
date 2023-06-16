@@ -66,11 +66,11 @@ export const SUB_MENUS_ADMIN = [
     href: '/admin/clients',
   },
   {
-    label: '제품 관리',
+    label: '상품 관리',
     href: '/admin/products',
   },
   {
-    label: '제품 추가',
+    label: '상품 추가',
     href: '/admin/addproduct',
   },
 ];

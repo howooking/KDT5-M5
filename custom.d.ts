@@ -8,7 +8,7 @@ interface User {
   isAdmin: boolean;
 }
 
-//체품 추가시 사용자가 입력하는 값
+//제품 추가시 사용자가 입력하는 값
 interface ProductInputData {
   title: string;
   price: string;
@@ -29,13 +29,26 @@ interface AddProductData {
   discountRate?: number;
 }
 
+//제품 수정시 사용자가 입력하는 값
+interface EditProductInputData {
+  title: string;
+  price: string;
+  description: string;
+  tags: string[];
+  isSoldOut: boolean;
+  thumbnailBase64?: string | null;
+  photoBase64?: string | null;
+  discountRate?: string;
+}
+
+// 수정시 요구되는 상품 body값
 interface UpdatedProduct {
   title?: string; // 제품 이름
   price?: number; // 제품 가격
   description?: string; // 제품 상세 설명
   tags?: string[]; // 제품 태그
-  thumbnailBase64?: string; // 제품 썸네일(대표) 사진(base64) - jpg, jpeg, webp, png, gif, svg
-  photoBase64?: string; // 제품 상세 사진(base64) - jpg, jpeg, webp, png, gif, svg
+  thumbnailBase64?: string | null; // 제품 썸네일(대표) 사진(base64) - jpg, jpeg, webp, png, gif, svg
+  photoBase64?: string | null; // 제품 상세 사진(base64) - jpg, jpeg, webp, png, gif, svg
   isSoldOut?: boolean; // 제품 매진 여부
   discountRate?: number; // 제품 할인율
 }
