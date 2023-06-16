@@ -8,10 +8,11 @@ import ImageUpload from '@/components/ui/ImageUpload';
 import Select from '@/components/ui/Select';
 import { SELECT_BRAND, SELECT_CATEGORY } from '@/constants/constants';
 import { useLocation } from 'react-router-dom';
+import { resolve } from 'path/win32';
 
 export default function EditProduct() {
   const {
-    state: { productId },
+    state: { productId, productTitle },
   } = useLocation();
   const [detailProduct, setDetailProduct] = useState<ProductDetail>();
   const [loading, setLoading] = useState(false);
@@ -32,7 +33,7 @@ export default function EditProduct() {
       }
     };
     fetchProducts();
-  }, []);
+  }, [productId]);
 
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -157,17 +158,19 @@ export default function EditProduct() {
     <div className="flex justify-center p-3">
       <div className="flex flex-col">
         <h3 className="py-3 text-3xl text-gray-800">
-          {loading ? <LoadingSpinner color={'accent'} /> : detailProduct?.title}
+          {loading ? <LoadingSpinner color={'accent'} /> : productTitle}
         </h3>
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           <div className="flex gap-10">
             <div className="flex-1  space-y-3">
               <Select
+                name="category"
                 options={SELECT_CATEGORY}
                 onChange={handleChange}
                 value={detailProduct?.tags[0] as string}
               />
               <Select
+                name="brand"
                 options={SELECT_BRAND}
                 onChange={handleChange}
                 value={detailProduct?.tags[1] as string}

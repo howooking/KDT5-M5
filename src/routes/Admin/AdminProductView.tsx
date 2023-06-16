@@ -14,7 +14,7 @@ export default function AdminProductView() {
   const [products, setProducts] = useState<Product[] | undefined>();
   const [detailProduct, setDetailProduct] = useState<ProductDetail>();
   const [loading, setLoading] = useState(false);
-  const navigator = useNavigate();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -35,19 +35,14 @@ export default function AdminProductView() {
     console.log(target.value);
     const res = await getProductDetail(target.value);
     setDetailProduct(res);
-    // 승원님 상세페이지 완성시 상세페이지에 연결 예정
-    window.productModal.showModal();
   };
   const handleUpdate = (productId: string, productTitle: string) => {
-    navigator('/admin/editproduct', { state: { productId, productTitle } });
+    navigate('/admin/editproduct', { state: { productId, productTitle } });
   };
-  const handleDelete = async (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    const Id = event.target as HTMLInputElement;
-    await deleteProduct(Id.value);
-    alert('제품이 성공적으로 삭제되었습니다.');
-    setProducts(products?.filter((product) => product.id !== Id.value));
+  const handleDelete = async (productId: string) => {
+    await deleteProduct(productId);
+    alert('상품이 성공적으로 삭제되었습니다.');
+    setProducts(products?.filter((product) => product.id !== productId));
   };
   // 리로드 기능 수정 완료
 
@@ -103,7 +98,7 @@ export default function AdminProductView() {
                   />
                   <Button
                     text="상품삭제"
-                    onClick={handleDelete}
+                    onClick={() => handleDelete(product.id)}
                     value={product.id}
                   />
                 </td>

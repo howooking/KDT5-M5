@@ -95,7 +95,7 @@ export default function ProductSection({ category }: ProductSectionProps) {
               <li
                 key={product.id}
                 className={`p-2 ${
-                  product.isSoldOut ? 'opacity-20' : ''
+                  product.isSoldOut ? '.sold-out opacity-20' : ''
                 } group cursor-pointer shadow-md`}
               >
                 <Link to={`/products/${product.tags[0]}/${product.id}`}>
@@ -105,7 +105,6 @@ export default function ProductSection({ category }: ProductSectionProps) {
                     discountRate={product.discountRate}
                     price={product.price}
                     thumbnail={product.thumbnail}
-                    tags={product.tags}
                   />
                 </Link>
               </li>
