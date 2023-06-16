@@ -135,14 +135,12 @@ export default function EditProduct() {
     // 제품등록이 성공한 경우
     if (res) {
       setPositive(true);
-      setMessage('제품을 등록하였습니다.');
+      setMessage('제품이 수정되었습니다.');
       setIsSending(false);
       const id = setTimeout(() => {
         setMessage('');
       }, 2000);
       setTimeoutId(id);
-      window.location.reload();
-
       return;
     }
     // 제품등록이 실패한 경우
@@ -203,7 +201,6 @@ export default function EditProduct() {
           </div>
           <div className={'flex'}>
             <label className="swap">
-              {/*value 타입은 string 인테 값은 불리언*/}
               <input type="checkbox" value={detailProduct?.isSoldOut.toString()} onChange={handleChange}/>
               <div className="swap-on text-2xl text-accent">매진된 상품입니다.</div>
               <div className="swap-off text-2xl ">재고가 있습니다</div>
