@@ -85,7 +85,7 @@ export async function getOrderList(accessToken: string) {
   }
 }
 
-export async function getTransactionDetail(
+export async function getOrderDetail(
   accessToken: string,
   detailId: string
 ) {

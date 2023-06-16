@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getTransactionDetail } from '@/api/transactionApi';
+import { getOrderDetail } from '@/api/transactionApi';
 import formatDate from '@/FormatDate';
 import { userStore } from '@/store';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
@@ -14,7 +14,7 @@ export default function OrderDetail() {
   useEffect(() => {
     const fetchDetail = async () => {
       if (detailId) {
-          const response = await getTransactionDetail(
+          const response = await getOrderDetail(
               userInfo?.accessToken as string,
               detailId
           );
