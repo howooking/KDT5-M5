@@ -8,6 +8,7 @@ import Input from '../../components/ui/Input';
 import AlertMessage from '../../components/ui/AlertMessage';
 import Button from '../../components/ui/Button';
 import LoadingSpinner from '../../components/ui/LoadingSpinner';
+import SectionTitle from '@/components/ui/SectionTitle';
 
 export default function Login() {
   const { setUser } = userStore();
@@ -58,27 +59,27 @@ export default function Login() {
 
     setIsSending(true);
     const res = await signIn(loginData);
-    // 기타오류, 없는 이메일 or 비번 입력 오류 or 유효성 오류 or apikey오류
-    if (typeof res === 'string') {
-      setMessage(res);
-      const id = setTimeout(() => {
-        setMessage('');
-      }, 2000);
-      setTimeoutId(id);
+    if (res.statusCode === 200) {
+      const user = res.data as UserResponseValue;
+      // 어드민 여부 확인(보안상 매우 안좋음)
+      const isAdmin = ADMINS.includes(user.user.email);
+      // // 로컬 저장소에 user정보와 isAdmin을 문자열화시켜서 저장
+      localStorage.setItem('user', JSON.stringify({ ...user, isAdmin }));
+      // 로컬 user의 상태도 저장
+      setUser({ ...user, isAdmin });
       setIsSending(false);
+      navigate('/', { replace: true });
       return;
     }
 
-    // 로그인에 성공하는 경우
-
-    // 어드민 여부 확인(보안상 매우 안좋음)
-    const isAdmin = ADMINS.includes(res.user.email);
-    // 로컬 저장소에 user정보와 isAdmin을 문자열화시켜서 저장
-    localStorage.setItem('user', JSON.stringify({ ...res, isAdmin }));
-    // 로컬 user의 상태도 저장
-    setUser({ ...res, isAdmin });
+    // 기타오류, 없는 이메일 or 비번 입력 오류 or 유효성 오류 or apikey오류
+    const errorMessage = res.data as string;
+    setMessage(errorMessage);
+    const id = setTimeout(() => {
+      setMessage('');
+    }, 2000);
+    setTimeoutId(id);
     setIsSending(false);
-    navigate('/', { replace: true });
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -92,7 +93,7 @@ export default function Login() {
   return (
     <div className="flex justify-center p-20">
       <div className="flex w-[436px] flex-col">
-        <h3 className="py-3 text-3xl text-gray-800">로그인</h3>
+        <SectionTitle text="로그인" />
         <form onSubmit={handleLogin} className="flex flex-col">
           <div className="space-y-3">
             <Input

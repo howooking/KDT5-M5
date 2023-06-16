@@ -64,6 +64,11 @@ interface Bank {
   disabled: boolean;
 }
 
+interface TotalBalance {
+  totalBalance: number;
+  accounts: UserAccount[];
+}
+
 interface UserAccount {
   id: string;
   bankName: string;
@@ -72,9 +77,11 @@ interface UserAccount {
   balance: number;
 }
 
-interface TotalBalance {
-  totalBalance: number;
-  accounts: UserAccount[];
+interface ConnectAccount {
+  bankCode: string; // 연결할 은행 코드 (필수!)
+  accountNumber: string; // 연결할 계좌번호 (필수!)
+  phoneNumber: string; // 사용자 전화번호 (필수!)
+  signature: boolean; // 사용자 서명 (필수!)
 }
 
 // 어드민에서 사용자들 정보를 조회할 때 오는 사용자 정보 타입
@@ -109,4 +116,28 @@ interface Product {
 interface Window {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   my_modal_2: any;
+}
+
+interface ConnectAccountBody {
+  bankCode: string;
+  accountNumber: string;
+  phoneNumber: string;
+  signature: boolean;
+}
+
+// 로그인 or 회원가입 성공하면 서버에서 오는 유져 데이터
+interface UserResponseValue {
+  user: {
+    email: string;
+    displayName: string;
+    profileImg: string | null;
+  };
+  accessToken: string;
+}
+
+// 인증확인 성공시 응답값의 타입
+interface AuthenticateResponseValue {
+  email: string;
+  displayName: string;
+  profileImg: string | null;
 }

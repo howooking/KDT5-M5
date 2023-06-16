@@ -192,18 +192,19 @@ export default function EditProduct() {
         </h3>
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           <div className="flex gap-10">
-            <div className="flex-1 space-y-3">
+            <div className="flex-1  space-y-3">
               <Select
+                name="category"
                 options={SELECT_CATEGORY}
                 onChange={handleChange}
-                value={editProductInputData?.tags[0] as string}
+                value={productInputData.tags[0]}
               />
               <Select
+                name="brand"
                 options={SELECT_BRAND}
                 onChange={handleChange}
-                value={editProductInputData?.tags[1] as string}
+                value={productInputData.tags[1]}
               />
-
               <Input
                 placeholder="제품이름*"
                 name="title"

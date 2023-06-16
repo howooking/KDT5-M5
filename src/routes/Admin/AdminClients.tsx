@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { getUsers } from '../../api/adminApi';
-import SingleUser from '../../components/SingleUser';
-import { ADMINS } from '../../constants/constants';
-import LoadingSpinner from '../../components/ui/LoadingSpinner';
+import { getUsers } from '@/api/adminApi';
+import SingleUser from '@/components/SingleUser';
+import { ADMINS } from '@/constants/constants';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
 
 export default function AdminClients() {
   const [users, setUsers] = useState<CheckUser[]>([]);

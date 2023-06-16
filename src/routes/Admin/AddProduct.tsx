@@ -164,11 +164,13 @@ export default function AddProduct() {
               <Select
                 options={SELECT_CATEGORY}
                 onChange={handleChange}
+                name="category"
                 value={productInputData.tags[0]}
               />
               <Select
                 options={SELECT_BRAND}
                 onChange={handleChange}
+                name="brand"
                 value={productInputData.tags[1]}
               />
               <Input
