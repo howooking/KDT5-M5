@@ -11,36 +11,28 @@ import { useLocation } from 'react-router-dom';
 
 export default function EditProduct() {
   const {
-    state: { productId, productTitle },
+    state: { productId },
   } = useLocation();
-
   const [detailProduct, setDetailProduct] = useState<ProductDetail>();
   const [loading, setLoading] = useState(false);
+  // 성공적으로 제품을 등록하였을 경우 message색을 초록색으로 바꾸기 위한 state
   const [positive, setPositive] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const [message, setMessage] = useState('');
+  // 2초가 지나면 alert message가 없어지는 기능을 위한 state
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const fetchProducts = async () => {
+      setLoading(true);
       const res = await getProductDetail(productId);
       if (res) {
-        setDetailProduct({
-          description: res.description,
-          isSoldOut: res.isSoldOut,
-          price: res.price.toString(),
-          tags: res.tags,
-          title: res.title,
-          discountRate: res.discountRate.toString(),
-          photoBase64: res.photo,
-          thumbnailBase64: res.thumbnail,
-        });
+        setDetailProduct(res);
         setLoading(false);
       }
     };
-    setLoading(true);
     fetchProducts();
-  }, [productId]);
+  }, []);
 
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -130,6 +122,8 @@ export default function EditProduct() {
       }
     }
 
+    ////////////// api 통신 부분 시작
+
     setIsSending(true);
     const res = await updateProduct(detailProduct?.id as string, {
       ...detailProduct,
@@ -150,35 +144,35 @@ export default function EditProduct() {
       return;
     }
     // 제품등록이 실패한 경우
-    setMessage(res.data as string);
+    setMessage(res);
     setIsSending(false);
     const id = setTimeout(() => {
       setMessage('');
     }, 2000);
     setTimeoutId(id);
   };
+  ////////////   통신 부분 끝
 
   return (
     <div className="flex justify-center p-3">
       <div className="flex flex-col">
         <h3 className="py-3 text-3xl text-gray-800">
-          {loading ? <LoadingSpinner color="accent" /> : productTitle}
+          {loading ? <LoadingSpinner color={'accent'} /> : detailProduct?.title}
         </h3>
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           <div className="flex gap-10">
             <div className="flex-1  space-y-3">
               <Select
-                name="category"
                 options={SELECT_CATEGORY}
                 onChange={handleChange}
-                value={detailProduct?.tags[0]}
+                value={detailProduct?.tags[0] as string}
               />
               <Select
-                name="brand"
                 options={SELECT_BRAND}
                 onChange={handleChange}
-                value={detailProduct?.tags[1]}
+                value={detailProduct?.tags[1] as string}
               />
+
               <Input
                 placeholder="제품이름*"
                 name="title"
@@ -247,39 +241,18 @@ export default function EditProduct() {
                 />
               </div>
             </div>
-            <div className="flex-1 space-y-3">
-              <ImageUpload
-                korName="썸네일사진"
-                name="thumbnailBase64"
-                onChange={handleChange}
-              />
-              <img
-                src={detailProduct?.thumbnail || '/defaultThumb.jpg'}
-                alt={detailProduct?.title}
-                className="h-20 w-20"
-              />
+            <div>
               <ImageUpload
                 korName="상세사진"
                 name="photoBase64"
                 onChange={handleChange}
               />
-              <div className="collapse bg-gray-100">
-                <input type="checkbox" />
-                <div className="collapse-title">상세사진 보기</div>
-                <div className="collapse-content">
-                  <img
-                    src={detailProduct?.photo as string}
-                    alt={detailProduct?.title}
-                    className="h-auto w-[300px]"
-                  />
-                </div>
-              </div>
             </div>
           </div>
           <AlertMessage message={message} positive={positive} />
           <div>
             <Button
-              text={isSending ? <LoadingSpinner color="white" /> : '상품 수정'}
+              text={isSending ? <LoadingSpinner color="white" /> : '제품 수정'}
               disabled={isSending}
             />
           </div>
