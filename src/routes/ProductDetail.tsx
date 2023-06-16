@@ -3,13 +3,19 @@ import SectionTitle from '@/components/ui/SectionTitle';
 import { DICTIONARY_SHOES } from '@/constants/constants';
 import { priceBeforeDiscount } from '@/constants/library';
 import { useEffect, useState } from 'react';
+import { getAccountList } from '@/api/bankApi';
+import { userStore } from '@/store';
+import { buyProduct } from '@/api/transactionApi';
 import { Link, useParams } from 'react-router-dom';
+import Button from '@/components/ui/Button';
 
 export default function ProductDetail() {
   const { productId } = useParams();
 
   const [product, setProduct] = useState<ProductDetail>();
-
+  const [accounts, setAccounts] = useState<UserAccount[]>([]);
+  const { userInfo } = userStore();
+  const [selectedAccount, setSelectedAccount] = useState<string>('');
   useEffect(() => {
     const fetchProductDetail = async () => {
       const res = await getProductDetail(productId as string);
@@ -20,15 +26,26 @@ export default function ProductDetail() {
     fetchProductDetail();
   }, [productId]);
 
-  const getTagLink = (tag: string | undefined) => {
-    if (tag === 'soccer') {
-      return '/products/soccer';
-    } else if (tag === 'footsal') {
-      return '/products/footsal';
-    } else if (tag === 'sneakers') {
-      return '/products/sneakers';
+  useEffect(() => {
+    async function fetchAccountList() {
+      const data = await getAccountList(userInfo?.accessToken as string);
+      if (data) {
+        setAccounts(data.accounts);
+      }
+    }
+    fetchAccountList();
+  }, [userInfo?.accessToken]);
+
+  const handlePurchase = async () => {
+    const purchaseResult = await buyProduct(
+      productId as string,
+      selectedAccount,
+      userInfo?.accessToken as string
+    );
+    if (purchaseResult.data) {
+      console.log('Purchase success');
     } else {
-      return '/';
+      console.log('Purchase failed');
     }
   };
 
@@ -70,6 +87,24 @@ export default function ProductDetail() {
               {product?.discountRate}%
             </span>
           </div>
+          <div>
+            <label htmlFor="account-select">결제할 계좌:</label>
+            <select
+              name="account-select"
+              id="account-select"
+              value={selectedAccount}
+              onChange={(e) => setSelectedAccount(e.target.value)}
+            >
+              <option value="">계좌 선택</option>
+              {accounts.map((account) => (
+                <option key={account.id} value={account.id}>
+                  {account.bankName} - {account.accountNumber} - 잔액:{' '}
+                  {account.balance}
+                </option>
+              ))}
+            </select>
+          </div>
+          <Button onClick={handlePurchase} text="결제하기" />
         </div>
       </div>
 
