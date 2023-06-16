@@ -48,18 +48,9 @@ export const updateProduct = async (
       headers: MASTER_HEADERS,
       body: JSON.stringify(updateData),
     });
-<<<<<<< HEAD
-    if (response.ok) {
-      const updatedProduct: UpdatedProduct = await response.json();
-      return { data: updatedProduct, statusCode: response.status };
-    }
-    const errorMessage: string = await response.json();
-    return { data: errorMessage, statusCode: response.status };
-=======
-    console.log(response.status)
+    console.log(response.status);
     const data = await response.json();
     return data;
->>>>>>> search2
   } catch (error) {
     return {
       data: '제품 수정 중 에러발생, 잠시 후 다시 실행해 주세요.',
