@@ -18,7 +18,8 @@ import ConnectAccount from '@/routes/Account/ConnectAccount';
 import Products from '@/routes/Products';
 import ProductDetail from '@/routes/ProductDetail';
 import AccountList from '@/routes/Account/AccountList';
-import SearchProducts from './routes/SearchProducts';
+import SearchProducts from '@/routes/SearchProducts';
+import OrderList from '@/routes/Auth/OrderList';
 
 export default function App() {
   return (
@@ -49,6 +50,7 @@ export default function App() {
           <Route path="changepw" element={<ChangePassword />} />
           <Route path="accountList" element={<AccountList />} />
           <Route path="connectAccount" element={<ConnectAccount />} />
+          <Route path="orderList" element={<OrderList />} />
         </Route>
 
         {/* 관리자 */}
@@ -60,10 +62,10 @@ export default function App() {
           <Route path="clients" element={<AdminClients />} />
           {/*상품관리*/}
           <Route path="products" element={<AdminProductView />} />
-           {/*상품추가*/}
+          {/*상품추가*/}
           <Route path="addProduct" element={<AddProduct />} />
-           {/*상품수정*/}
-          <Route path="editProduct" element={<EditProduct  />} />
+          {/*상품수정*/}
+          <Route path="editProduct" element={<EditProduct />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Route>

@@ -57,6 +57,10 @@ export const SUB_MENUS_MYACCOUNT = [
     label: '계좌 연결',
     href: '/myaccount/connectAccount',
   },
+  {
+    label: '주문 목록',
+    href: '/myaccount/orderList',
+  },
 ];
 
 // admin 패널 sub anvbar

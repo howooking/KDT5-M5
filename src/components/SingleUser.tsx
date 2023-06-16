@@ -22,7 +22,7 @@ export default function SingleUser({
       }`}
     >
       <td className="py-2">
-        <ProfileImage small src={profileImg} />
+        <ProfileImage small src={profileImg || '/defaultProfile.jpg'} />
       </td>
       <td>{email}</td>
       <td>{displayName}</td>

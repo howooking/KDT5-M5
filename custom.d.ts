@@ -141,3 +141,23 @@ interface AuthenticateResponseValue {
   displayName: string;
   profileImg: string | null;
 }
+
+// 사용자가 자신의 주문목록을 요청하면 받는 개별 주문정보
+interface TransactionDetail {
+  // 거래 내역 정보
+  detailId: string; // 거래 내역 ID
+  product: {
+    // 거래한 제품 정보
+    productId: string;
+    title: string;
+    price: number;
+    description: string;
+    tags: string[];
+    thumbnail: string | null;
+    discountRate: number; // 제품 할인율
+  };
+  reservation: Reservation | null; // 거래한 제품의 예약 정보
+  timePaid: string; // 제품을 거래한 시간
+  isCanceled: boolean; // 거래 취소 여부
+  done: boolean; // 거래 완료 여부
+}
