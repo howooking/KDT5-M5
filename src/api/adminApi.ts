@@ -42,15 +42,23 @@ export const updateProduct = async (
   updateData: UpdatedProduct
 ) => {
   try {
+    console.log(updateData);
     const response = await fetch(`${API_URL}/products/${productId}`, {
       method: 'PUT',
       headers: MASTER_HEADERS,
       body: JSON.stringify(updateData),
     });
-    const data = await response.json();
-    return data;
+    if (response.ok) {
+      const updatedProduct: UpdatedProduct = await response.json();
+      return { data: updatedProduct, statusCode: response.status };
+    }
+    const errorMessage: string = await response.json();
+    return { data: errorMessage, statusCode: response.status };
   } catch (error) {
-    throw new Error('Failed to update product.');
+    return {
+      data: '제품 수정 중 에러발생, 잠시 후 다시 실행해 주세요.',
+      statusCode: 400,
+    };
   }
 };
 

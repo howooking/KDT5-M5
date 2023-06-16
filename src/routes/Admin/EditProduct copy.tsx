@@ -54,7 +54,6 @@ export default function EditProduct() {
   ) => {
     // HTMLSelectElement의 경우 event.target.checked가 없어서 발생하는 오류입니다.
     // check를 지우고 사용하는 곳에서 event의 타입을 단언해주면 됩니다.
-    // 그런데 input type="radio or checkbox" 보다는 이미 만든 select 컴포넌트가 나아보입니다.
     const { name, value, type, checked } = event.target;
 
     if (type === 'file') {

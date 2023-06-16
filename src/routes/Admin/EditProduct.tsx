@@ -11,12 +11,12 @@ import { useLocation } from 'react-router-dom';
 
 export default function EditProduct() {
   const {
-    state: { productId },
+    state: { productId, productTitle },
   } = useLocation();
 
   const [editProductInputData, setEditProductInputData] =
     useState<EditProductInputData>({
-      isSold: false,
+      isSoldOut: false,
       title: '',
       price: '',
       description: '',
@@ -25,6 +25,7 @@ export default function EditProduct() {
       photoBase64: '',
       discountRate: '',
     });
+  // console.log(editProductInputData);
   const [loading, setLoading] = useState(false);
   // 성공적으로 제품을 등록하였을 경우 message색을 초록색으로 바꾸기 위한 state
   const [positive, setPositive] = useState(false);
@@ -39,7 +40,7 @@ export default function EditProduct() {
       if (res) {
         setEditProductInputData({
           description: res.description,
-          isSold: res.isSoldOut,
+          isSoldOut: res.isSoldOut,
           price: res.price.toString(),
           tags: res.tags,
           title: res.title,
@@ -88,11 +89,12 @@ export default function EditProduct() {
           tags: [prevData?.tags?.[0] || '', value],
         };
       });
-    } else if (checked) {
+    } else if (name === 'isSoldOut') {
+      console.log(event.target.value === 'sold');
       setEditProductInputData((prevdata) => {
         return {
           ...prevdata,
-          [name]: checked,
+          [name]: event.target.value === 'sold',
         };
       });
     } else {
@@ -149,20 +151,17 @@ export default function EditProduct() {
       }
     }
 
-    ////////////// api 통신 부분 시작
-
     setIsSending(true);
-    const res = await updateProduct(editProductInputData?.id as string, {
+    const res = await updateProduct(productId, {
       ...editProductInputData,
-      discountRate: Number(editProductInputData?.discountRate),
-      price: Number(editProductInputData?.price),
+      discountRate: Number(editProductInputData.discountRate),
+      price: Number(editProductInputData.price),
     });
-    console.log(res);
 
     // 제품등록이 성공한 경우
-    if (!res) {
+    if (res.statusCode === 200) {
       setPositive(true);
-      setMessage('제품을 등록하였습니다.');
+      setMessage('상품을 수정하였습니다.');
       setIsSending(false);
       const id = setTimeout(() => {
         setMessage('');
@@ -171,24 +170,19 @@ export default function EditProduct() {
       return;
     }
     // 제품등록이 실패한 경우
-    setMessage(res);
+    setMessage(res.data as string);
     setIsSending(false);
     const id = setTimeout(() => {
       setMessage('');
     }, 2000);
     setTimeoutId(id);
   };
-  ////////////   통신 부분 끝
 
   return (
     <div className="flex justify-center p-3">
       <div className="flex flex-col">
         <h3 className="py-3 text-3xl text-gray-800">
-          {loading ? (
-            <LoadingSpinner color="accent" />
-          ) : (
-            editProductInputData?.title
-          )}
+          {loading ? <LoadingSpinner color="accent" /> : productTitle}
         </h3>
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           <div className="flex gap-10">
@@ -197,38 +191,63 @@ export default function EditProduct() {
                 name="category"
                 options={SELECT_CATEGORY}
                 onChange={handleChange}
-                value={productInputData.tags[0]}
+                value={editProductInputData.tags[0]}
               />
               <Select
                 name="brand"
                 options={SELECT_BRAND}
                 onChange={handleChange}
-                value={productInputData.tags[1]}
+                value={editProductInputData.tags[1]}
               />
               <Input
                 placeholder="제품이름*"
                 name="title"
                 onChange={handleChange}
-                value={editProductInputData?.title}
+                value={editProductInputData.title}
               />
               <Input
                 placeholder="가격*"
                 name="price"
                 onChange={handleChange}
-                value={editProductInputData?.price}
+                value={editProductInputData.price}
               />
               <Input
                 placeholder="제품설명*"
                 name="description"
                 onChange={handleChange}
-                value={editProductInputData?.description}
+                value={editProductInputData.description}
               />
               <Input
                 placeholder="할인율 (0 ~ 99, 입력 안할 경우 0) "
                 name="discountRate"
                 onChange={handleChange}
-                value={editProductInputData?.discountRate}
+                value={editProductInputData.discountRate}
               />
+              {/* 재고 radio */}
+              <div className="flex select-none gap-3">
+                <div>
+                  <input
+                    id="notSold"
+                    type="radio"
+                    value="notSold"
+                    name="isSoldOut"
+                    checked={!editProductInputData.isSoldOut}
+                    onChange={handleChange}
+                  />
+                  <label htmlFor="notSold"> 재고 있음</label>
+                </div>
+                <div>
+                  <input
+                    id="sold"
+                    type="radio"
+                    value="sold"
+                    name="isSoldOut"
+                    checked={editProductInputData.isSoldOut}
+                    onChange={handleChange}
+                  />
+                  <label htmlFor="sold"> 재고 없음</label>
+                </div>
+              </div>
             </div>
             <div className="flex-1 space-y-3">
               <ImageUpload
@@ -236,64 +255,35 @@ export default function EditProduct() {
                 name="thumbnailBase64"
                 onChange={handleChange}
               />
+              <img
+                src={
+                  editProductInputData.thumbnailBase64 || '/defaultThumb.jpg'
+                }
+                alt={editProductInputData.title}
+                className="h-20 w-20"
+              />
               <ImageUpload
                 korName="상세사진"
                 name="photoBase64"
                 onChange={handleChange}
               />
+              <div className="collapse bg-gray-100">
+                <input type="checkbox" />
+                <div className="collapse-title">상세사진 보기</div>
+                <div className="collapse-content">
+                  <img
+                    src={editProductInputData.photoBase64 as string}
+                    alt={editProductInputData.title}
+                    className="h-auto w-[300px]"
+                  />
+                </div>
+              </div>
             </div>
           </div>
-          {/* <div className={'flex'}>
-            <label className="swap">
-              <input
-                type="checkbox"
-                checked={editProductInputData?.isSoldOut}
-                onChange={handleChange}
-              />
-              <div className="swap-on text-xl">매진</div>
-              <div className="swap-off">재고가 있습니다</div>
-            </label>
-          </div> */}
-          {/* <div className={'flex'}>
-            <img
-              src={editProductInputData?.thumbnail as string}
-              alt={editProductInputData?.title}
-              className="mr-4 w-[200px]"
-            />
-            <ImageUpload
-              korName="썸네일사진"
-              name="thumbnailBase64"
-              onChange={handleChange}
-            />
-          </div> */}
-          {/* <div className="mb-0 flex w-full border-2 border-orange-300">
-            <div
-              tabIndex={0}
-              className="collapse-plus collapse mr-4 w-[400px] border border-base-300 bg-base-200"
-            >
-              <div className="collapse-title text-xl font-medium">
-                상세이미지 보기
-              </div>
-              <div className="collapse-content flex justify-center">
-                <img
-                  src={editProductInputData?.photo as string}
-                  alt={editProductInputData?.title}
-                  className="h-auto w-[300px]"
-                />
-              </div>
-            </div>
-            <div>
-              <ImageUpload
-                korName="상세사진"
-                name="photoBase64"
-                onChange={handleChange}
-              />
-            </div>
-          </div> */}
           <AlertMessage message={message} positive={positive} />
           <div>
             <Button
-              text={isSending ? <LoadingSpinner color="white" /> : '제품 수정'}
+              text={isSending ? <LoadingSpinner color="white" /> : '상품 수정'}
               disabled={isSending}
             />
           </div>

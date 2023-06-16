@@ -35,7 +35,7 @@ interface EditProductInputData {
   price: string;
   description: string;
   tags: string[];
-  isSold: boolean;
+  isSoldOut: boolean;
   thumbnailBase64?: string | null;
   photoBase64?: string | null;
   discountRate?: string;
@@ -47,8 +47,8 @@ interface UpdatedProduct {
   price?: number; // 제품 가격
   description?: string; // 제품 상세 설명
   tags?: string[]; // 제품 태그
-  thumbnailBase64?: string; // 제품 썸네일(대표) 사진(base64) - jpg, jpeg, webp, png, gif, svg
-  photoBase64?: string; // 제품 상세 사진(base64) - jpg, jpeg, webp, png, gif, svg
+  thumbnailBase64?: string | null; // 제품 썸네일(대표) 사진(base64) - jpg, jpeg, webp, png, gif, svg
+  photoBase64?: string | null; // 제품 상세 사진(base64) - jpg, jpeg, webp, png, gif, svg
   isSoldOut?: boolean; // 제품 매진 여부
   discountRate?: number; // 제품 할인율
 }
