@@ -21,6 +21,7 @@ export default function AddProduct() {
     thumbnailBase64: '',
     photoBase64: '',
     discountRate: '',
+    isSoldOut: false,
   });
 
   const [isSending, setIsSending] = useState(false);
@@ -126,6 +127,7 @@ export default function AddProduct() {
     // 제품등록이 성공한 경우
     if (!res) {
       setPositive(true);
+      console.log(productInputData)
       setMessage('제품을 등록하였습니다.');
       setIsSending(false);
       const id = setTimeout(() => {
@@ -140,6 +142,7 @@ export default function AddProduct() {
         photoBase64: '',
         tags: ['category', 'brand'],
         thumbnailBase64: '',
+        isSoldOut: false
       });
       return;
     }
