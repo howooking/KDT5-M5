@@ -77,6 +77,10 @@ export const SUB_MENUS_ADMIN = [
     label: '상품 추가',
     href: '/admin/addproduct',
   },
+  {
+    label: '거래 내역',
+    href: '/admin/alltransactions',
+  },
 ];
 
 export const SELECT_CATEGORY = [

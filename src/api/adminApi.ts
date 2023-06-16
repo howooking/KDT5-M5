@@ -135,3 +135,23 @@ export async function getProductDetail(productId: string) {
     console.log(error);
   }
 }
+
+export const getAllTransactions = async () => {
+  try {
+    const response = await fetch(`${API_URL}/products/transactions/all`, {
+      method: 'GET',
+      headers: MASTER_HEADERS,
+    });
+    
+    if (response.ok) {
+      const allTransactions = await response.json();
+      return allTransactions;
+    }
+    
+    const error: string = await response.json();
+    return error;
+  } catch (error) {
+    console.log('Error while fetching all transactions: ', error);
+    return '전체 거래 내역을 불러오는 중 오류가 발생하였습니다.';
+  }
+};

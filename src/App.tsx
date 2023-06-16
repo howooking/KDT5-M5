@@ -20,6 +20,7 @@ import ProductDetail from '@/routes/ProductDetail';
 import AccountList from '@/routes/Account/AccountList';
 import SearchProducts from '@/routes/SearchProducts';
 import OrderList from '@/routes/Auth/OrderList';
+import AllTransactions from './routes/Admin/AllTransactions';
 
 export default function App() {
   return (
@@ -66,6 +67,10 @@ export default function App() {
           <Route path="addProduct" element={<AddProduct />} />
           {/*상품수정*/}
           <Route path="editProduct" element={<EditProduct />} />
+          {/*상품수정*/}
+          <Route path="editProduct" element={<EditProduct />} />
+          {/*거래내역*/}
+          <Route path="alltransactions" element={<AllTransactions />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Route>
