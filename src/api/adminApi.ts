@@ -47,6 +47,7 @@ export const updateProduct = async (
       headers: MASTER_HEADERS,
       body: JSON.stringify(updateData),
     });
+    console.log(response.status)
     const data = await response.json();
     return data;
   } catch (error) {

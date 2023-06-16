@@ -38,7 +38,6 @@ export default function EditProduct() {
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement >,
   ) => {
     const { name, value, type } = event.target;
-    console.log(value)
 
     if (type === 'file') {
       const files = (event.target as HTMLInputElement).files as FileList;
@@ -132,13 +131,11 @@ export default function EditProduct() {
       price: Number(detailProduct?.price),
       isSoldOut: Boolean(detailProduct?.isSoldOut),
     });
-    console.log(res)
 
     // 제품등록이 성공한 경우
-    if (!res) {
+    if (res) {
       setPositive(true);
-      // setMessage('제품을 등록하였습니다.');
-      alert('제품을 수정하였습니다.')
+      setMessage('제품을 등록하였습니다.');
       setIsSending(false);
       const id = setTimeout(() => {
         setMessage('');
