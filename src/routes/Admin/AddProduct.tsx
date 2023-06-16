@@ -7,6 +7,7 @@ import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import ImageUpload from '@/components/ui/ImageUpload';
 import Select from '@/components/ui/Select';
 import { SELECT_BRAND, SELECT_CATEGORY } from '@/constants/constants';
+import SectionTitle from '@/components/ui/SectionTitle';
 
 export default function AddProduct() {
   // 성공적으로 제품을 등록하였을 경우 message색을 초록색으로 바꾸기 위한 state
@@ -156,10 +157,10 @@ export default function AddProduct() {
   return (
     <div className="flex justify-center p-3">
       <div className="flex flex-col">
-        <h3 className="py-3 text-3xl text-gray-800">제품 추가</h3>
+        <SectionTitle text="제품추가" />
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           <div className="flex gap-10">
-            <div className="flex-1  space-y-3">
+            <div className="flex-1 space-y-3">
               <Select
                 options={SELECT_CATEGORY}
                 onChange={handleChange}
@@ -195,7 +196,7 @@ export default function AddProduct() {
                 value={productInputData.discountRate}
               />
             </div>
-            <div className="flex-1  space-y-3">
+            <div className="flex-1 space-y-3">
               <ImageUpload
                 korName="썸네일사진"
                 name="thumbnailBase64"

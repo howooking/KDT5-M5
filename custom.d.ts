@@ -29,6 +29,19 @@ interface AddProductData {
   discountRate?: number;
 }
 
+//제품 수정시 사용자가 입력하는 값
+interface EditProductInputData {
+  title: string;
+  price: string;
+  description: string;
+  tags: string[];
+  isSold: boolean;
+  thumbnailBase64?: string | null;
+  photoBase64?: string | null;
+  discountRate?: string;
+}
+
+// 수정시 요구되는 상품 body값
 interface UpdatedProduct {
   title?: string; // 제품 이름
   price?: number; // 제품 가격

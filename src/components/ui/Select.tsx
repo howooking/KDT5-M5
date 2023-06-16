@@ -3,7 +3,7 @@ import { IoIosArrowDown } from 'react-icons/io';
 interface SelectProps {
   options: {
     name: string;
-    value: string;
+    value: string | boolean;
   }[];
   onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   value: string;

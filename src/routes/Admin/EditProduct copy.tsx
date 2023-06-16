@@ -13,58 +13,57 @@ export default function EditProduct() {
   const {
     state: { productId },
   } = useLocation();
-
-  const [editProductInputData, setEditProductInputData] =
-    useState<EditProductInputData>({
-      isSold: false,
-      title: '',
-      price: '',
-      description: '',
-      tags: ['', ''],
-      thumbnailBase64: '',
-      photoBase64: '',
-      discountRate: '',
-    });
+  // 수정값들의 다음과 같이 string으로 초기값을 세팅해줘야합니다.
+  // const [editProductInputData, setEditProductInputData] =
+  // useState<EditProductInputData>({
+  //   isSold: false,
+  //   title: '',
+  //   price: '',
+  //   description: '',
+  //   tags: ['', ''],
+  //   thumbnailBase64: '',
+  //   photoBase64: '',
+  //   discountRate: '',
+  // });
+  const [detailProduct, setDetailProduct] = useState<ProductDetail>();
   const [loading, setLoading] = useState(false);
-  // 성공적으로 제품을 등록하였을 경우 message색을 초록색으로 바꾸기 위한 state
   const [positive, setPositive] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const [message, setMessage] = useState('');
-  // 2초가 지나면 alert message가 없어지는 기능을 위한 state
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const fetchProducts = async () => {
+      // 사소한 부분인데 통신이 진행되기 전에, 즉 fetchProducts()바로 위에 실행하는게 절차적으로 맞습니다.
+      setLoading(true);
       const res = await getProductDetail(productId);
       if (res) {
-        setEditProductInputData({
-          description: res.description,
-          isSold: res.isSoldOut,
-          price: res.price.toString(),
-          tags: res.tags,
-          title: res.title,
-          discountRate: res.discountRate.toString(),
-          photoBase64: res.photo,
-          thumbnailBase64: res.thumbnail,
-        });
+        // 인풋 값 중에 price는 number인데 input type은 string이므로 변환이 필요합니다.
+        // 나머지도 하나하나 입력해줘야합니다.
+        setDetailProduct(res);
         setLoading(false);
       }
     };
-    setLoading(true);
+    // 이쪽으로
     fetchProducts();
-  }, [productId]);
+    // productId가 바뀌면 이 useEffect가 실행되어야 하므로 []안에 채워주세요
+  }, []);
 
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    const { name, value, type } = event.target;
+    // HTMLSelectElement의 경우 event.target.checked가 없어서 발생하는 오류입니다.
+    // check를 지우고 사용하는 곳에서 event의 타입을 단언해주면 됩니다.
+    // 그런데 input type="radio or checkbox" 보다는 이미 만든 select 컴포넌트가 나아보입니다.
+    const { name, value, type, checked } = event.target;
 
     if (type === 'file') {
+      // 여기보시면 event.target.files는 HTMLSelectElement안에 없기 떄문에 as HTMLInputElement로 단언해준 것을 볼 수 있습니다.
       const files = (event.target as HTMLInputElement).files as FileList;
       const reader = new FileReader();
       reader.readAsDataURL(files[0]);
       reader.onloadend = () => {
-        setEditProductInputData((prevData) => {
+        setDetailProduct((prevData) => {
           return {
             ...prevData,
             [name]: reader.result as string,
@@ -75,28 +74,28 @@ export default function EditProduct() {
       // select로 tags의 element를 지정하는 로직
       // tags = ["카테고리(축구화, 족구화...)", "브랜드(나이키, 아디다스...)"]
     } else if (name === 'category') {
-      setEditProductInputData((prevData) => {
+      setDetailProduct((prevData) => {
         return {
           ...prevData,
           tags: [value, prevData?.tags?.[1] || ''],
         };
       });
     } else if (name === 'brand') {
-      setEditProductInputData((prevData) => {
+      setDetailProduct((prevData) => {
         return {
           ...prevData,
           tags: [prevData?.tags?.[0] || '', value],
         };
       });
     } else if (checked) {
-      setEditProductInputData((prevdata) => {
+      setDetailProduct((prevdata) => {
         return {
           ...prevdata,
           [name]: checked,
         };
       });
     } else {
-      setEditProductInputData((prevdata) => {
+      setDetailProduct((prevdata) => {
         return {
           ...prevdata,
           [name]: value,
@@ -121,9 +120,9 @@ export default function EditProduct() {
 
     // 제품이름 or 제품가격 or 제품설명을 입력하지 않은 경우
     if (
-      editProductInputData?.title.trim() === '' ||
-      editProductInputData?.price.toString().trim() === '' ||
-      editProductInputData?.description.toString().trim() === ''
+      detailProduct?.title.trim() === '' ||
+      detailProduct?.price.toString().trim() === '' ||
+      detailProduct?.description.toString().trim() === ''
     ) {
       setMessage('제품이름, 가격, 제품설명을 모두 입력해주세요.');
       const id = setTimeout(() => {
@@ -134,11 +133,11 @@ export default function EditProduct() {
     }
 
     // 할인율 0 ~ 99 가 아닌경우
-    if (editProductInputData?.discountRate) {
+    if (detailProduct?.discountRate) {
       if (
-        !Number(editProductInputData?.discountRate) ||
-        Number(editProductInputData?.discountRate) <= 0 ||
-        Number(editProductInputData?.discountRate) >= 100
+        !Number(detailProduct?.discountRate) ||
+        Number(detailProduct?.discountRate) <= 0 ||
+        Number(detailProduct?.discountRate) >= 100
       ) {
         setMessage('할인율은 0 ~ 99를 입력해주세요.');
         const id = setTimeout(() => {
@@ -152,10 +151,10 @@ export default function EditProduct() {
     ////////////// api 통신 부분 시작
 
     setIsSending(true);
-    const res = await updateProduct(editProductInputData?.id as string, {
-      ...editProductInputData,
-      discountRate: Number(editProductInputData?.discountRate),
-      price: Number(editProductInputData?.price),
+    const res = await updateProduct(detailProduct?.id as string, {
+      ...detailProduct,
+      discountRate: Number(detailProduct?.discountRate),
+      price: Number(detailProduct?.price),
     });
     console.log(res);
 
@@ -184,79 +183,64 @@ export default function EditProduct() {
     <div className="flex justify-center p-3">
       <div className="flex flex-col">
         <h3 className="py-3 text-3xl text-gray-800">
-          {loading ? (
-            <LoadingSpinner color="accent" />
-          ) : (
-            editProductInputData?.title
-          )}
+          {loading ? <LoadingSpinner color={'accent'} /> : detailProduct?.title}
         </h3>
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           <div className="flex gap-10">
-            <div className="flex-1 space-y-3">
+            <div className="flex-1  space-y-3">
               <Select
                 options={SELECT_CATEGORY}
                 onChange={handleChange}
-                value={editProductInputData?.tags[0] as string}
+                value={detailProduct?.tags[0] as string}
               />
               <Select
                 options={SELECT_BRAND}
                 onChange={handleChange}
-                value={editProductInputData?.tags[1] as string}
+                value={detailProduct?.tags[1] as string}
               />
 
               <Input
                 placeholder="제품이름*"
                 name="title"
                 onChange={handleChange}
-                value={editProductInputData?.title}
+                value={detailProduct?.title}
               />
               <Input
                 placeholder="가격*"
                 name="price"
                 onChange={handleChange}
-                value={editProductInputData?.price}
+                value={detailProduct?.price}
               />
               <Input
                 placeholder="제품설명*"
                 name="description"
                 onChange={handleChange}
-                value={editProductInputData?.description}
+                value={detailProduct?.description}
               />
               <Input
                 placeholder="할인율 (0 ~ 99, 입력 안할 경우 0) "
                 name="discountRate"
                 onChange={handleChange}
-                value={editProductInputData?.discountRate}
-              />
-            </div>
-            <div className="flex-1 space-y-3">
-              <ImageUpload
-                korName="썸네일사진"
-                name="thumbnailBase64"
-                onChange={handleChange}
-              />
-              <ImageUpload
-                korName="상세사진"
-                name="photoBase64"
-                onChange={handleChange}
+                value={detailProduct?.discountRate}
               />
             </div>
           </div>
-          {/* <div className={'flex'}>
+          <div className={'flex'}>
             <label className="swap">
               <input
                 type="checkbox"
-                checked={editProductInputData?.isSoldOut}
+                checked={detailProduct?.isSoldOut}
                 onChange={handleChange}
               />
               <div className="swap-on text-xl">매진</div>
               <div className="swap-off">재고가 있습니다</div>
             </label>
-          </div> */}
-          {/* <div className={'flex'}>
+            {/*checked={detailProduct?.isSoldOut}*/}
+          </div>
+          <div className={'flex'}>
             <img
-              src={editProductInputData?.thumbnail as string}
-              alt={editProductInputData?.title}
+              src={detailProduct?.thumbnail as string}
+              alt={detailProduct?.title}
               className="mr-4 w-[200px]"
             />
             <ImageUpload
@@ -264,8 +248,8 @@ export default function EditProduct() {
               name="thumbnailBase64"
               onChange={handleChange}
             />
-          </div> */}
-          {/* <div className="mb-0 flex w-full border-2 border-orange-300">
+          </div>
+          <div className="mb-0 flex w-full border-2 border-orange-300">
             <div
               tabIndex={0}
               className="collapse-plus collapse mr-4 w-[400px] border border-base-300 bg-base-200"
@@ -275,8 +259,8 @@ export default function EditProduct() {
               </div>
               <div className="collapse-content flex justify-center">
                 <img
-                  src={editProductInputData?.photo as string}
-                  alt={editProductInputData?.title}
+                  src={detailProduct?.photo as string}
+                  alt={detailProduct?.title}
                   className="h-auto w-[300px]"
                 />
               </div>
@@ -288,7 +272,7 @@ export default function EditProduct() {
                 onChange={handleChange}
               />
             </div>
-          </div> */}
+          </div>
           <AlertMessage message={message} positive={positive} />
           <div>
             <Button
