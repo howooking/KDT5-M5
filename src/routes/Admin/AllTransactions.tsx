@@ -28,7 +28,6 @@ export default function TransactionsPage () {
 
   return (
     <section className="container mx-auto px-20 py-4">
-      <h1>거래 내역</h1>
       <table className="table-zebra table table-fixed text-center">
         <thead className="text-sm text-black">
           <tr>
