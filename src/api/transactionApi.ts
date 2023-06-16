@@ -84,3 +84,26 @@ export async function getOrderList(accessToken: string) {
     };
   }
 }
+
+export const orderConfirmed = async (accessToken: string, detailId: string) => {
+  try {
+    const res = await fetch(`${API_URL}/products/cancel`, {
+      method: 'POST',
+      headers: {
+        ...HEADERS,
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify(detailId)
+    });
+    if (res.ok) {
+      const confirmed: boolean = await res.json();
+      return { data: confirmed, statusCode: res.status };
+    }
+  } catch (error) {
+    console.log('Error while buyProduct: ', error);
+    return {
+      data: '구매확정 시도 중 에러 발생, 잠시 후 다시 시도해 주세요.',
+      statusCode: 400,
+    };
+  }
+};

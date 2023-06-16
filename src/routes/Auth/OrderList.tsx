@@ -1,4 +1,4 @@
-import { getOrderList } from '@/api/transactionApi';
+import { getOrderList, orderConfirmed } from '@/api/transactionApi';
 import Button from '@/components/ui/Button';
 import SectionTitle from '@/components/ui/SectionTitle';
 import {
@@ -38,6 +38,16 @@ export default function OrderList() {
       convertToMilliseconds(b.timePaid) - convertToMilliseconds(a.timePaid)
   );
 
+  const handleSearch = async (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    const res = await orderConfirmed(
+      userInfo?.accessToken as string,
+      target.value
+    );
+    setOrders
+  };
+
   return (
     <section className="container mx-auto px-20 py-4">
       <SectionTitle text="주문 목록" />
@@ -72,9 +82,9 @@ export default function OrderList() {
                 />
                 <Button
                   text="구매 확정"
-                  //   onClick={handleSearch}
-
+                  onClick={handleSearch}
                   secondary
+                  value={order.detailId}
                 />
                 <Button
                   text="구매 취소"
