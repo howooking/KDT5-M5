@@ -1,32 +1,26 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from 'react';
-import { userStore } from '../../store';
-import { editUser } from '../../api/authApi';
+import { useState } from 'react';
+import { userStore } from '@/store';
+import { editUser } from '@/api/authApi';
 import { useNavigate } from 'react-router-dom';
-import Input from '../../components/ui/Input';
-import Button from '../../components/ui/Button';
-import AlertMessage from '../../components/ui/AlertMessage';
-import LoadingSpinner from '../../components/ui/LoadingSpinner';
+import Input from '@/components/ui/Input';
+import Button from '@/components/ui/Button';
+import AlertMessage from '@/components/ui/AlertMessage';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
 
 export default function ChangeName() {
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
   const [isSending, setIsSending] = useState(false);
   const navigate = useNavigate();
   const { authMe, userInfo } = userStore();
-  useEffect(() => {
-    authMe();
-  }, []);
 
   const [message, setMessage] = useState('');
   const [editData, setEditData] = useState({
     displayName: '',
-    // oldPassword: '',
   });
-  console.log(editData);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    console.log({ name, value });
     setEditData({
       ...editData,
       [name]: value,

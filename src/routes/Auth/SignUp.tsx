@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { userStore } from '../../store';
-import { signUp } from '../../api/authApi';
-import { EMAIL_REGEX } from '../../constants/constants';
-import Button from '../../components/ui/Button';
-import AlertMessage from '../../components/ui/AlertMessage';
-import Input from '../../components/ui/Input';
-import LoadingSpinner from '../../components/ui/LoadingSpinner';
-import ImageUpload from '../../components/ui/ImageUpload';
+import { userStore } from '@/store';
+import { signUp } from '@/api/authApi';
+import { EMAIL_REGEX } from '@/constants/constants';
+import Button from '@/components/ui/Button';
+import AlertMessage from '@/components/ui/AlertMessage';
+import Input from '@/components/ui/Input';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import ImageUpload from '@/components/ui/ImageUpload';
+import SectionTitle from '@/components/ui/SectionTitle';
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -111,27 +112,29 @@ export default function SignUp() {
 
     setIsSending(true);
     const res = await signUp(signUpData);
-    // 기타오류, 이미 등록된 이메일 or 유효성 오류 or apikey오류
-    if (typeof res === 'string') {
-      setMessage(res);
-      const id = setTimeout(() => {
-        setMessage('');
-      }, 2000);
-      setTimeoutId(id);
-      setIsSending(false);
+    // 회원가입에 성공하는 경우
+    if (res.statusCode === 200) {
+      const user = res.data as UserResponseValue;
+      localStorage.setItem('user', JSON.stringify(res));
+      setUser({ ...user, isAdmin: false });
+      setIsSending(true);
+      navigate('/', { replace: true });
       return;
     }
-    // 회원가입에 성공하는 경우
-    localStorage.setItem('user', JSON.stringify(res));
-    setUser({ ...res, isAdmin: false });
-    setIsSending(true);
-    navigate('/', { replace: true });
+    // 기타오류, 이미 등록된 이메일 or 유효성 오류 or apikey오류
+    const errorMessage = res.data as string;
+    setMessage(errorMessage);
+    const id = setTimeout(() => {
+      setMessage('');
+    }, 2000);
+    setTimeoutId(id);
+    setIsSending(false);
   };
 
   return (
     <div className="flex justify-center p-20">
       <div className="flex w-[436px] flex-col">
-        <h3 className="py-3 text-3xl text-gray-800">회원가입</h3>
+        <SectionTitle text="회원가입" />
         <form onSubmit={handleSubmit}>
           <div className="space-y-3">
             <Input

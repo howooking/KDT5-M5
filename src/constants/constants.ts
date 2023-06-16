@@ -49,10 +49,14 @@ export const SUB_MENUS_MYACCOUNT = [
     label: '비밀번호 변경',
     href: '/myaccount/changepw',
   },
-  // {
-  //   label: '구입목록',
-  //   href: '/myaccount/purchased',
-  // },
+  {
+    label: '계좌 조회 / 해지',
+    href: '/myaccount/accountList',
+  },
+  {
+    label: '계좌 연결',
+    href: '/myaccount/connectAccount',
+  },
 ];
 
 // admin 패널 sub anvbar
@@ -62,35 +66,60 @@ export const SUB_MENUS_ADMIN = [
     href: '/admin/clients',
   },
   {
-    label: '제품 관리',
+    label: '상품 관리',
     href: '/admin/products',
   },
   {
-    label: '제품 추가',
+    label: '상품 추가',
     href: '/admin/addproduct',
   },
 ];
 
 export const SELECT_CATEGORY = [
-  { name: '카테고리 선택', value: 'category' },
+  { name: '카테고리 선택*', value: 'category' },
   { name: '축구화', value: 'soccer' },
   { name: '풋살화', value: 'footsal' },
   { name: '운동화/슬리퍼', value: 'sneakers' },
 ];
 export const SELECT_BRAND = [
-  { name: '브랜드 선택', value: 'brand' },
+  { name: '브랜드 선택*', value: 'brand' },
   { name: '나이키', value: 'nike' },
   { name: '아디다스', value: 'adidas' },
   { name: '미즈노', value: 'mizno' },
   { name: '푸마', value: 'puma' },
-  { name: '기타', value: 'etc' },
 ];
 
 interface Translate {
   [key: string]: string;
 }
-export const dictionary: Translate = {
+export const DICTIONARY_SHOES: Translate = {
   soccer: '축구화',
   footsal: '풋살화',
   sneakers: '운동화/슬리퍼',
 };
+
+// 은행 정보
+export const BANKS = [
+  { name: 'KB국민은행', code: '004', digits: [3, 2, 4, 3] },
+  { name: '신한은행', code: '088', digits: [3, 3, 6] },
+  { name: '우리은행', code: '020', digits: [4, 3, 6] },
+  { name: '하나은행', code: '081', digits: [3, 6, 5] },
+  { name: '케이뱅크', code: '089', digits: [3, 3, 6] },
+  { name: '카카오뱅크', code: '090', digits: [4, 2, 7] },
+  { name: 'NH농협은행', code: '011', digits: [3, 4, 4, 2] },
+];
+
+// 상품 sorting 옵션
+export const PRODUCT_SORT = [
+  { name: '낮은가격', value: 'lowPrice' },
+  { name: '높은가격', value: 'highPrice' },
+];
+
+// 상품 brand sorting 옵션
+export const PRODUCT_BRAND = [
+  { name: '모두', value: 'all' },
+  { name: '나이키', value: 'nike' },
+  { name: '아디다스', value: 'adidas' },
+  { name: '미즈노', value: 'mizno' },
+  { name: '푸마', value: 'puma' },
+];

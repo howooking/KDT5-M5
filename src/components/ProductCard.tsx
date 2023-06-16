@@ -1,7 +1,6 @@
 interface ProductCardProps {
   title: string; // 제품 이름
   price: number; // 제품 가격
-  tags: string[]; // 제품 태그
   thumbnail: string | null; // 제품 썸네일 이미지(URL)
   discountRate: number; // 제품 할인율
 }
@@ -9,11 +8,11 @@ interface ProductCardProps {
 export default function ProductCard({
   discountRate,
   price,
-  // tags,
   thumbnail,
   title,
 }: ProductCardProps) {
-  const priceBeforeDiscount = (price * 100) / (100 - discountRate);
+  const priceBeforeDiscount =
+    Math.ceil((price * 100) / (100 - discountRate) / 1000) * 1000;
   return (
     <div className="text-sm">
       <img
@@ -29,7 +28,6 @@ export default function ProductCard({
             discountRate ? '' : 'hidden'
           }`}
         >
-          {/* 100원 단위 0으로 만드는 로직 필요 */}
           {priceBeforeDiscount.toFixed(0)}원
         </span>
       </div>

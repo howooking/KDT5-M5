@@ -1,4 +1,5 @@
 interface InputProps {
+  maxLength?: number;
   placeholder?: string;
   type?: string;
   name: string;
@@ -11,10 +12,12 @@ export default function Input({
   type,
   name,
   value,
+  maxLength,
   onChange,
 }: InputProps) {
   return (
     <input
+      maxLength={maxLength}
       placeholder={placeholder}
       type={type}
       id={name}

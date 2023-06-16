@@ -6,10 +6,31 @@ import { BsCart } from 'react-icons/bs';
 import SubNavbar from '@/components/SubNavbar';
 import { SUB_MENUS } from '@/constants/constants';
 import ProfileImage from '@/components/ui/ProfileImage';
+import { useState } from 'react';
+import { logOut } from '@/api/authApi';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
 
 export default function Navbar() {
   // store에서 필요한 메소드(로그아웃, 인증), 유져정보를 가져옴
-  const { userInfo, logoutUser } = userStore();
+  const { userInfo, setUser } = userStore();
+  const [isLogoutting, setIsLogoutting] = useState(false);
+
+  const handleLogout = async () => {
+    setIsLogoutting(true);
+    const res = await logOut(userInfo?.accessToken as string);
+    // 로그아웃성공
+    if (res.statusCode === 200) {
+      setIsLogoutting(false);
+      // 클라이언트상 전역 user를 null로
+      setUser(null);
+      // 로컬저장소 user삭제
+      localStorage.removeItem('user');
+      // protected route에서 로그아웃 한 경우 강제 새로고침 해야함
+      location.reload();
+    }
+    // 로그아웃 실패
+    setIsLogoutting(false);
+  };
 
   return (
     <>
@@ -24,8 +45,12 @@ export default function Navbar() {
             // 로그인 되어있는 경우
             <>
               <li>
-                <Link to="#" onClick={logoutUser}>
-                  로그아웃
+                <Link to="#" onClick={handleLogout}>
+                  {isLogoutting ? (
+                    <LoadingSpinner color="accent" />
+                  ) : (
+                    '로그아웃'
+                  )}
                 </Link>
               </li>
 

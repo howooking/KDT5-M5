@@ -7,6 +7,7 @@ import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import ImageUpload from '@/components/ui/ImageUpload';
 import Select from '@/components/ui/Select';
 import { SELECT_BRAND, SELECT_CATEGORY } from '@/constants/constants';
+import SectionTitle from '@/components/ui/SectionTitle';
 
 export default function AddProduct() {
   // 성공적으로 제품을 등록하였을 경우 message색을 초록색으로 바꾸기 위한 state
@@ -84,9 +85,15 @@ export default function AddProduct() {
     if (
       productInputData.title.trim() === '' ||
       productInputData.price.trim() === '' ||
-      productInputData.description.trim() === ''
+      productInputData.description.trim() === '' ||
+      productInputData.tags[0] === '' ||
+      productInputData.tags[0] === 'category' ||
+      productInputData.tags[1] === '' ||
+      productInputData.tags[1] === 'brand'
     ) {
-      setMessage('제품이름, 가격, 제품설명을 모두 입력해주세요.');
+      setMessage(
+        '카테고리, 브랜드, 제품이름, 가격, 제품설명을 모두 입력해주세요.'
+      );
       const id = setTimeout(() => {
         setMessage('');
       }, 2000);
@@ -132,7 +139,7 @@ export default function AddProduct() {
         title: '',
         discountRate: '',
         photoBase64: '',
-        tags: ['', ''],
+        tags: ['category', 'brand'],
         thumbnailBase64: '',
       });
       return;
@@ -150,12 +157,22 @@ export default function AddProduct() {
   return (
     <div className="flex justify-center p-3">
       <div className="flex flex-col">
-        <h3 className="py-3 text-3xl text-gray-800">제품 추가</h3>
+        <SectionTitle text="제품추가" />
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           <div className="flex gap-10">
-            <div className="flex-1  space-y-3">
-              <Select options={SELECT_CATEGORY} onChange={handleChange} />
-              <Select options={SELECT_BRAND} onChange={handleChange} />
+            <div className="flex-1 space-y-3">
+              <Select
+                options={SELECT_CATEGORY}
+                onChange={handleChange}
+                name="category"
+                value={productInputData.tags[0]}
+              />
+              <Select
+                options={SELECT_BRAND}
+                onChange={handleChange}
+                name="brand"
+                value={productInputData.tags[1]}
+              />
               <Input
                 placeholder="제품이름*"
                 name="title"
@@ -181,7 +198,7 @@ export default function AddProduct() {
                 value={productInputData.discountRate}
               />
             </div>
-            <div className="flex-1  space-y-3">
+            <div className="flex-1 space-y-3">
               <ImageUpload
                 korName="썸네일사진"
                 name="thumbnailBase64"
