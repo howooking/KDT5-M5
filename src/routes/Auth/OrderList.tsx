@@ -41,11 +41,13 @@ export default function OrderList() {
   const handleSearch = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
+    const target = event.target as HTMLInputElement
     const res = await orderConfirmed(
       userInfo?.accessToken as string,
       target.value
-    );
-    setOrders
+      );
+      console.log(res?.data);
+    
   };
 
   return (

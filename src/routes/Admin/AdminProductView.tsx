@@ -36,6 +36,8 @@ export default function AdminProductView() {
     const res = await getProductDetail(target.value);
     setDetailProduct(res);
   };
+
+  
   const handleUpdate = (productId: string, productTitle: string) => {
     navigate('/admin/editproduct', { state: { productId, productTitle } });
   };

@@ -87,16 +87,19 @@ export async function getOrderList(accessToken: string) {
 
 export const orderConfirmed = async (accessToken: string, detailId: string) => {
   try {
-    const res = await fetch(`${API_URL}/products/cancel`, {
+    const res = await fetch(`${API_URL}/products/ok`, {
       method: 'POST',
       headers: {
         ...HEADERS,
         Authorization: `Bearer ${accessToken}`,
       },
-      body: JSON.stringify(detailId)
+      body: JSON.stringify(detailId),
     });
+    console.log(res);
+    
     if (res.ok) {
       const confirmed: boolean = await res.json();
+      console.log(confirmed);
       return { data: confirmed, statusCode: res.status };
     }
   } catch (error) {
