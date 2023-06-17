@@ -2,13 +2,13 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import ProductBar from '@/components/ProductBar';
 import ProductCard from '@/components/ProductCard';
-import Skeleton from '@/components/ui/Skeleton';
 import { searchProducts } from '@/api/transactionApi';
+import CrazyLoading from '@/components/ui/CrazyLoading';
 
 export default function SearchProducts() {
   const { state: searchText } = useLocation();
   const [message, setMessage] = useState('');
-  const [products, setProducts] = useState<Product[]>();
+  const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [sortByPrice, setSortByPrice] = useState('');
 
@@ -19,12 +19,13 @@ export default function SearchProducts() {
 
   useEffect(() => {
     async function fetchData() {
+      setProducts([]);
       setMessage('');
+      setIsLoading(true);
       const res = await searchProducts({ searchText: searchText });
       if (res.statusCode === 200) {
         const products = res.data as Product[];
         if (products.length === 0) {
-          setProducts(products);
           setMessage(`'${searchText}' 검색결과가 없습니다.`);
           setIsLoading(false);
           return;
@@ -33,15 +34,11 @@ export default function SearchProducts() {
         setIsLoading(false);
         return;
       }
-      setMessage(res.data as string);
-      setProducts([]);
+      setMessage(res.message);
       setIsLoading(false);
     }
-    setIsLoading(true);
     fetchData();
   }, [searchText]);
-
-  const skeletonLength = new Array(5).fill(0);
 
   // 가격순 sorting
   const sortedSearchedProducts = useMemo(
@@ -56,17 +53,12 @@ export default function SearchProducts() {
     <section className="container mx-auto px-20 py-10">
       <ProductBar
         searchText={searchText}
-        selectedBrand=""
         productNumber={sortedSearchedProducts?.length}
         handleSortByPrice={handleSortByPrice}
       />
       <ul className="grid grid-cols-5 gap-10">
         {isLoading ? (
-          <>
-            {skeletonLength.map((_el, inex) => (
-              <Skeleton key={inex} />
-            ))}
-          </>
+          <CrazyLoading />
         ) : (
           <>
             {sortedSearchedProducts?.map((product) => (
@@ -90,7 +82,7 @@ export default function SearchProducts() {
           </>
         )}
       </ul>
-      <span className="text-2xl">{message}</span>
+      <span className="text-xl">{message}</span>
     </section>
   );
 }

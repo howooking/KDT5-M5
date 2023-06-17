@@ -12,6 +12,7 @@ import toast from 'react-hot-toast';
 import CrazyLoading from '@/components/ui/CrazyLoading';
 import Breadcrumbs from '@/components/ui/Breadcrumbs';
 import Select from '@/components/ui/Select';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
 
 export default function ProductDetail() {
   const navigate = useNavigate();
@@ -21,9 +22,10 @@ export default function ProductDetail() {
   const [accounts, setAccounts] = useState<UserAccount[]>([]);
   const { userInfo } = userStore();
   const [selectedAccount, setSelectedAccount] = useState<string>('');
+  const [isPurchasing, setIsPurchasing] = useState(false);
 
   useEffect(() => {
-    const fetchProductDetail = async () => {
+    async function fetchData() {
       setIsLoading(true);
       const res = await getProductDetail(productId as string);
       if (res.statusCode === 200) {
@@ -34,8 +36,8 @@ export default function ProductDetail() {
       toast.error(res.message, { id: 'getProduct' });
       navigate('/');
       setIsLoading(false);
-    };
-    fetchProductDetail();
+    }
+    fetchData();
   }, [productId]);
 
   useEffect(() => {
@@ -48,7 +50,7 @@ export default function ProductDetail() {
       }
     }
     fetchData();
-  }, [userInfo?.accessToken]);
+  }, [userInfo?.accessToken, isPurchasing]);
 
   const accountOptions = useMemo(
     () => [
@@ -58,20 +60,25 @@ export default function ProductDetail() {
         value: account.id,
       })),
     ],
-    []
+    [accounts]
   );
 
   const handlePurchase = async () => {
-    const purchaseResult = await buyProduct(
+    setIsPurchasing(true);
+    const res = await buyProduct(
       productId as string,
       selectedAccount,
       userInfo?.accessToken as string
     );
-    if (purchaseResult.data) {
-      console.log('Purchase success');
-    } else {
-      console.log('Purchase failed');
+    if (res.statusCode === 200) {
+      setIsPurchasing(false);
+      toast.success(`${product?.title}를 구매하였습니다!`, {
+        id: 'buyProduct',
+      });
+      return;
     }
+    setIsPurchasing(false);
+    toast.error(res.message, { id: 'buyProduct' });
   };
 
   return (
@@ -88,7 +95,7 @@ export default function ProductDetail() {
           <div className="flex gap-10">
             <div className="flex-1">
               <img
-                src={product?.thumbnail || '/defaultThumb.jpg'}
+                src={product?.thumbnail || ''}
                 alt="썸네일 이미지"
                 className="pl-[140px]"
               />
@@ -119,7 +126,13 @@ export default function ProductDetail() {
                   value={selectedAccount}
                 />
               </div>
-              <Button onClick={handlePurchase} text="결제하기" />
+              <Button
+                onClick={handlePurchase}
+                text={
+                  isPurchasing ? <LoadingSpinner color="white" /> : '간편결제'
+                }
+                disabled={isPurchasing}
+              />
             </div>
           </div>
           <div className="divider" />

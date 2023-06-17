@@ -12,12 +12,25 @@ export const getBankList = async (accessToken: string) => {
     });
     if (response.ok) {
       const data: Bank[] = await response.json();
-      return data;
+      return {
+        data,
+        statusCode: response.status,
+        message: '',
+      };
     }
-    const error = await response.json();
-    console.log(error);
+    const errorMessage: string = await response.json();
+    return {
+      data: null,
+      statusCode: response.status,
+      message: errorMessage,
+    };
   } catch (error) {
-    console.log(error);
+    console.log('error while getting banks', error);
+    return {
+      data: null,
+      statusCode: 400,
+      message: '은행 목록 조회 중 에러 발생, 잠시 후 다시 시도해 주세요.',
+    };
   }
 };
 
@@ -32,9 +45,9 @@ export const getAccountListAndBalance = async (accessToken: string) => {
       },
     });
     if (response.ok) {
-      const banks: AccountsAndBalance = await response.json();
+      const data: AccountsAndBalance = await response.json();
       return {
-        data: banks,
+        data,
         statusCode: response.status,
         message: '',
       };
@@ -46,7 +59,7 @@ export const getAccountListAndBalance = async (accessToken: string) => {
       message: errorMessage,
     };
   } catch (error) {
-    console.log('error while getting account lists and balance');
+    console.log('error while getting account lists and balance', error);
     return {
       data: null,
       statusCode: 400,
@@ -76,13 +89,25 @@ export const connectAccount = async (
     });
     if (response.ok) {
       const data: UserAccount = await response.json();
-      return data;
+      return {
+        data,
+        statusCode: response.status,
+        message: `${data.bankName}계좌를 추가하셨습니다.`,
+      };
     }
     const errorMessage: string = await response.json();
-    return errorMessage;
+    return {
+      data: null,
+      statusCode: response.status,
+      message: errorMessage,
+    };
   } catch (error) {
     console.log('error while conncting bank account', error);
-    return '계좌 생성 중 에러발생, 잠시 후 다시 시도해주세요.';
+    return {
+      data: null,
+      statusCode: 400,
+      message: '계좌 추가 중 에러발생, 잠시 후 다시 시도해 주세요.',
+    };
   }
 };
 
@@ -104,12 +129,25 @@ export const deleteAccount = async (
       body: JSON.stringify(requestBody),
     });
     if (response.ok) {
-      const isDeleted: true = await response.json();
-      return isDeleted; // false일리가 없음
+      const data: true = await response.json();
+      return {
+        data,
+        statusCode: response.status,
+        message: '',
+      };
     }
-    const error: string = await response.json();
-    console.log(error);
+    const errorMessage: string = await response.json();
+    return {
+      data: null,
+      statusCode: response.status,
+      message: errorMessage,
+    };
   } catch (error) {
-    console.log(error);
+    console.log('error while deleting an account', error);
+    return {
+      data: null,
+      statusCode: 400,
+      message: '계좌 삭제 중 에러발생, 잠시 후 다시 시도해 주세요.',
+    };
   }
 };

@@ -9,13 +9,14 @@ import CrazyLoading from '@/components/ui/CrazyLoading';
 import SectionTitle from '@/components/ui/SectionTitle';
 
 export default function AccountList() {
+  const navigate = useNavigate();
   const [totalBalance, setTotalBalance] = useState<number>(0);
   const [accounts, setAccounts] = useState<UserAccount[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [deletingAccount, setDeletingAccount] = useState<string | null>(null);
-  const navigate = useNavigate();
-
+  const [isDeleting, setIsDeleting] = useState(false);
   const { userInfo } = userStore();
+
+  console.log(accounts);
 
   useEffect(() => {
     async function fetchAccountList() {
@@ -35,56 +36,76 @@ export default function AccountList() {
     fetchAccountList();
   }, [userInfo?.accessToken]);
 
-  const handleDeleteAccount = async (accountId: string) => {
-    setDeletingAccount(accountId);
-    const accountDeleted = await deleteAccount(
+  const handleDeleteAccount = async (
+    accountId: string,
+    accountName: string
+  ) => {
+    setAccounts((prevAccounts) =>
+      prevAccounts.map((account) =>
+        account.id === accountId ? { ...account, delete: true } : account
+      )
+    );
+    setIsDeleting(true);
+    const res = await deleteAccount(
       { accountId, signature: true },
       userInfo?.accessToken as string
     );
-    if (accountDeleted) {
+    if (res.statusCode === 200) {
+      toast.success(`${accountName}계좌를 해지하였습니다.`, {
+        id: 'deleteAccount',
+      });
+      setIsDeleting(false);
       setAccounts(accounts.filter((account) => account.id !== accountId));
+      return;
     }
-    setDeletingAccount(null);
+    toast.error(res.message, { id: 'deleteAccount' });
+    setIsDeleting(false);
   };
 
   return (
-    <section className="container mx-auto px-20 py-4">
+    <>
       {isLoading ? (
         <CrazyLoading />
       ) : accounts.length > 0 ? (
         <>
-          <SectionTitle text={`총 잔액: ${totalBalance}`} />
-          <table className="table-zebra table table-fixed text-center">
-            <thead className="text-sm text-black">
-              <tr>
-                <th>은행명</th>
-                <th>계좌번호</th>
-                <th>잔액(원)</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {accounts.map((account) => (
-                <tr key={account.id} className="text-center ">
-                  <td>{account.bankName}</td>
-                  <td>{account.accountNumber}</td>
-                  <td>{account.balance.toLocaleString('ko-KR')}</td>
-                  <td>
-                    <Button
-                      text={
-                        deletingAccount ? (
-                          <LoadingSpinner color="white" />
-                        ) : (
-                          '해지'
-                        )
-                      }
-                      onClick={() => handleDeleteAccount(account.id)}
-                    />
-                  </td>
+          <section className="container mx-auto px-20 py-4">
+            <SectionTitle
+              text={`총 잔액: ${totalBalance.toLocaleString('kr-KO')}원`}
+            />
+            <table className="table-zebra table table-fixed text-center">
+              <thead className="text-sm text-black">
+                <tr>
+                  <th>은행명</th>
+                  <th>계좌번호</th>
+                  <th>잔액(원)</th>
+                  <th>해지</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {accounts.map((account) => (
+                  <tr key={account.id} className="text-center ">
+                    <td>{account.bankName}</td>
+                    <td>{account.accountNumber}</td>
+                    <td>{account.balance.toLocaleString('ko-KR')}</td>
+                    <td>
+                      <Button
+                        text={
+                          isDeleting && account.delete ? (
+                            <LoadingSpinner color="white" />
+                          ) : (
+                            '해지'
+                          )
+                        }
+                        onClick={() =>
+                          handleDeleteAccount(account.id, account.bankName)
+                        }
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </section>
         </>
       ) : (
         <div className="flex flex-col items-center">
@@ -95,6 +116,6 @@ export default function AccountList() {
           />
         </div>
       )}
-    </section>
+    </>
   );
 }

@@ -12,11 +12,11 @@ export const addProduct = async (productData: AddProductData) => {
       body: JSON.stringify(productData),
     });
     if (response.ok) {
-      const addedProduct: AddProductResponseValue = await response.json();
+      const data: AddProductResponseValue = await response.json();
       return {
-        data: addedProduct,
+        data,
         statusCode: response.status,
-        message: `${addedProduct.title}를 추가하였습니다.`,
+        message: `${data.title}를 추가하였습니다.`,
       };
     }
     const errorMessage: string = await response.json();
@@ -35,12 +35,12 @@ export const addProduct = async (productData: AddProductData) => {
   }
 };
 
+// 수정 예정
 export const updateProduct = async (
   productId: string,
   updateData: UpdatedProduct
 ) => {
   try {
-    console.log(updateData);
     const response = await fetch(`${API_URL}/products/${productId}`, {
       method: 'PUT',
       headers: MASTER_HEADERS,
@@ -57,6 +57,7 @@ export const updateProduct = async (
   }
 };
 
+// 수정예정
 export const deleteProduct = async (productId: string) => {
   try {
     const res = await fetch(`${API_URL}/products/${productId}`, {
@@ -83,9 +84,9 @@ export const getClients = async () => {
     });
     // 유저들 조회가 성공한 경우
     if (res.ok) {
-      const clients: Client[] = await res.json();
+      const data: Client[] = await res.json();
       return {
-        data: clients,
+        data,
         statusCode: res.status,
         message: '',
       };
@@ -116,9 +117,9 @@ export async function getProducts() {
       headers: MASTER_HEADERS,
     });
     if (res.ok) {
-      const products: Product[] = await res.json();
+      const data: Product[] = await res.json();
       return {
-        data: products,
+        data,
         statusCode: res.status,
         message: '',
       };
@@ -145,9 +146,9 @@ export async function getProductDetail(productId: string) {
       headers: MASTER_HEADERS,
     });
     if (res.ok) {
-      const productDetail: ProductDetail = await res.json();
+      const data: ProductDetail = await res.json();
       return {
-        data: productDetail,
+        data,
         statusCode: res.status,
         message: '',
       };
@@ -176,9 +177,9 @@ export const getAllTransactions = async () => {
     });
 
     if (response.ok) {
-      const allTransactions: TransactionDetail[] = await response.json();
+      const data: TransactionDetail[] = await response.json();
       return {
-        data: allTransactions,
+        data,
         statusCode: response.status,
         message: '',
       };

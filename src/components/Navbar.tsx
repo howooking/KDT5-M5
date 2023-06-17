@@ -81,11 +81,6 @@ export default function Navbar() {
               </li>
             </>
           )}
-          <li>
-            <Link to="/mycart" className="text-accent">
-              <BsCart size={20} />
-            </Link>
-          </li>
         </ul>
       </header>
       <SubNavbar menus={SUB_MENUS} />

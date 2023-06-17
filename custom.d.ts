@@ -139,6 +139,7 @@ interface UserAccount {
   bankCode: string;
   accountNumber: string;
   balance: number;
+  delete?: boolean;
 }
 
 interface ConnectAccount {

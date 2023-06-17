@@ -13,9 +13,9 @@ export default function Breadcrumbs({
   name,
 }: BreadcrumbsProps) {
   return (
-    <div className="flex gap-1 text-xs text-gray-500">
+    <>
       {category ? (
-        <>
+        <div className="flex gap-1 text-xs text-gray-500">
           <div>
             <Link to="/">크레이지 11</Link>
           </div>
@@ -26,10 +26,12 @@ export default function Breadcrumbs({
           </div>
           <div>{brand ? ` / ${brand}` : ''}</div>
           <div>{name ? ` / ${name}` : ''}</div>
-        </>
+        </div>
       ) : (
-        <>크레이지 11</>
+        <Link to="/" className="flex gap-1 text-xs text-gray-500">
+          크레이지 11
+        </Link>
       )}
-    </div>
+    </>
   );
 }

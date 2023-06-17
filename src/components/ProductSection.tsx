@@ -29,8 +29,8 @@ export default function ProductSection({ category }: ProductSectionProps) {
   useEffect(() => {
     setBrand('all');
     async function fetchData() {
-      const res = await getProducts();
       setIsLoading(true);
+      const res = await getProducts();
       if (res.statusCode === 200) {
         // 카테고리에 따라서 products을 setting
         const categoryFilteredProducts = (res.data as Product[]).filter(
