@@ -9,11 +9,13 @@ import {
 import { userStore } from '@/store';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 export default function OrderList() {
   const { userInfo } = userStore();
   const [orders, setOrders] = useState<TransactionDetail[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchOrderList() {
@@ -71,14 +73,14 @@ export default function OrderList() {
                   <td>
                     <Button
                       text="상세 내역"
-                      //   onClick={handleSearch}
-
+                      onClick={() =>
+                        navigate(`/myaccount/order/${order.detailId}`)
+                      }
                       secondary
                     />
                     <Button
                       text="구매 확정"
                       //   onClick={handleSearch}
-
                       secondary
                     />
                     <Button
