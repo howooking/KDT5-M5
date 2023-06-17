@@ -93,7 +93,11 @@ export const logOut = async (accessToken: string) => {
     });
     if (res.ok) {
       const isLoggedOut: boolean = await res.json(); // 당연히 true
-      return { data: isLoggedOut, statusCode: res.status, message: '' };
+      return {
+        data: isLoggedOut,
+        statusCode: res.status,
+        message: '안녕히 가세요!🖐️🖐️',
+      };
     }
     const errorMessage: string = await res.json();
     return {

@@ -53,7 +53,7 @@ export default function Login() {
       setUser({ ...user, isAdmin });
       setIsSending(false);
       navigate('/', { replace: true });
-      toast.success(res.message, {
+      toast.success(isAdmin ? '주인님 오셨습니다!👸👸' : res.message, {
         id: 'login',
       });
       return;

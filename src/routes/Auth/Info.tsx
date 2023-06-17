@@ -43,7 +43,7 @@ export default function Info() {
     });
     if (res.statusCode === 200) {
       const updatedUser = res.data as UpdatedUserResponseValue;
-      toast.success(`${updatedUser.displayName}님! 사진 멋져요!😁😁`, {
+      toast.success(`${updatedUser.displayName}님! 새로운 사진 멋져요!😁😁`, {
         id: 'profile',
       });
       setIsSending(false);

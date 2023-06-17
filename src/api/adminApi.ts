@@ -4,18 +4,6 @@ const MASTER_HEADERS = {
   masterKey: 'true',
 };
 
-interface AddProductResponseValue {
-  id: string; // 제품 ID
-  title: string; // 제품 이름
-  price: number; // 제품 가격
-  description: string; // 제품 상세 설명
-  tags: string[]; // 제품 태그
-  thumbnail: string | null; // 제품 썸네일 이미지(URL)
-  photo: string | null; // 제품 상세 이미지(URL)
-  isSoldOut: boolean; // 제품 매진 여부
-  discountRate: number; // 제품 할인율
-}
-
 export const addProduct = async (productData: AddProductData) => {
   try {
     const response = await fetch(`${API_URL}/products`, {
@@ -24,15 +12,26 @@ export const addProduct = async (productData: AddProductData) => {
       body: JSON.stringify(productData),
     });
     if (response.ok) {
-      const addedData: AddProductResponseValue = await response.json();
-      console.log(addedData);
-      return;
+      const addedProduct: AddProductResponseValue = await response.json();
+      return {
+        data: addedProduct,
+        statusCode: response.status,
+        message: `${addedProduct.title}를 추가하였습니다.`,
+      };
     }
-    const error: string = await response.json();
-    return error;
+    const errorMessage: string = await response.json();
+    return {
+      data: null,
+      statusCode: response.status,
+      message: errorMessage,
+    };
   } catch (error) {
-    console.log('Error while getUser: ', error);
-    return '상품 추가 중 에러가 발생하였습니다.';
+    console.log('Error while adding product: ', error);
+    return {
+      data: null,
+      statusCode: 400,
+      message: '상품을 추가 중 에러발생, 잠시 후 다시 시도해 주세요',
+    };
   }
 };
 
@@ -76,26 +75,36 @@ export const deleteProduct = async (productId: string) => {
 };
 
 // 유저조회
-export const getUsers = async () => {
+export const getClients = async () => {
   try {
-    const res = await fetch(
-      'https://asia-northeast3-heropy-api.cloudfunctions.net/api/auth/users',
-      {
-        method: 'GET',
-        headers: MASTER_HEADERS,
-      }
-    );
+    const res = await fetch(`${API_URL}/auth/users`, {
+      method: 'GET',
+      headers: MASTER_HEADERS,
+    });
     // 유저들 조회가 성공한 경우
     if (res.ok) {
-      const users: CheckUser[] = await res.json();
-      return users;
+      const clients: Client[] = await res.json();
+      return {
+        data: clients,
+        statusCode: res.status,
+        message: '',
+      };
     }
     // 유저들 조회가 실패한 경우(masterkey가 없는경우)
-    const error: string = await res.json();
-    console.log(error);
+    const errorMessage: string = await res.json();
+    return {
+      data: null,
+      statusCode: res.status,
+      message: errorMessage,
+    };
     // 기타 오류(url이 잘못된경우, aws가 서버다운)
   } catch (error) {
     console.log('Error while getUser: ', error);
+    return {
+      data: null,
+      statusCode: 400,
+      message: '회원 조회 중 에러발생, 잠시 후 다시 시도해 주세요.',
+    };
   }
 };
 
@@ -108,12 +117,24 @@ export async function getProducts() {
     });
     if (res.ok) {
       const products: Product[] = await res.json();
-      return products;
+      return {
+        data: products,
+        statusCode: res.status,
+        message: '',
+      };
     }
     const error: string = await res.json();
-    console.log(error);
+    return {
+      data: null,
+      statusCode: res.status,
+      message: error,
+    };
   } catch (error) {
-    console.log(error);
+    return {
+      data: null,
+      statusCode: 400,
+      message: '상품 목록 조회 중 오류 발생, 잠시 후 다시 시도해 주세요.',
+    };
   }
 }
 
@@ -125,12 +146,25 @@ export async function getProductDetail(productId: string) {
     });
     if (res.ok) {
       const productDetail: ProductDetail = await res.json();
-      return productDetail;
+      return {
+        data: productDetail,
+        statusCode: res.status,
+        message: '',
+      };
     }
-    const error: string = await res.json();
-    console.log(error);
+    const errorMessage: string = await res.json();
+    return {
+      data: null,
+      statusCode: res.status,
+      message: errorMessage,
+    };
   } catch (error) {
-    console.log(error);
+    console.log('error while getting a product', error);
+    return {
+      data: null,
+      statusCode: 400,
+      message: '개별 상품 조회 중 에러발생, 잠시 후 다시 시도해 주세요.',
+    };
   }
 }
 
@@ -142,14 +176,27 @@ export const getAllTransactions = async () => {
     });
 
     if (response.ok) {
-      const allTransactions = await response.json();
-      return allTransactions;
+      const allTransactions: TransactionDetail[] = await response.json();
+      return {
+        data: allTransactions,
+        statusCode: response.status,
+        message: '',
+      };
     }
 
-    const error: string = await response.json();
-    return error;
+    const errorMessage: string = await response.json();
+    return {
+      data: null,
+      statusCode: response.status,
+      message: errorMessage,
+    };
   } catch (error) {
     console.log('Error while fetching all transactions: ', error);
-    return '전체 거래 내역을 불러오는 중 오류가 발생하였습니다.';
+    return {
+      data: null,
+      statusCode: 400,
+      message:
+        '전체 거래 내역을 불러오는 중 오류 발생, 잠시 후 다시 시도해 주세요.',
+    };
   }
 };

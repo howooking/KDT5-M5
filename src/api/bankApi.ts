@@ -22,7 +22,7 @@ export const getBankList = async (accessToken: string) => {
 };
 
 // 계좌 목록 및 잔액 조회
-export const getAccountList = async (accessToken: string) => {
+export const getAccountListAndBalance = async (accessToken: string) => {
   try {
     const response = await fetch(`${API_URL}/account`, {
       method: 'GET',
@@ -32,13 +32,26 @@ export const getAccountList = async (accessToken: string) => {
       },
     });
     if (response.ok) {
-      const banks: TotalBalance = await response.json();
-      return banks;
+      const banks: AccountsAndBalance = await response.json();
+      return {
+        data: banks,
+        statusCode: response.status,
+        message: '',
+      };
     }
-    const error: string = await response.json();
-    console.log(error);
+    const errorMessage: string = await response.json();
+    return {
+      data: null,
+      statusCode: response.status,
+      message: errorMessage,
+    };
   } catch (error) {
-    throw new Error('Failed to get account list');
+    console.log('error while getting account lists and balance');
+    return {
+      data: null,
+      statusCode: 400,
+      message: '계좌 조회 중 에러 발생, 잠시 후 다시 시도해 주세요.',
+    };
   }
 };
 

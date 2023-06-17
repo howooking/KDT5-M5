@@ -9,6 +9,7 @@ import ProfileImage from '@/components/ui/ProfileImage';
 import { useState } from 'react';
 import { logOut } from '@/api/authApi';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import toast from 'react-hot-toast';
 
 export default function Navbar() {
   // store에서 필요한 메소드(로그아웃, 인증), 유져정보를 가져옴
@@ -17,18 +18,20 @@ export default function Navbar() {
 
   const handleLogout = async () => {
     setIsLogoutting(true);
+    toast.loading('로그아웃 중', { id: 'logout' });
     const res = await logOut(userInfo?.accessToken as string);
     // 로그아웃성공
     if (res.statusCode === 200) {
+      toast.success(res.message, { id: 'logout' });
       setIsLogoutting(false);
       // 클라이언트상 전역 user를 null로
       setUser(null);
       // 로컬저장소 user삭제
       localStorage.removeItem('user');
-      // protected route에서 로그아웃 한 경우 강제 새로고침 해야함
-      location.reload();
+      return;
     }
     // 로그아웃 실패
+    toast.error(res.message, { id: 'logout' });
     setIsLogoutting(false);
   };
 

@@ -83,7 +83,6 @@ export default function SearchProducts() {
                     discountRate={product.discountRate}
                     price={product.price}
                     thumbnail={product.thumbnail}
-                    tags={product.tags}
                   />
                 </Link>
               </li>

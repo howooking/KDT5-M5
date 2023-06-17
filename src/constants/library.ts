@@ -28,15 +28,15 @@ export function convertToHumanReadable(dateString: string) {
   const minutes = date.getMinutes();
 
   // Format the date and time
-  const formattedDate = `${year}년 ${month.toString().padStart(2, '0')}월 ${day
+  const formattedDate = `${year}.${month.toString().padStart(2, '0')}.${day
     .toString()
-    .padStart(2, '0')}일`;
-  const formattedTime = `${hours.toString().padStart(2, '0')}시${minutes
+    .padStart(2, '0')}`;
+  const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes
     .toString()
-    .padStart(2, '0')}분`;
+    .padStart(2, '0')}`;
 
   // Combine the formatted date and time
-  const humanReadableDateTime = `${formattedDate} ${formattedTime}`;
+  const humanReadableDateTime = `${formattedDate} / ${formattedTime}`;
 
   return humanReadableDateTime;
 }

@@ -8,7 +8,6 @@ import ImageUpload from '@/components/ui/ImageUpload';
 import Select from '@/components/ui/Select';
 import { SELECT_BRAND, SELECT_CATEGORY } from '@/constants/constants';
 import { useLocation } from 'react-router-dom';
-import { resolve } from 'path/win32';
 
 export default function EditProduct() {
   const {
@@ -28,7 +27,7 @@ export default function EditProduct() {
       setLoading(true);
       const res = await getProductDetail(productId);
       if (res) {
-        setDetailProduct(res);
+        setDetailProduct([]);
         setLoading(false);
       }
     };

@@ -5,7 +5,6 @@ import { editUser } from '@/api/authApi';
 import { useNavigate } from 'react-router-dom';
 import Input from '@/components/ui/Input';
 import Button from '@/components/ui/Button';
-import AlertMessage from '@/components/ui/AlertMessage';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import toast from 'react-hot-toast';
 
@@ -44,6 +43,7 @@ export default function ChangeName() {
     }
 
     setIsSending(true);
+    toast.loading('닉네임 변경 중', { id: 'changeName' });
     const res = await editUser(userInfo?.accessToken as string, editData);
     if (res.statusCode === 200) {
       authMe();
