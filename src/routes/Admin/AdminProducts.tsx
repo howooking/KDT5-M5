@@ -7,7 +7,7 @@ import { DICTIONARY_SHOES } from '@/constants/constants';
 import toast from 'react-hot-toast';
 import CrazyLoading from '@/components/ui/CrazyLoading';
 
-export default function AdminProductView() {
+export default function AdminProduct() {
   const [products, setProducts] = useState<Product[] | undefined>();
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
@@ -31,14 +31,35 @@ export default function AdminProductView() {
     navigate(`/products/${category}/${productId}`);
   };
 
-  const handleUpdate = (productId: string, productTitle: string) => {
+  const handleUpdate = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    productId: string,
+    productTitle: string
+  ) => {
+    event.stopPropagation();
     navigate('/admin/editproduct', { state: { productId, productTitle } });
   };
 
-  const handleDelete = async (productId: string) => {
-    await deleteProduct(productId);
-    alert('상품이 성공적으로 삭제되었습니다.');
-    setProducts(products?.filter((product) => product.id !== productId));
+  const handleDelete = async (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    productId: string,
+    productTitle: string
+  ) => {
+    event.stopPropagation();
+    if (confirm(`${productTitle}를 삭제하시겠습니까?`)) {
+      toast.loading(`${productTitle} 삭제 중...`, {
+        id: 'deleteProduct',
+      });
+      const res = await deleteProduct(productId);
+      if (res.statusCode === 200) {
+        toast.success(`${productTitle}를 삭제하였습니다.`, {
+          id: 'deleteProduct',
+        });
+        setProducts(products?.filter((product) => product.id !== productId));
+        return;
+      }
+      toast.error(res.message, { id: 'deleteProduct' });
+    }
   };
 
   return (
@@ -64,38 +85,48 @@ export default function AdminProductView() {
             <tbody>
               {products?.map((product) => {
                 return (
-                  <tr>
+                  <tr
+                    onClick={() => toDetailPage(product.tags[0], product.id)}
+                    className="cursor-pointer hover:opacity-70"
+                  >
                     <td>
-                      <img src={product.thumbnail as string} alt="썸네일" />
+                      <img
+                        src={product.thumbnail as string}
+                        alt={product.title}
+                      />
                     </td>
                     <td>
                       <p className="line-clamp-1" title={product.title}>
                         {product.title}
                       </p>
                     </td>
-                    <td>{product.price}</td>
+                    <td>{product.price.toLocaleString('ko-KR')}</td>
                     <td>{DICTIONARY_SHOES[product.tags[0]]}</td>
                     <td>{product.tags[1].toUpperCase()}</td>
                     <td>{product.isSoldOut ? '❌' : '🔘'}</td>
                     <td>{product.discountRate} %</td>
                     <td>
-                      <Button
+                      {/* <Button
                         text="상세조회"
                         onClick={() =>
                           toDetailPage(product.tags[0], product.id)
                         }
                         value={product.id}
                         secondary
-                      />
+                      /> */}
                       <Button
-                        onClick={() => handleUpdate(product.id, product.title)}
+                        onClick={(event) =>
+                          handleUpdate(event, product.id, product.title)
+                        }
                         text="상품수정"
                         value={product.id}
                         secondary
                       />
                       <Button
                         text="상품삭제"
-                        onClick={() => handleDelete(product.id)}
+                        onClick={(event) =>
+                          handleDelete(event, product.id, product.title)
+                        }
                         value={product.id}
                       />
                     </td>

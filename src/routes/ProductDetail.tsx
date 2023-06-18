@@ -19,6 +19,7 @@ export default function ProductDetail() {
   const { productId } = useParams();
   const [isLoading, setIsLoading] = useState(false);
   const [product, setProduct] = useState<ProductDetail>();
+  console.log(product);
   const [accounts, setAccounts] = useState<UserAccount[]>([]);
   const { userInfo } = userStore();
   const [selectedAccount, setSelectedAccount] = useState<string>('');
@@ -101,38 +102,55 @@ export default function ProductDetail() {
               />
             </div>
             <div className="flex flex-1 flex-col gap-5">
-              <div className="py-10 text-2xl font-bold">{product?.title}</div>
-              <div className="flex-1 text-gray-700">{product?.description}</div>
+              <div className="text-2xl font-bold">{product?.title}</div>
               <div className="flex items-center gap-8">
                 <span className="text-3xl text-red-500 ">
                   {product?.price.toLocaleString('ko-KR')}원
                 </span>
-                <span className="text-xl text-gray-500 line-through">
-                  {priceBeforeDiscount(
-                    product?.price as number,
-                    product?.discountRate as number
-                  )}
-                  원
-                </span>
-                <span className="flex h-10 w-10 items-center justify-center rounded-full ring-1 ring-gray-400">
-                  {product?.discountRate}%
-                </span>
+                {product?.discountRate === 0 ? (
+                  <></>
+                ) : (
+                  <>
+                    <span className="text-xl text-gray-500 line-through">
+                      {priceBeforeDiscount(
+                        product?.price as number,
+                        product?.discountRate as number
+                      )}
+                      원
+                    </span>
+                    <span className="flex h-10 w-10 items-center justify-center rounded-full ring-1 ring-gray-400">
+                      {product?.discountRate}%
+                    </span>
+                  </>
+                )}
               </div>
-              <div>
-                <Select
-                  name="account"
-                  onChange={(e) => setSelectedAccount(e.target.value)}
-                  options={accountOptions}
-                  value={selectedAccount}
+              <div className="flex-1 text-gray-700">{product?.description}</div>
+              {userInfo ? (
+                <div className="flex flex-col gap-3">
+                  <Select
+                    name="account"
+                    onChange={(e) => setSelectedAccount(e.target.value)}
+                    options={accountOptions}
+                    value={selectedAccount}
+                  />
+                  <Button
+                    onClick={handlePurchase}
+                    text={
+                      isPurchasing ? (
+                        <LoadingSpinner color="white" />
+                      ) : (
+                        '간편결제'
+                      )
+                    }
+                    disabled={isPurchasing}
+                  />
+                </div>
+              ) : (
+                <Button
+                  text="로그인 하러가기"
+                  onClick={() => navigate('/login')}
                 />
-              </div>
-              <Button
-                onClick={handlePurchase}
-                text={
-                  isPurchasing ? <LoadingSpinner color="white" /> : '간편결제'
-                }
-                disabled={isPurchasing}
-              />
+              )}
             </div>
           </div>
           <div className="divider" />

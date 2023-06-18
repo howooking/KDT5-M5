@@ -57,21 +57,32 @@ export const updateProduct = async (
   }
 };
 
-// 수정예정
 export const deleteProduct = async (productId: string) => {
   try {
-    const res = await fetch(`${API_URL}/products/${productId}`, {
+    const response = await fetch(`${API_URL}/products/${productId}`, {
       method: 'DELETE',
       headers: MASTER_HEADERS,
     });
-    if (res.ok) {
-      const response: boolean = await res.json();
-      return response;
+    if (response.ok) {
+      const data: true = await response.json();
+      return {
+        data,
+        statusCode: response.status,
+        message: '',
+      };
     }
-    const error: string = await res.json();
-    console.log(error);
+    const errorMessage: string = await response.json();
+    return {
+      data: null,
+      statusCode: response.status,
+      message: errorMessage,
+    };
   } catch (error) {
-    throw new Error('Failed to delete product.');
+    return {
+      data: null,
+      statusCode: 400,
+      message: '상품 삭제 중 에러발생, 잠시 후 다시 시도해 주세요.',
+    };
   }
 };
 

@@ -52,7 +52,7 @@ export default function Login() {
       // 로컬 user의 상태도 저장
       setUser({ ...user, isAdmin });
       setIsSending(false);
-      navigate('/', { replace: true });
+      navigate(-1);
       toast.success(isAdmin ? '주인님 오셨습니다!👸👸' : res.message, {
         id: 'login',
       });
