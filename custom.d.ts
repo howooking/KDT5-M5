@@ -18,7 +18,7 @@ interface ProductInputData {
   tags: string[];
   thumbnailBase64?: string;
   photoBase64?: string;
-  discountRate?: string;
+  discountRate?: number;
   isSoldOut: boolean;
 }
 

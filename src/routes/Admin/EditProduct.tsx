@@ -4,7 +4,7 @@ import Input from '@/components/ui/Input';
 import Button from '@/components/ui/Button';
 import AlertMessage from '@/components/ui/AlertMessage';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
-import ImageUpload from '@/components/ui/ImageUpload';
+// import ImageUpload from '@/components/ui/ImageUpload';
 import Select from '@/components/ui/Select';
 import { SELECT_BRAND, SELECT_CATEGORY } from '@/constants/constants';
 import { useLocation } from 'react-router-dom';
@@ -43,7 +43,7 @@ export default function EditProduct() {
           tags: res.tags,
           thumbnailBase64: res.thumbnail,
           photoBase64: res.photo,
-          discountRate: res.discountRate.toString(),
+          discountRate: res.discountRate,
           isSoldOut: res.isSoldOut,
         });
         setLoading(false);
@@ -52,10 +52,14 @@ export default function EditProduct() {
     fetchProducts();
   }, [productId]);
 
-  console.log(detailProduct.thumbnailBase64);
-  console.log(btoa(detailProduct.thumbnailBase64 as string));
-  console.log(detailProduct.photoBase64);
-  console.log(btoa(detailProduct.photoBase64 as string));
+  // console.log(detailProduct.thumbnailBase64);
+  // console.log(btoa(detailProduct.thumbnailBase64 as string));
+  // console.log(detailProduct.photoBase64);
+  // console.log(btoa(detailProduct.photoBase64 as string));
+
+  const handleImage = ()=>{
+    console.log(productId)
+  }
 
 
   const handleChange = (
@@ -148,14 +152,15 @@ export default function EditProduct() {
         return;
       }
     }
-    ////////////// api 통신 부분 시작
+
+    // //////// api 통신 부분 시작
     setIsSending(true);
     const res = await updateProduct(productId, {
       title: detailProduct.title,
       price: Number(detailProduct?.price),
       description: detailProduct?.description,
       tags: detailProduct?.tags,
-      thumbnailBase64: detailProduct?.thumbnailBase64,
+      // thumbnailBase64: detailProduct?.thumbnailBase64,
       // photoBase64: detailProduct?.photoBase64,
       discountRate: Number(detailProduct?.discountRate),
       isSoldOut: detailProduct?.isSoldOut,
@@ -242,7 +247,28 @@ export default function EditProduct() {
               </label>
             </div>
           </div>
-          <div className={'flex'}>
+          <div className={'flex justify-center gap-4'}>
+            <div>
+            <img src={detailProduct?.thumbnailBase64} alt='' />
+            </div>
+            <div
+              tabIndex={0}
+              className="collapse-plus collapse mr-4 w-[400px] border border-base-300 bg-base-200"
+            >
+              <div className="collapse-title text-xl font-medium">
+                상세이미지 보기
+              </div>
+              <div className="collapse-content flex justify-center">
+                <img
+                  src={detailProduct?.photoBase64}
+                  alt={detailProduct?.title}
+                  className="h-auto w-[300px]"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/*<div className={'flex'}>
             <img
               src={detailProduct?.thumbnailBase64}
               alt={productTitle}
@@ -254,7 +280,7 @@ export default function EditProduct() {
               onChange={handleChange}
             />
           </div>
-          <div className="mb-0 flex w-full border-2 border-orange-300">
+          <div className="mb-0 flex w-full border-2 border-orange-300">*!/
             <div
               tabIndex={0}
               className="collapse-plus collapse mr-4 w-[400px] border border-base-300 bg-base-200"
@@ -277,7 +303,7 @@ export default function EditProduct() {
                 onChange={handleChange}
               />
             </div>
-          </div>
+          </div>*/}
           <AlertMessage message={message} positive={positive} />
           <div>
             <Button
@@ -286,6 +312,9 @@ export default function EditProduct() {
             />
           </div>
         </form>
+        <div>
+          <Button text={'이미지 수정'} secondary={true} onClick={handleImage}/>
+        </div>
       </div>
     </div>
   );
