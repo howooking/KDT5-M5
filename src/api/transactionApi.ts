@@ -69,6 +69,8 @@ export async function getOrderList(accessToken: string) {
         Authorization: `Bearer ${accessToken}`,
       },
     });
+    console.log(res);
+
     if (res.ok) {
       const orderList: TransactionDetail[] = await res.json();
       return { data: orderList, statusCode: res.status };
@@ -93,15 +95,18 @@ export const orderConfirmed = async (accessToken: string, detailId: string) => {
         ...HEADERS,
         Authorization: `Bearer ${accessToken}`,
       },
-      body: JSON.stringify(detailId),
+      body: JSON.stringify({ detailId }),
     });
     console.log(res);
-    
+
     if (res.ok) {
       const confirmed: boolean = await res.json();
       console.log(confirmed);
       return { data: confirmed, statusCode: res.status };
     }
+    console.log('error');
+    const errorMessage: string = await res.json();
+    return { data: errorMessage, statusCode: res.status };
   } catch (error) {
     console.log('Error while buyProduct: ', error);
     return {

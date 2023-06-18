@@ -37,7 +37,7 @@ export default function OrderList() {
     (a, b) =>
       convertToMilliseconds(b.timePaid) - convertToMilliseconds(a.timePaid)
   );
-
+  
   const handleSearch = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
@@ -47,9 +47,8 @@ export default function OrderList() {
       target.value
       );
       console.log(res?.data);
-    
   };
-
+  
   return (
     <section className="container mx-auto px-20 py-4">
       <SectionTitle text="주문 목록" />
