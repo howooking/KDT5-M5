@@ -9,46 +9,56 @@ import { userStore } from '@/store';
 import { useEffect, useState } from 'react';
 
 export default function OrderList() {
+  // const [order, setoder] = useState()
   const { userInfo } = userStore();
   const [orders, setOrders] = useState<TransactionDetail[]>([]);
 
+
   // 통신해서 주문 목록을 가져옴
-  useEffect(() => {
-    async function fetchOrderList() {
-      const res = await getOrderList(userInfo?.accessToken as string);
-      console.log(res);
-      if (res.statusCode === 200) {
-        // 성공
-        const orderList = res.data;
-        setOrders(
-          (orderList as TransactionDetail[]).filter(
-            (order) => !order.isCanceled
-          )
-        );
-      }
-      //실패가 발생 상호작용
+  async function fetchOrderList() {
+    const res = await getOrderList(userInfo?.accessToken as string);
+    if (res.statusCode === 200) {
+      // 성공
+      const orderList = res.data;
+      setOrders(
+        (orderList as TransactionDetail[]).filter(
+          (order) => !order.isCanceled
+        )
+      );
     }
+    //실패가 발생 상호작용
+  }
+  
+
+  useEffect(() => {
     fetchOrderList();
   }, [userInfo?.accessToken]);
+
+  
+
+
 
   // 시간순으로 배열하기
   // .sort()
   const timeSortedOrders = orders.sort(
     (a, b) =>
       convertToMilliseconds(b.timePaid) - convertToMilliseconds(a.timePaid)
-  );
-  
+      );
+
   const handleSearch = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
-    const target = event.target as HTMLInputElement
+    const target = event.target as HTMLInputElement;
     const res = await orderConfirmed(
       userInfo?.accessToken as string,
       target.value
-      );
-      console.log(res?.data);
+    );
+    
+    if (res.statusCode === 200) {
+      fetchOrderList();
+    }
   };
-  
+
   return (
     <section className="container mx-auto px-20 py-4">
       <SectionTitle text="주문 목록" />
@@ -64,7 +74,7 @@ export default function OrderList() {
         </thead>
         <tbody>
           {timeSortedOrders?.map((order) => (
-            <tr>
+            <tr className={order.done === true ? 'opacity-10' : ''}>
               <td>
                 <img
                   src={order.product.thumbnail || ''}
@@ -87,10 +97,12 @@ export default function OrderList() {
                   secondary
                   value={order.detailId}
                 />
-                <Button
-                  text="구매 취소"
-                  //   onClick={handleSearch}
-                />
+                {order.done !== true && (
+                  <Button
+                    text="구매 취소"
+                    // onClick={handleSearch}
+                  />
+                )}
               </td>
 
               {/* <td>
