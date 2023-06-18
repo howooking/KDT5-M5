@@ -20,7 +20,9 @@ export default function ProductCard({
         alt={title}
         className="p-1 duration-300 group-hover:scale-105"
       />
-      <h3>{title}</h3>
+      <h3 className="line-clamp-2" title={title}>
+        {title}
+      </h3>
       <div className="flex gap-2">
         <span className="text-accent">{price.toLocaleString('ko-KR')}원</span>
         <span
