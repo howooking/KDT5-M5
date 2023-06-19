@@ -13,14 +13,13 @@ export default function AccountList() {
   const navigate = useNavigate();
   const [totalBalance, setTotalBalance] = useState<number>(0);
   const [accounts, setAccounts] = useState<UserAccount[]>();
-  console.log(accounts);
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const { userInfo } = userStore();
 
   useEffect(() => {
+    setIsLoading(true);
     async function fetchAccountList() {
-      setIsLoading(true);
       const res = await getAccountListAndBalance(
         userInfo?.accessToken as string
       );
@@ -46,26 +45,27 @@ export default function AccountList() {
     accountId: string,
     accountName: string
   ) => {
-    setAccounts((prevAccounts) =>
-      prevAccounts?.map((account) =>
-        account.id === accountId ? { ...account, delete: true } : account
-      )
-    );
-    setIsDeleting(true);
-    const res = await deleteAccount(
-      { accountId, signature: true },
-      userInfo?.accessToken as string
-    );
-    if (res.statusCode === 200) {
-      toast.success(`${accountName}계좌를 해지하였습니다.`, {
-        id: 'deleteAccount',
-      });
+    if (confirm(`${accountName} 계좌를 삭제하시겠습니까?`)) {
+      setIsDeleting(true);
+      setAccounts((prevAccounts) =>
+        prevAccounts?.map((account) =>
+          account.id === accountId ? { ...account, delete: true } : account
+        )
+      );
+      const res = await deleteAccount(
+        { accountId, signature: true },
+        userInfo?.accessToken as string
+      );
+      if (res.statusCode === 200) {
+        toast.success(`${accountName} 계좌를 해지하였습니다.`, {
+          id: 'deleteAccount',
+        });
+        setIsDeleting(false);
+        return;
+      }
+      toast.error(res.message, { id: 'deleteAccount' });
       setIsDeleting(false);
-      setAccounts(accounts?.filter((account) => account.id !== accountId));
-      return;
     }
-    toast.error(res.message, { id: 'deleteAccount' });
-    setIsDeleting(false);
   };
 
   return (
@@ -73,46 +73,46 @@ export default function AccountList() {
       {isLoading ? (
         <CrazyLoading />
       ) : (
-        <>
-          <section className="container mx-auto px-20 py-4">
-            <SectionTitle
-              text={`총 잔액: ${totalBalance.toLocaleString('kr-KO')}원`}
-            />
-            <table className="table-zebra table table-fixed text-center">
-              <thead className="text-sm text-black">
-                <tr>
-                  <th>은행명</th>
-                  <th>계좌번호</th>
-                  <th>잔액(원)</th>
-                  <th>해지</th>
+        <section className="container mx-auto px-20 py-4">
+          <SectionTitle text="계좌 조회 / 해지" />
+          <table className="table-zebra table table-fixed text-center">
+            <thead className="text-sm text-black">
+              <tr>
+                <th>은행명</th>
+                <th>계좌번호</th>
+                <th>잔액(원)</th>
+                <th className="w-36">해지</th>
+              </tr>
+            </thead>
+            <tbody>
+              {accounts?.map((account) => (
+                <tr key={account.id} className="text-center ">
+                  <td>{account.bankName}</td>
+                  <td>{account.accountNumber}</td>
+                  <td>{account.balance.toLocaleString('ko-KR')}</td>
+                  <td>
+                    <Button
+                      text={
+                        isDeleting && account.delete ? (
+                          <LoadingSpinner color="white" />
+                        ) : (
+                          '해지'
+                        )
+                      }
+                      onClick={() =>
+                        handleDeleteAccount(account.id, account.bankName)
+                      }
+                      disabled={isDeleting}
+                    />
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {accounts?.map((account) => (
-                  <tr key={account.id} className="text-center ">
-                    <td>{account.bankName}</td>
-                    <td>{account.accountNumber}</td>
-                    <td>{account.balance.toLocaleString('ko-KR')}</td>
-                    <td>
-                      <Button
-                        text={
-                          isDeleting && account.delete ? (
-                            <LoadingSpinner color="white" />
-                          ) : (
-                            '해지'
-                          )
-                        }
-                        onClick={() =>
-                          handleDeleteAccount(account.id, account.bankName)
-                        }
-                      />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </section>
-        </>
+              ))}
+            </tbody>
+          </table>
+          <h3 className="my-2 text-right text-xl font-bold">
+            잔액 : {totalBalance.toLocaleString('kr-KO')}원
+          </h3>
+        </section>
       )}
     </>
   );
