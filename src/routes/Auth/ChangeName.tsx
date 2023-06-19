@@ -27,9 +27,6 @@ export default function ChangeName() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    // 이전 타임아웃이 아직 작동중이 초기화
-
     if (editData.displayName.trim() === '') {
       toast.error('변경 할 닉네임를 입력해주세요.', { id: 'changeName' });
       return;
@@ -47,17 +44,16 @@ export default function ChangeName() {
     toast.loading('닉네임 변경 중', { id: 'changeName' });
     const res = await editUser(userInfo?.accessToken as string, editData);
     if (res.statusCode === 200) {
-      await authMe();
       const updatedUser = res.data as UpdatedUserResponseValue;
       toast.success(`${updatedUser.displayName}(으)로 변경하였습니다.`, {
         id: 'changeName',
       });
-      navigate('/myaccount/info', { replace: true });
+      navigate('/myaccount/info');
       setIsSending(false);
+      authMe();
       return;
     }
-    const errorMessage = res.message;
-    toast.error(errorMessage, { id: 'changeName' });
+    toast.error(res.message, { id: 'changeName' });
     setIsSending(false);
   };
 
@@ -77,6 +73,7 @@ export default function ChangeName() {
             value={editData.displayName}
           />
           <Button
+            submit
             text={isSending ? <LoadingSpinner color="white" /> : '닉네임 변경'}
             disabled={isSending}
           />
