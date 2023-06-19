@@ -1,17 +1,23 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { getOrderDetail } from '@/api/transactionApi';
 import { userStore } from '@/store';
 import { convertToHumanReadable } from '@/constants/library';
 import CrazyLoading from '@/components/ui/CrazyLoading';
 import SectionTitle from '@/components/ui/SectionTitle';
+import toast from 'react-hot-toast';
+import { DICTIONARY_SHOES } from '@/constants/constants';
+import Button from '@/components/ui/Button';
 
 export default function OrderDetail() {
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const { detailId } = useParams();
   const [detail, setDetail] = useState<TransactionDetail>();
   const { userInfo } = userStore();
 
+  console.log(detail);
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
@@ -22,7 +28,11 @@ export default function OrderDetail() {
       if (res.statusCode === 200) {
         setDetail(res.data as TransactionDetail);
         setIsLoading(false);
+        return;
       }
+      toast.error(res.message, { id: 'getOrderDetail' });
+      navigate('/');
+      setIsLoading(false);
     };
     fetchData();
   }, [detailId, userInfo?.accessToken]);
@@ -33,7 +43,19 @@ export default function OrderDetail() {
         <CrazyLoading />
       ) : (
         <section className="container mx-auto px-20 py-4">
-          <SectionTitle text="거래 상세 내역" />
+          <div className="flex items-center justify-between py-3">
+            <SectionTitle text="상세 구매 내역" />
+            <div className="">
+              <Button
+                text="상품 페이지로 이동"
+                onClick={() =>
+                  navigate(
+                    `/products/${detail?.product.tags[0]}/${detail?.product.productId}`
+                  )
+                }
+              />
+            </div>
+          </div>
           <table className="table-zebra mx-auto table w-full table-fixed text-center">
             <tbody>
               <tr>
@@ -47,15 +69,11 @@ export default function OrderDetail() {
               <tr>
                 <td>상품 이미지</td>
                 <td>
-                  {detail?.product.thumbnail ? (
-                    <img
-                      src={detail?.product.thumbnail}
-                      alt={detail?.product.title}
-                      className="mx-auto h-[100px] w-[100px]"
-                    />
-                  ) : (
-                    '이미지 없음'
-                  )}
+                  <img
+                    src={detail?.product.thumbnail as string}
+                    alt={detail?.product.title}
+                    className="mx-auto h-[100px] w-[100px]"
+                  />
                 </td>
               </tr>
               <tr>
@@ -66,28 +84,25 @@ export default function OrderDetail() {
                 <td>상품 가격(원)</td>
                 <td>{detail?.product.price.toLocaleString('ko-KR')}</td>
               </tr>
+
               <tr>
-                <td>상품 설명</td>
-                <td>{detail?.product.description}</td>
+                <td>카테고리</td>
+                <td>{DICTIONARY_SHOES[detail?.product.tags[0] as string]}</td>
               </tr>
               <tr>
-                <td>태그</td>
-                <td>{detail?.product.tags.join(', ')}</td>
+                <td>브랜드</td>
+                <td>{detail?.product.tags[1].toUpperCase()}</td>
               </tr>
               <tr>
                 <td>할인율</td>
                 <td>{detail?.product.discountRate}%</td>
               </tr>
               <tr>
-                <td>거래 시간</td>
+                <td>구매 시간</td>
                 <td>{convertToHumanReadable(detail?.timePaid || '')}</td>
               </tr>
               <tr>
-                <td>거래 취소 여부</td>
-                <td>{detail?.isCanceled ? '취소됨' : '취소되지 않음'}</td>
-              </tr>
-              <tr>
-                <td>거래 완료 여부</td>
+                <td>구매 완료 여부</td>
                 <td>{detail?.done ? '완료됨' : '완료되지 않음'}</td>
               </tr>
             </tbody>

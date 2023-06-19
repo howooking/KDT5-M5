@@ -19,7 +19,7 @@ export default function OrderList() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    async function fetchOrderList() {
+    async function fetchData() {
       setIsLoading(true);
       const res = await getOrderList(userInfo?.accessToken as string);
       if (res.statusCode === 200) {
@@ -38,7 +38,7 @@ export default function OrderList() {
       toast.error(res.message, { id: 'fetchOrderList' });
       setIsLoading(false);
     }
-    fetchOrderList();
+    fetchData();
   }, [userInfo?.accessToken, isOrdered]);
 
   const handleConfirmOrder = async (
@@ -52,7 +52,7 @@ export default function OrderList() {
       toast.loading('구매확정 요청 중...', { id: 'confirmOrder' });
       const res = await confirmOrder(userInfo?.accessToken as string, orderId);
       if (res.statusCode === 200) {
-        toast.success(`${productTitle} 구매를 확정하셨습니다.`, {
+        toast.success(`${productTitle} 구매를 확정하였습니다.`, {
           id: 'confirmOrder',
         });
         setIsOrdered(true);
@@ -72,24 +72,20 @@ export default function OrderList() {
     productTitle: string
   ) => {
     event.stopPropagation();
-    // API 호출 시도
-    if (confirm(`${productTitle} 주문을 취소하시겠습니까?`)) {
+    if (confirm(`${productTitle} 구매를 취소하시겠습니까?`)) {
       toast.loading('구매 취소 요청 중', { id: 'cancelOrder' });
       const res = await cancelOrder(detailId, userInfo?.accessToken as string);
 
       if (res.statusCode === 200) {
-        // 거래 취소가 성공한 경우
-
         const updatedOrders = orders.filter(
           (order) => order.detailId !== detailId
         );
         setOrders(updatedOrders);
-        toast.success(`${productTitle} 주문을 취소하였습니다.`, {
+        toast.success(`${productTitle} 구매를 취소하였습니다.`, {
           id: 'cancelOrder',
         });
         return;
       }
-      // 거래 취소가 실패한 경우
       toast.error(res.message, { id: 'cancelOrder' });
     }
   };
@@ -100,14 +96,14 @@ export default function OrderList() {
         <CrazyLoading />
       ) : (
         <section className="container mx-auto px-20 py-4">
-          <SectionTitle text="주문 목록" />
+          <SectionTitle text="구매 내역" />
           <table className="table-zebra table table-fixed text-center">
             <thead className="text-sm text-black">
               <tr>
                 <th>상품이미지</th>
                 <th>상품명</th>
                 <th>상품가격(원)</th>
-                <th>거래시간</th>
+                <th>주문시간</th>
                 <th>구매확정</th>
                 <th />
               </tr>
@@ -129,9 +125,9 @@ export default function OrderList() {
                   <td>{order.product.price.toLocaleString('ko-KR')}</td>
                   <td>{convertToHumanReadable(order.timePaid)}</td>
                   <td>{order.done ? '🔘' : '❌'}</td>
-                  <td>
+                  <td className="space-y-2">
                     <Button
-                      text={order.done ? '구매확정 완료' : '구매확정'}
+                      text={order.done ? '구매 확정 완료' : '구매 확정'}
                       disabled={order.done}
                       onClick={(event) =>
                         handleConfirmOrder(
