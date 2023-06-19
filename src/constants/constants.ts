@@ -42,10 +42,6 @@ export const SUB_MENUS_MYACCOUNT = [
     href: '/myaccount/info',
   },
   {
-    label: '닉네임 변경',
-    href: '/myaccount/changename',
-  },
-  {
     label: '비밀번호 변경',
     href: '/myaccount/changepw',
   },

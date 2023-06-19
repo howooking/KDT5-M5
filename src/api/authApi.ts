@@ -120,7 +120,7 @@ export const authenticate = async (accessToken: string | null) => {
   // 토큰이 없는 경우
   if (!accessToken) {
     localStorage.removeItem('user');
-    return;
+    return { data: null, statusCode: 400, message: '로그인 해주세요' };
   }
 
   // 토큰이 있는경우

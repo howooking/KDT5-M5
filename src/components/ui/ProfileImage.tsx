@@ -10,7 +10,7 @@ export default function ProfileImage({ src, small }: ProfileImageProps) {
       alt="profile"
       className={`${
         small ? 'h-9 w-9' : 'h-60 w-60'
-      } mx-auto inline-block rounded-full object-cover`}
+      } inline-block rounded-full object-cover`}
     />
   );
 }

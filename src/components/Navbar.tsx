@@ -2,7 +2,6 @@
 import { Link } from 'react-router-dom';
 import { userStore } from '@/store';
 import Search from '@/components/Search';
-import { BsCart } from 'react-icons/bs';
 import SubNavbar from '@/components/SubNavbar';
 import { SUB_MENUS } from '@/constants/constants';
 import ProfileImage from '@/components/ui/ProfileImage';

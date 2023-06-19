@@ -8,6 +8,7 @@ import Button from '@/components/ui/Button';
 import { useNavigate } from 'react-router-dom';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import { toast } from 'react-hot-toast';
+import SectionTitle from '@/components/ui/SectionTitle';
 
 export default function ConnectAccount() {
   const navigate = useNavigate();
@@ -95,48 +96,51 @@ export default function ConnectAccount() {
   }
 
   return (
-    <div className="container mx-auto w-96 py-20">
-      <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
-        <Select
-          onChange={handleChange}
-          options={bankOptions}
-          value={bankInputData.bankCode}
-          name="bankCode"
-        />
-        <Input
-          name="accountNumber"
-          onChange={handleChange}
-          maxLength={selectedBankDigits}
-          placeholder={`${
-            selectedBankDigits
-              ? selectedBankDigits + "자리 계좌번호 '-' 없이"
-              : '계좌번호'
-          }`}
-        />
-        <Input
-          name="phoneNumber"
-          onChange={handleChange}
-          maxLength={11}
-          placeholder="휴대폰번호 '-' 없이"
-        />
-        <div className="flex items-center gap-2">
-          <input
-            className="h-6 w-6 appearance-none rounded border-2 border-gray-300 checked:border-transparent checked:bg-accent"
-            name="signature"
-            id="signature"
-            type="checkbox"
-            checked={bankInputData.signature}
+    <div className="container mx-auto px-20 py-4">
+      <SectionTitle text="계좌 연결" />
+      <div className="my-20 flex justify-center">
+        <form className="flex w-96 flex-col gap-3" onSubmit={handleSubmit}>
+          <Select
             onChange={handleChange}
+            options={bankOptions}
+            value={bankInputData.bankCode}
+            name="bankCode"
           />
-          <label htmlFor="signature" className="select-none">
-            간편결제 계좌 등록에 동의합니다.
-          </label>
-        </div>
-        <Button
-          text={isSending ? <LoadingSpinner color="white" /> : '계좌 연결'}
-          disabled={isSending}
-        />
-      </form>
+          <Input
+            name="accountNumber"
+            onChange={handleChange}
+            maxLength={selectedBankDigits}
+            placeholder={`${
+              selectedBankDigits
+                ? selectedBankDigits + "자리 계좌번호 '-' 없이"
+                : '계좌번호'
+            }`}
+          />
+          <Input
+            name="phoneNumber"
+            onChange={handleChange}
+            maxLength={11}
+            placeholder="휴대폰번호 '-' 없이"
+          />
+          <div className="flex items-center gap-2">
+            <input
+              className="h-6 w-6 appearance-none rounded border-2 border-gray-300 checked:border-transparent checked:bg-accent"
+              name="signature"
+              id="signature"
+              type="checkbox"
+              checked={bankInputData.signature}
+              onChange={handleChange}
+            />
+            <label htmlFor="signature" className="select-none">
+              간편결제 계좌 등록에 동의합니다.
+            </label>
+          </div>
+          <Button
+            text={isSending ? <LoadingSpinner color="white" /> : '계좌 연결'}
+            disabled={isSending}
+          />
+        </form>
+      </div>
     </div>
   );
 }

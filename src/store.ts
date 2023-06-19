@@ -6,7 +6,7 @@ import { ADMINS } from '@/constants/constants';
 interface UserState {
   userInfo: User | null;
   setUser: (user: User | null) => void;
-  authMe: () => void;
+  authMe: () => Promise<string | undefined>;
 }
 
 export const userStore = create<UserState>((set) => ({
@@ -24,6 +24,7 @@ export const userStore = create<UserState>((set) => ({
 
   // 인증
   authMe: async () => {
+    // 로컬저장소에 'user'가 있다면 json.parse시켜 객체로 만들고 useInfo에 저장 / 없다면 useInfo에 null
     const userInfo: User | null = localStorage.getItem('user')
       ? JSON.parse(localStorage.getItem('user') as string)
       : null;
@@ -34,15 +35,11 @@ export const userStore = create<UserState>((set) => ({
       set({
         userInfo: null,
       });
-      return;
-    }
-    // 로컬저장소에 user가 있는 경우
-    const res = await authenticate(userInfo.accessToken);
-    // access토큰이 없는 경우(누군가 의도적으로 로컬저장소에서 user는 남겨두고 access토큰만 삭제하는 경우)
-    if (!res) {
-      return;
+      return '로그인을 해주세요.';
     }
 
+    // 로컬저장소에 user가 있는 경우
+    const res = await authenticate(userInfo.accessToken);
     // 인증에 성공하는 경우
     if (res.statusCode === 200) {
       const user = res.data as AuthenticateResponseValue;
@@ -57,12 +54,11 @@ export const userStore = create<UserState>((set) => ({
       });
       return;
     }
-    // 인증실패(유효한 토큰이 아닌경우, expired)
-    // 로컬저장소에 무효화된 유져를 삭제
-    localStorage.removeItem('user');
-    // 유져 초기화
+    // 토큰은 있으나 인증에 실패한 경우 (expired or 토큰 값 인위적 조작)
     set({
       userInfo: null,
     });
+    localStorage.removeItem('user');
+    return '로그인 하신지 24시간이 지나셨어요! 다시 로그인해주세요.';
   },
 }));

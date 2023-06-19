@@ -5,6 +5,7 @@ import Input from '@/components/ui/Input';
 import Button from '@/components/ui/Button';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import toast from 'react-hot-toast';
+import SectionTitle from '@/components/ui/SectionTitle';
 
 export default function ChangePassword() {
   const [isSending, setIsSending] = useState(false);
@@ -92,8 +93,12 @@ export default function ChangePassword() {
   };
 
   return (
-    <div className="flex justify-center p-20">
-      <form onSubmit={handleSubmit} className="flex w-96 flex-col gap-3">
+    <div className="container mx-auto px-20 py-4">
+      <SectionTitle text="비밀번호 변경" />
+      <form
+        onSubmit={handleSubmit}
+        className="mx-auto my-20 flex w-96 flex-col gap-3"
+      >
         <Input
           onChange={handleChange}
           type="password"

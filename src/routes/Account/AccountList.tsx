@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from 'react';
 import { getAccountListAndBalance, deleteAccount } from '@/api/bankApi';
 import Button from '@/components/ui/Button';
@@ -11,12 +12,11 @@ import SectionTitle from '@/components/ui/SectionTitle';
 export default function AccountList() {
   const navigate = useNavigate();
   const [totalBalance, setTotalBalance] = useState<number>(0);
-  const [accounts, setAccounts] = useState<UserAccount[]>([]);
+  const [accounts, setAccounts] = useState<UserAccount[]>();
+  console.log(accounts);
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const { userInfo } = userStore();
-
-  console.log(accounts);
 
   useEffect(() => {
     async function fetchAccountList() {
@@ -25,23 +25,29 @@ export default function AccountList() {
         userInfo?.accessToken as string
       );
       if (res.statusCode === 200) {
-        setIsLoading(false);
+        if (res.data?.accounts.length === 0) {
+          setIsLoading(false);
+          toast.error('먼저 계좌를 등록해주세요', { id: 'getAccounts' });
+          navigate('/myaccount/connectAccount');
+          return;
+        }
         setTotalBalance((res.data as AccountsAndBalance).totalBalance);
         setAccounts((res.data as AccountsAndBalance).accounts);
+        setIsLoading(false);
         return;
       }
       toast.error(res.message, { id: 'getAccounts' });
       setIsLoading(false);
     }
     fetchAccountList();
-  }, [userInfo?.accessToken]);
+  }, [userInfo?.accessToken, isDeleting]);
 
   const handleDeleteAccount = async (
     accountId: string,
     accountName: string
   ) => {
     setAccounts((prevAccounts) =>
-      prevAccounts.map((account) =>
+      prevAccounts?.map((account) =>
         account.id === accountId ? { ...account, delete: true } : account
       )
     );
@@ -55,7 +61,7 @@ export default function AccountList() {
         id: 'deleteAccount',
       });
       setIsDeleting(false);
-      setAccounts(accounts.filter((account) => account.id !== accountId));
+      setAccounts(accounts?.filter((account) => account.id !== accountId));
       return;
     }
     toast.error(res.message, { id: 'deleteAccount' });
@@ -66,7 +72,7 @@ export default function AccountList() {
     <>
       {isLoading ? (
         <CrazyLoading />
-      ) : accounts.length > 0 ? (
+      ) : (
         <>
           <section className="container mx-auto px-20 py-4">
             <SectionTitle
@@ -82,7 +88,7 @@ export default function AccountList() {
                 </tr>
               </thead>
               <tbody>
-                {accounts.map((account) => (
+                {accounts?.map((account) => (
                   <tr key={account.id} className="text-center ">
                     <td>{account.bankName}</td>
                     <td>{account.accountNumber}</td>
@@ -107,14 +113,6 @@ export default function AccountList() {
             </table>
           </section>
         </>
-      ) : (
-        <div className="flex flex-col items-center">
-          <p>연결된 계좌가 없습니다. 계좌를 추가해주세요!</p>
-          <Button
-            onClick={() => navigate('/myaccount/connectAccount')}
-            text="계좌 연결하기"
-          />
-        </div>
       )}
     </>
   );

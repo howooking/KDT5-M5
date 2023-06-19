@@ -7,6 +7,7 @@ import Input from '@/components/ui/Input';
 import Button from '@/components/ui/Button';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import toast from 'react-hot-toast';
+import SectionTitle from '@/components/ui/SectionTitle';
 
 export default function ChangeName() {
   const [isSending, setIsSending] = useState(false);
@@ -46,9 +47,9 @@ export default function ChangeName() {
     toast.loading('닉네임 변경 중', { id: 'changeName' });
     const res = await editUser(userInfo?.accessToken as string, editData);
     if (res.statusCode === 200) {
-      authMe();
+      await authMe();
       const updatedUser = res.data as UpdatedUserResponseValue;
-      toast.success(`${updatedUser.displayName}으로 변경하셨습니다.`, {
+      toast.success(`${updatedUser.displayName}(으)로 변경하였습니다.`, {
         id: 'changeName',
       });
       navigate('/myaccount/info', { replace: true });
@@ -61,20 +62,26 @@ export default function ChangeName() {
   };
 
   return (
-    <div className="flex justify-center p-20">
-      <form onSubmit={handleSubmit} className="flex w-96 flex-col gap-3">
-        <Input
-          name="displayName"
-          onChange={handleChange}
-          placeholder={userInfo?.user.displayName}
-          type="text"
-          value={editData.displayName}
-        />
-        <Button
-          text={isSending ? <LoadingSpinner color="white" /> : '닉네임 변경'}
-          disabled={isSending}
-        />
-      </form>
+    <div className="container mx-auto px-20 py-4">
+      <SectionTitle text="닉네임 변경" />
+      <div className="flex justify-center">
+        <form
+          onSubmit={handleSubmit}
+          className="my-20 flex w-96 flex-col gap-3"
+        >
+          <Input
+            name="displayName"
+            onChange={handleChange}
+            placeholder={userInfo?.user.displayName}
+            type="text"
+            value={editData.displayName}
+          />
+          <Button
+            text={isSending ? <LoadingSpinner color="white" /> : '닉네임 변경'}
+            disabled={isSending}
+          />
+        </form>
+      </div>
     </div>
   );
 }
