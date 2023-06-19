@@ -1,4 +1,4 @@
-import { confirmOrder, getOrderList } from '@/api/transactionApi';
+import { confirmOrder, getOrderList, cancelOrder } from '@/api/transactionApi';
 import Button from '@/components/ui/Button';
 import CrazyLoading from '@/components/ui/CrazyLoading';
 import SectionTitle from '@/components/ui/SectionTitle';
@@ -48,8 +48,8 @@ export default function OrderList() {
   ) => {
     event.stopPropagation();
     setIsOrdered(false);
-    toast.loading('구매확정 요청 중...', { id: 'confirmOrder' });
     if (confirm(`${productTitle} 구매를 확정하시겠습니까?`)) {
+      toast.loading('구매확정 요청 중...', { id: 'confirmOrder' });
       const res = await confirmOrder(userInfo?.accessToken as string, orderId);
       if (res.statusCode === 200) {
         toast.success(`${productTitle} 구매를 확정하셨습니다.`, {
@@ -64,6 +64,34 @@ export default function OrderList() {
 
   const toOrderDetail = (orderId: string) => {
     navigate(`/myaccount/order/${orderId}`);
+  };
+
+  const handleCancel = async (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    detailId: string,
+    productTitle: string
+  ) => {
+    event.stopPropagation();
+    // API 호출 시도
+    if (confirm(`${productTitle} 주문을 취소하시겠습니까?`)) {
+      toast.loading('구매 취소 요청 중', { id: 'cancelOrder' });
+      const res = await cancelOrder(detailId, userInfo?.accessToken as string);
+
+      if (res.statusCode === 200) {
+        // 거래 취소가 성공한 경우
+
+        const updatedOrders = orders.filter(
+          (order) => order.detailId !== detailId
+        );
+        setOrders(updatedOrders);
+        toast.success(`${productTitle} 주문을 취소하였습니다.`, {
+          id: 'cancelOrder',
+        });
+        return;
+      }
+      // 거래 취소가 실패한 경우
+      toast.error(res.message, { id: 'cancelOrder' });
+    }
   };
 
   return (
@@ -112,14 +140,19 @@ export default function OrderList() {
                           order.product.title
                         )
                       }
-                      secondary
                     />
                     {order.done ? (
                       <></>
                     ) : (
                       <Button
                         text="구매 취소"
-                        //   onClick={handleSearch}
+                        onClick={(event) =>
+                          handleCancel(
+                            event,
+                            order.detailId,
+                            order.product.title
+                          )
+                        }
                       />
                     )}
                   </td>

@@ -32,9 +32,9 @@ export default function OrderDetail() {
       {isLoading ? (
         <CrazyLoading />
       ) : (
-        <section className="container mx-auto max-w-screen-md px-20 py-4">
+        <section className="container mx-auto px-20 py-4">
           <SectionTitle text="거래 상세 내역" />
-          <table className="table-zebra table w-full table-fixed text-center">
+          <table className="table-zebra mx-auto table w-full table-fixed text-center">
             <tbody>
               <tr>
                 <td className="w-36">은행</td>
