@@ -1,4 +1,4 @@
-import { getOrderList, orderConfirmed } from '@/api/transactionApi';
+import { getOrderList } from '@/api/transactionApi';
 import Button from '@/components/ui/Button';
 import CrazyLoading from '@/components/ui/CrazyLoading';
 import SectionTitle from '@/components/ui/SectionTitle';
@@ -35,30 +35,12 @@ export default function OrderList() {
     fetchOrderList();
   }, [userInfo?.accessToken]);
 
-  
-
-
-
   // 시간순으로 배열하기
   // .sort()
   const timeSortedOrders = orders.sort(
     (a, b) =>
       convertToMilliseconds(b.timePaid) - convertToMilliseconds(a.timePaid)
-      );
-
-  const handleSearch = async (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    const target = event.target as HTMLInputElement;
-    const res = await orderConfirmed(
-      userInfo?.accessToken as string,
-      target.value
-    );
-    
-    if (res.statusCode === 200) {
-      fetchOrderList();
-    }
-  };
+  );
 
   return (
     <>
