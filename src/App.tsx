@@ -13,7 +13,6 @@ import ChangeName from '@/routes/Auth/ChangeName';
 import ChangePassword from '@/routes/Auth/ChangePassword';
 import Info from '@/routes/Auth/Info';
 import AdminProduct from '@/routes/Admin/AdminProducts';
-// import EditProduct from '@/routes/Admin/EditProduct';
 import ConnectAccount from '@/routes/Account/ConnectAccount';
 import Products from '@/routes/Products';
 import ProductDetail from '@/routes/ProductDetail';
@@ -23,6 +22,7 @@ import OrderList from '@/routes/Auth/OrderList';
 import AllTransactions from './routes/Admin/AllTransactions';
 import OrderDetail from './routes/Auth/OrderDetail';
 import LogoutNeededRoute from './routes/Auth/LogoutNeededRoute';
+import EditProduct from './routes/Admin/EditProduct';
 
 export default function App() {
   return (
@@ -75,7 +75,7 @@ export default function App() {
           {/*상품추가*/}
           <Route path="addProduct" element={<AddProduct />} />
           {/*상품수정*/}
-          {/* <Route path="editProduct" element={<EditProduct />} /> */}
+          <Route path="editProduct" element={<EditProduct />} />
           {/*거래내역*/}
           <Route path="alltransactions" element={<AllTransactions />} />
         </Route>

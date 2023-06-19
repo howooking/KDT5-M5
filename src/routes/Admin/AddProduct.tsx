@@ -22,6 +22,7 @@ export default function AddProduct() {
     thumbnailBase64: '',
     photoBase64: '',
     discountRate: '',
+    isSoldOut: false,
   });
 
   const [isSending, setIsSending] = useState(false);
@@ -65,8 +66,6 @@ export default function AddProduct() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    //// 클라이언트 사이드 유효성 검사
 
     // 상품이름 or 상품가격 or 상품설명을 입력하지 않은 경우
     if (
@@ -118,6 +117,7 @@ export default function AddProduct() {
         photoBase64: '',
         tags: ['category', 'brand'],
         thumbnailBase64: '',
+        isSoldOut: false,
       });
       return;
     }
@@ -127,12 +127,12 @@ export default function AddProduct() {
   };
 
   return (
-    <div className="flex justify-center p-3">
+    <div className="container mx-auto px-20 py-10">
       <div className="flex flex-col">
         <SectionTitle text="상품추가" />
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           <div className="flex gap-10">
-            <div className="flex-1 space-y-3">
+            <div className="flex-1 space-y-5">
               <Select
                 options={SELECT_CATEGORY}
                 onChange={handleChange}
@@ -170,7 +170,7 @@ export default function AddProduct() {
                 value={productInputData.discountRate}
               />
             </div>
-            <div className="flex-1 space-y-3">
+            <div className="flex flex-1 flex-col space-y-5">
               <ImageUpload
                 korName="썸네일사진"
                 name="thumbnailBase64"
@@ -181,13 +181,16 @@ export default function AddProduct() {
                 name="photoBase64"
                 onChange={handleChange}
               />
+              <div className="flex-1" />
+              <div>
+                <Button
+                  text={
+                    isSending ? <LoadingSpinner color="white" /> : '상품등록'
+                  }
+                  disabled={isSending}
+                />
+              </div>
             </div>
-          </div>
-          <div>
-            <Button
-              text={isSending ? <LoadingSpinner color="white" /> : '상품등록'}
-              disabled={isSending}
-            />
           </div>
         </form>
       </div>

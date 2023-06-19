@@ -38,7 +38,7 @@ export const addProduct = async (productData: AddProductData) => {
 // 수정 예정
 export const updateProduct = async (
   productId: string,
-  updateData: UpdatedProduct
+  updateData: UpdateProductBodyData
 ) => {
   try {
     const response = await fetch(`${API_URL}/products/${productId}`, {
@@ -46,13 +46,26 @@ export const updateProduct = async (
       headers: MASTER_HEADERS,
       body: JSON.stringify(updateData),
     });
-    console.log(response.status);
-    const data = await response.json();
-    return data;
-  } catch (error) {
+    if (response.ok) {
+      const data: UpdatedProduct = await response.json();
+      return {
+        data,
+        statusCode: response.status,
+        message: `${data.title} 상품을 수정하였습니다.`,
+      };
+    }
+    const errorMessage = await response.json();
     return {
-      data: '제품 수정 중 에러발생, 잠시 후 다시 실행해 주세요.',
+      data: null,
+      statusCode: response.status,
+      message: errorMessage,
+    };
+  } catch (error) {
+    console.log('error while updating a product');
+    return {
+      data: null,
       statusCode: 400,
+      message: '제품 수정 중 에러발생, 잠시 후 다시 시도해 주세요.',
     };
   }
 };

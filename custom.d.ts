@@ -58,6 +58,7 @@ interface ProductInputData {
   thumbnailBase64?: string;
   photoBase64?: string;
   discountRate?: string;
+  isSoldOut: boolean;
 }
 
 // 실제 제품 추가시 요구되는 값
@@ -77,14 +78,14 @@ interface EditProductInputData {
   price: string;
   description: string;
   tags: string[];
-  isSoldOut: boolean;
+  isSoldOut: string;
   thumbnailBase64?: string | null;
   photoBase64?: string | null;
   discountRate?: string;
 }
 
 // 실제 수정시 요구되는 값
-interface UpdatedProduct {
+interface UpdateProductBodyData {
   title?: string;
   price?: number;
   description?: string;
@@ -93,6 +94,19 @@ interface UpdatedProduct {
   photoBase64?: string | null;
   isSoldOut?: boolean;
   discountRate?: number;
+}
+
+// 수정시 서버로 부터 받는 수정된 상품 값
+interface UpdatedProduct {
+  id: string; // 제품 ID
+  title: string; // 제품 이름
+  price: number; // 제품 가격
+  description: string; // 제품 상세 설명
+  tags: string[]; // 제품 태그
+  thumbnail: string | null; // 제품 썸네일 이미지(URL)
+  photo: string | null; // 제품 상세 이미지(URL)
+  isSoldOut: boolean; // 제품 매진 여부
+  discountRate: number; // 제품 할인율
 }
 
 // 거래 세부 내역
@@ -155,8 +169,8 @@ interface ProductDetail {
   price: number;
   description: string;
   tags: string[]; // 제품 태그
-  thumbnail: string | null; // 제품 썸네일
-  photo: string | null; //상세이미지 URL
+  thumbnail?: string; // 제품 썸네일
+  photo?: string; //상세이미지 URL
   isSoldOut: boolean; // 제품 매진여부
   discountRate: number;
 }
