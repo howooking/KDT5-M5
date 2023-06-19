@@ -1,4 +1,4 @@
-import { getOrderList } from '@/api/transactionApi';
+import { confirmOrder, getOrderList } from '@/api/transactionApi';
 import Button from '@/components/ui/Button';
 import CrazyLoading from '@/components/ui/CrazyLoading';
 import SectionTitle from '@/components/ui/SectionTitle';
@@ -12,10 +12,10 @@ import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 
 export default function OrderList() {
-  // const [order, setoder] = useState()
   const { userInfo } = userStore();
   const [orders, setOrders] = useState<TransactionDetail[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isOrdered, setIsOrdered] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,7 +24,13 @@ export default function OrderList() {
       const res = await getOrderList(userInfo?.accessToken as string);
       if (res.statusCode === 200) {
         setOrders(
-          (res.data as TransactionDetail[]).filter((order) => !order.isCanceled)
+          (res.data as TransactionDetail[])
+            .filter((order) => !order.isCanceled)
+            .sort(
+              (a, b) =>
+                convertToMilliseconds(b.timePaid) -
+                convertToMilliseconds(a.timePaid)
+            )
         );
         setIsLoading(false);
         return;
@@ -33,14 +39,32 @@ export default function OrderList() {
       setIsLoading(false);
     }
     fetchOrderList();
-  }, [userInfo?.accessToken]);
+  }, [userInfo?.accessToken, isOrdered]);
 
-  // 시간순으로 배열하기
-  // .sort()
-  const timeSortedOrders = orders.sort(
-    (a, b) =>
-      convertToMilliseconds(b.timePaid) - convertToMilliseconds(a.timePaid)
-  );
+  const handleConfirmOrder = async (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    orderId: string,
+    productTitle: string
+  ) => {
+    event.stopPropagation();
+    setIsOrdered(false);
+    toast.loading('구매확정 요청 중...', { id: 'confirmOrder' });
+    if (confirm(`${productTitle} 구매를 확정하시겠습니까?`)) {
+      const res = await confirmOrder(userInfo?.accessToken as string, orderId);
+      if (res.statusCode === 200) {
+        toast.success(`${productTitle} 구매를 확정하셨습니다.`, {
+          id: 'confirmOrder',
+        });
+        setIsOrdered(true);
+        return;
+      }
+      toast.error(res.message, { id: 'confirmOrder' });
+    }
+  };
+
+  const toOrderDetail = (orderId: string) => {
+    navigate(`/myaccount/order/${orderId}`);
+  };
 
   return (
     <>
@@ -52,42 +76,52 @@ export default function OrderList() {
           <table className="table-zebra table table-fixed text-center">
             <thead className="text-sm text-black">
               <tr>
-                <th>사진</th>
+                <th>상품이미지</th>
                 <th>상품명</th>
                 <th>상품가격(원)</th>
                 <th>거래시간</th>
+                <th>구매확정</th>
                 <th />
               </tr>
             </thead>
             <tbody>
-              {timeSortedOrders?.map((order) => (
-                <tr>
+              {orders?.map((order) => (
+                <tr
+                  onClick={() => toOrderDetail(order.detailId)}
+                  className="cursor-pointer hover:opacity-80"
+                >
                   <td>
                     <img
-                      src={order.product.thumbnail || ''}
+                      src={order.product.thumbnail as string}
                       alt={order.product.title}
+                      className="mx-auto w-24"
                     />
                   </td>
                   <td>{order.product.title}</td>
                   <td>{order.product.price.toLocaleString('ko-KR')}</td>
                   <td>{convertToHumanReadable(order.timePaid)}</td>
+                  <td>{order.done ? '🔘' : '❌'}</td>
                   <td>
                     <Button
-                      text="상세 내역"
-                      onClick={() =>
-                        navigate(`/myaccount/order/${order.detailId}`)
+                      text={order.done ? '구매확정 완료' : '구매확정'}
+                      disabled={order.done}
+                      onClick={(event) =>
+                        handleConfirmOrder(
+                          event,
+                          order.detailId,
+                          order.product.title
+                        )
                       }
                       secondary
                     />
-                    <Button
-                      text="구매 확정"
-                      //   onClick={handleSearch}
-                      secondary
-                    />
-                    <Button
-                      text="구매 취소"
-                      //   onClick={handleSearch}
-                    />
+                    {order.done ? (
+                      <></>
+                    ) : (
+                      <Button
+                        text="구매 취소"
+                        //   onClick={handleSearch}
+                      />
+                    )}
                   </td>
                 </tr>
               ))}
