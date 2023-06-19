@@ -31,7 +31,7 @@ export default function ConnectAccount() {
   // 가져온 은행들 중 사용 가능한 것만 option으로 사용
   const bankOptions = useMemo(
     () => [
-      { name: '은행선택', value: '' },
+      { name: '은행선택*', value: '' },
       ...banks
         .filter((bank) => !bank.disabled)
         .map((bank) => ({
@@ -76,11 +76,21 @@ export default function ConnectAccount() {
   // 전송함수
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (
+      bankInputData.bankCode.trim() === '' ||
+      bankInputData.accountNumber.trim() === '' ||
+      bankInputData.phoneNumber.trim() === ''
+    ) {
+      toast.error('은행, 계좌번호, 휴대폰번호를 입력해주세요.');
+      return;
+    }
+    if (!bankInputData.signature) {
+      toast.error('간편결제 등록에 동의해주세요.');
+      return;
+    }
+
     setIsSending(true);
     toast.loading('계좌를 추가하고 있습니다.', { id: 'connectAccount' });
-
-    // 클라이언트사이드 유효성 검사 안함.
-
     const res = await connectAccount(
       bankInputData,
       userInfo?.accessToken as string
@@ -112,30 +122,31 @@ export default function ConnectAccount() {
             maxLength={selectedBankDigits}
             placeholder={`${
               selectedBankDigits
-                ? selectedBankDigits + "자리 계좌번호 '-' 없이"
-                : '계좌번호'
+                ? selectedBankDigits + "자리 계좌번호 '-' 없이*"
+                : '계좌번호*'
             }`}
           />
           <Input
             name="phoneNumber"
             onChange={handleChange}
             maxLength={11}
-            placeholder="휴대폰번호 '-' 없이"
+            placeholder="휴대폰번호 '-' 없이*"
           />
           <div className="flex items-center gap-2">
             <input
-              className="h-6 w-6 appearance-none rounded border-2 border-gray-300 checked:border-transparent checked:bg-accent"
+              className="h-6 w-6 cursor-pointer appearance-none rounded border-2 border-gray-300 checked:border-transparent checked:bg-accent"
               name="signature"
               id="signature"
               type="checkbox"
               checked={bankInputData.signature}
               onChange={handleChange}
             />
-            <label htmlFor="signature" className="select-none">
+            <label htmlFor="signature" className="cursor-pointer select-none">
               간편결제 계좌 등록에 동의합니다.
             </label>
           </div>
           <Button
+            submit
             text={isSending ? <LoadingSpinner color="white" /> : '계좌 연결'}
             disabled={isSending}
           />

@@ -45,7 +45,7 @@ export default function AccountList() {
     accountId: string,
     accountName: string
   ) => {
-    if (confirm(`${accountName} 계좌를 삭제하시겠습니까?`)) {
+    if (confirm(`${accountName} 계좌를 해지하시겠습니까?`)) {
       setIsDeleting(true);
       setAccounts((prevAccounts) =>
         prevAccounts?.map((account) =>
