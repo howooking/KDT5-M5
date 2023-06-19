@@ -6,8 +6,10 @@ import Button from '@/components/ui/Button';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import toast from 'react-hot-toast';
 import SectionTitle from '@/components/ui/SectionTitle';
+import { useNavigate } from 'react-router-dom';
 
 export default function ChangePassword() {
+  const navigate = useNavigate();
   const [isSending, setIsSending] = useState(false);
   const { userInfo } = userStore();
   const [editData, setEditData] = useState({
@@ -70,23 +72,20 @@ export default function ChangePassword() {
     });
 
     if (res.statusCode === 200) {
-      const updatedUser = res.data as UpdatedUserResponseValue;
-      toast.success(
-        `${updatedUser.displayName}님의 비밀번호가 변경되었습니다.`,
-        {
-          id: 'changePassword',
-        }
-      );
+      const data = res.data as UpdatedUserResponseValue;
+      toast.success(`${data.displayName}님의 비밀번호가 변경되었습니다.`, {
+        id: 'changePassword',
+      });
       setEditData({
         oldPassword: '',
         newPassword: '',
         checkPassword: '',
       });
       setIsSending(false);
+      navigate('/myaccount/info');
       return;
     }
-    const errorMessage = res.message;
-    toast.error(errorMessage, {
+    toast.error(res.message, {
       id: 'changePassword',
     });
     setIsSending(false);
@@ -97,30 +96,33 @@ export default function ChangePassword() {
       <SectionTitle text="비밀번호 변경" />
       <form
         onSubmit={handleSubmit}
-        className="mx-auto my-20 flex w-96 flex-col gap-3"
+        className="mx-auto my-20 flex w-96 flex-col gap-5"
       >
-        <Input
-          onChange={handleChange}
-          type="password"
-          name="oldPassword"
-          value={editData.oldPassword}
-          placeholder="이전 비밀번호를 입력하세요."
-        />
-        <Input
-          onChange={handleChange}
-          type="password"
-          name="newPassword"
-          value={editData.newPassword}
-          placeholder="변경할 비밀번호를 입력하세요."
-        />
-        <Input
-          onChange={handleChange}
-          name="checkPassword"
-          type="password"
-          value={editData.checkPassword}
-          placeholder="변경할 비밀번호 확인"
-        />
+        <div className="space-y-3">
+          <Input
+            onChange={handleChange}
+            type="password"
+            name="oldPassword"
+            value={editData.oldPassword}
+            placeholder="기존 비밀번호"
+          />
+          <Input
+            onChange={handleChange}
+            type="password"
+            name="newPassword"
+            value={editData.newPassword}
+            placeholder="변경할 비밀번호"
+          />
+          <Input
+            onChange={handleChange}
+            name="checkPassword"
+            type="password"
+            value={editData.checkPassword}
+            placeholder="변경할 비밀번호 확인"
+          />
+        </div>
         <Button
+          submit
           text={isSending ? <LoadingSpinner color="white" /> : '비밀번호 변경'}
           disabled={isSending}
         />
