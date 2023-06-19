@@ -11,14 +11,11 @@ import { useNavigate } from 'react-router-dom';
 import SectionTitle from '@/components/ui/SectionTitle';
 
 export default function Info() {
-  // 닉네임 옆 수정 아이콘 누르면 닉네임 수정라우터로 이동하기 위해
   const navigate = useNavigate();
-
-  //
   const { authMe } = userStore();
   const { userInfo } = userStore();
   const [profileImage, setProfileImage] = useState(
-    () => userInfo?.user.profileImg
+    userInfo?.user.profileImg as string
   );
   const [isSending, setIsSending] = useState(false);
 
@@ -31,20 +28,17 @@ export default function Info() {
     };
   };
 
-  // 프로필 사진 변경 통신 로직
   const handleSubmit = async (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
-    e.preventDefault();
-
-    // 이전 타임아웃이 아직 작동중이 초기화
+    event.preventDefault();
 
     if (profileImage === '') {
       toast.error('변경할 이미지를 선택해주세요.', { id: 'profileImage' });
-
       return;
     }
 
+    // 사진을 선택하지 않았을 경우 문제 발생함..!!
     setIsSending(true);
     toast.loading('프로필 사진 변경 중', { id: 'profileImage' });
     const res = await editUser(userInfo?.accessToken as string, {
@@ -57,15 +51,13 @@ export default function Info() {
       });
       setIsSending(false);
       // navbar에 있는 프로필 사진도 새로운 사진으로 바꿔주기 위해
+      setProfileImage(updatedUser.profileImg as string);
       await authMe();
-
-      setProfileImage(updatedUser.profileImg);
       return;
     }
     const errorMessage = res.message;
     toast.error(errorMessage, { id: 'profileImage' });
     setIsSending(false);
-    setProfileImage('');
   };
 
   return (

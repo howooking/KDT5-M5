@@ -36,14 +36,14 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="container relative mx-auto flex h-20 items-center justify-between px-20 text-sm">
+      <header className="container relative z-50 mx-auto flex h-20 items-center justify-between px-20 text-sm">
         <Link to="/">
           <img src="/mainlogo.png" alt="logo" className="h-16" />
         </Link>
         <Search />
         <ul className="flex items-center gap-5 text-gray-500">
           {/* 유져가 로그인 여부 */}
-          {userInfo?.accessToken ? (
+          {userInfo ? (
             // 로그인 되어있는 경우
             <>
               <li>
