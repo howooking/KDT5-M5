@@ -112,3 +112,30 @@ export async function getOrderDetail(accessToken: string, detailId: string) {
     };
   }
 }
+
+export const confirmOrder = async (accessToken: string, detailId: string) => {
+  try {
+    const res = await fetch(`${API_URL}/products/ok`, {
+      method: 'POST',
+      headers: {
+        ...HEADERS,
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({ detailId }),
+    });
+
+    if (res.ok) {
+      const data: true = await res.json();
+      return { data, statusCode: res.status, message: '' };
+    }
+    const errorMessage: string = await res.json();
+    return { data: null, statusCode: res.status, message: errorMessage };
+  } catch (error) {
+    console.log('Error while confirming a order: ', error);
+    return {
+      data: null,
+      statusCode: 400,
+      message: '구매확정 시도 중 에러 발생, 잠시 후 다시 시도해 주세요.',
+    };
+  }
+};
