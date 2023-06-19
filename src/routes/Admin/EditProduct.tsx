@@ -26,7 +26,6 @@ export default function EditProduct() {
     discountRate: '',
     isSoldOut: '',
   });
-  console.log(detailProduct);
   const [isLoading, setIsLoading] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const [isImageUpdate, setIsImageUpdate] = useState(false);
@@ -52,6 +51,8 @@ export default function EditProduct() {
     };
     fetchProducts();
   }, [productId]);
+  console.log(detailProduct.discountRate);
+  console.log(typeof detailProduct.isSoldOut);
 
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -110,16 +111,23 @@ export default function EditProduct() {
     }
 
     // 할인율 0 ~ 99 가 아닌경우
-    if (detailProduct.discountRate) {
-      if (
-        !Number(detailProduct?.discountRate) ||
-        Number(detailProduct?.discountRate) <= 0 ||
-        Number(detailProduct?.discountRate) >= 100
-      ) {
-        toast.error('할인율은 0 ~ 99를 입력해주세요.', {
-          id: 'updateProduct',
-        });
-        return;
+    // if (detailProduct.discountRate) {
+    //   if (
+    //     !Number(detailProduct?.discountRate) ||
+    //     Number(detailProduct?.discountRate) <= 0 ||
+    //     Number(detailProduct?.discountRate) >= 100
+    //   ){
+    //     toast.error('할인율은 0 ~ 99를 입력해주세요.', {
+    //       id: 'updateProduct',
+    //     });
+    //     return;
+    //   }
+    // }
+    if (detailProduct?.discountRate) {
+      const discount = Number(detailProduct.discountRate);
+      if (discount < 0 || discount >= 100) {
+        toast.error('할인율은 0 ~ 99를 입력해주세요.', { id: 'updateProduct' });
+        return
       }
     }
 
