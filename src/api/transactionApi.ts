@@ -112,3 +112,30 @@ export async function getOrderDetail(accessToken: string, detailId: string) {
     };
   }
 }
+
+// 제품삭제 api
+export async function cancelOrder(detailId: string, accessToken: string) {
+  try {
+    console.log(detailId, accessToken);
+    const response = await fetch(
+      'https://asia-northeast3-heropy-api.cloudfunctions.net/api/products/cancel',
+      {
+        method: 'POST',
+        headers: {
+          ...HEADERS,
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({detailId}),
+      }
+    );
+    if (response.ok) {
+      const data:true = await response.json();
+     return {data, statusCode: response.status, message: "success"}
+    }
+    const errorMessage:string = await response.json()
+    return {data:null, statusCode: response.status, message: errorMessage}
+  } catch (error) {
+    console.log("error while cancelling order", error);
+    return {data:null, statusCode: 400, message:"거래 취소 중 에러발생 잠시후 다시 시도해 주세요."  }
+}
+}

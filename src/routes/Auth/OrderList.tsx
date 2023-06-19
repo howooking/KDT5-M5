@@ -1,4 +1,4 @@
-import { getOrderList } from '@/api/transactionApi';
+import { cancelOrder, getOrderList } from '@/api/transactionApi';
 import Button from '@/components/ui/Button';
 import CrazyLoading from '@/components/ui/CrazyLoading';
 import SectionTitle from '@/components/ui/SectionTitle';
@@ -41,6 +41,25 @@ export default function OrderList() {
       convertToMilliseconds(b.timePaid) - convertToMilliseconds(a.timePaid)
   );
 
+
+  const handleCancel = async (detailId: string) => {
+    
+      // API 호출 시도
+      const res = await cancelOrder(detailId, userInfo?.accessToken as string);
+      
+      if (res.statusCode === 200) {
+        // 거래 취소가 성공한 경우
+        
+        const updatedOrders = orders.filter((order) => order.detailId !== detailId);
+        setOrders(updatedOrders);
+        toast.success('상품 취소가 완료되었습니다.',{id: "cancelOrder"});
+        return
+      } 
+        // 거래 취소가 실패한 경우
+    toast.error(res.message, {id: "cancelOrder"})
+  };
+  
+  
   return (
     <>
       {isLoading ? (
@@ -76,16 +95,16 @@ export default function OrderList() {
                       onClick={() =>
                         navigate(`/myaccount/order/${order.detailId}`)
                       }
-                      secondary
+                      
                     />
                     <Button
                       text="구매 확정"
                       //   onClick={handleSearch}
-                      secondary
+                      
                     />
                     <Button
                       text="구매 취소"
-                      //   onClick={handleSearch}
+                      onClick={() => handleCancel(order.detailId)}
                     />
                   </td>
                 </tr>
