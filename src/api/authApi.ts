@@ -95,8 +95,8 @@ export const logOut = async (accessToken: string) => {
       const data: true = await response.json(); // 당연히 true
       return {
         data,
-        statusCode: response.status,
-        message: '안녕히 가세요!🖐️🖐️',
+        statusCode: response.status, //200
+        message: '안녕히가세요!🖐️🖐️',
       };
     }
     const errorMessage: string = await response.json();
