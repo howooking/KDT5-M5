@@ -1,5 +1,6 @@
 import { getOrderList, orderConfirmed } from '@/api/transactionApi';
 import Button from '@/components/ui/Button';
+import CrazyLoading from '@/components/ui/CrazyLoading';
 import SectionTitle from '@/components/ui/SectionTitle';
 import {
   convertToHumanReadable,
@@ -7,30 +8,30 @@ import {
 } from '@/constants/library';
 import { userStore } from '@/store';
 import { useEffect, useState } from 'react';
+import { toast } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 export default function OrderList() {
   // const [order, setoder] = useState()
   const { userInfo } = userStore();
   const [orders, setOrders] = useState<TransactionDetail[]>([]);
-
-
-  // 통신해서 주문 목록을 가져옴
-  async function fetchOrderList() {
-    const res = await getOrderList(userInfo?.accessToken as string);
-    if (res.statusCode === 200) {
-      // 성공
-      const orderList = res.data;
-      setOrders(
-        (orderList as TransactionDetail[]).filter(
-          (order) => !order.isCanceled
-        )
-      );
-    }
-    //실패가 발생 상호작용
-  }
-  
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
+    async function fetchOrderList() {
+      setIsLoading(true);
+      const res = await getOrderList(userInfo?.accessToken as string);
+      if (res.statusCode === 200) {
+        setOrders(
+          (res.data as TransactionDetail[]).filter((order) => !order.isCanceled)
+        );
+        setIsLoading(false);
+        return;
+      }
+      toast.error(res.message, { id: 'fetchOrderList' });
+      setIsLoading(false);
+    }
     fetchOrderList();
   }, [userInfo?.accessToken]);
 
@@ -60,74 +61,58 @@ export default function OrderList() {
   };
 
   return (
-    <section className="container mx-auto px-20 py-4">
-      <SectionTitle text="주문 목록" />
-      <table className="table-zebra table table-fixed text-center">
-        <thead className="text-sm text-black">
-          <tr>
-            <th>사진</th>
-            <th>상품명</th>
-            <th>상품가격(원)</th>
-            <th>거래시간</th>
-            <th />
-          </tr>
-        </thead>
-        <tbody>
-          {timeSortedOrders?.map((order) => (
-            <tr className={order.done === true ? 'opacity-10' : ''}>
-              <td>
-                <img
-                  src={order.product.thumbnail || ''}
-                  alt={order.product.title}
-                />
-              </td>
-              <td>{order.product.title}</td>
-              <td>{order.product.price.toLocaleString('ko-KR')}</td>
-              <td>{convertToHumanReadable(order.timePaid)}</td>
-              <td>
-                <Button
-                  text="상세 내역"
-                  //   onClick={handleSearch}
-
-                  secondary
-                />
-                <Button
-                  text="구매 확정"
-                  onClick={handleSearch}
-                  secondary
-                  value={order.detailId}
-                />
-                {order.done !== true && (
-                  <Button
-                    text="구매 취소"
-                    // onClick={handleSearch}
-                  />
-                )}
-              </td>
-
-              {/* <td>
-                  <Button
-                    text="상세조회"
-                    onClick={handleSearch}
-                    value={product.id}
-                    secondary
-                  />
-                  <Button
-                    onClick={() => handleUpdate(product.id, product.title)}
-                    text="상품수정"
-                    value={product.id}
-                    secondary
-                  />
-                  <Button
-                    text="상품삭제"
-                    onClick={() => handleDelete(product.id)}
-                    value={product.id}
-                  />
-                </td> */}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </section>
+    <>
+      {isLoading ? (
+        <CrazyLoading />
+      ) : (
+        <section className="container mx-auto px-20 py-4">
+          <SectionTitle text="주문 목록" />
+          <table className="table-zebra table table-fixed text-center">
+            <thead className="text-sm text-black">
+              <tr>
+                <th>사진</th>
+                <th>상품명</th>
+                <th>상품가격(원)</th>
+                <th>거래시간</th>
+                <th />
+              </tr>
+            </thead>
+            <tbody>
+              {timeSortedOrders?.map((order) => (
+                <tr>
+                  <td>
+                    <img
+                      src={order.product.thumbnail || ''}
+                      alt={order.product.title}
+                    />
+                  </td>
+                  <td>{order.product.title}</td>
+                  <td>{order.product.price.toLocaleString('ko-KR')}</td>
+                  <td>{convertToHumanReadable(order.timePaid)}</td>
+                  <td>
+                    <Button
+                      text="상세 내역"
+                      onClick={() =>
+                        navigate(`/myaccount/order/${order.detailId}`)
+                      }
+                      secondary
+                    />
+                    <Button
+                      text="구매 확정"
+                      //   onClick={handleSearch}
+                      secondary
+                    />
+                    <Button
+                      text="구매 취소"
+                      //   onClick={handleSearch}
+                    />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </section>
+      )}
+    </>
   );
 }

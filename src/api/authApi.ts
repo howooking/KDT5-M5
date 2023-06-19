@@ -6,7 +6,7 @@ export const signIn = async (loginData: {
   password: string;
 }) => {
   try {
-    const res = await fetch(`${API_URL}/auth/login`, {
+    const response = await fetch(`${API_URL}/auth/login`, {
       method: 'POST',
       headers: HEADERS,
       body: JSON.stringify({
@@ -15,20 +15,25 @@ export const signIn = async (loginData: {
       }),
     });
     // 로그인 성공
-    if (res.ok) {
-      const user: UserResponseValue = await res.json();
-      return { data: user, statusCode: res.status };
+    if (response.ok) {
+      const data: UserResponseValue = await response.json();
+      return {
+        data,
+        statusCode: response.status,
+        message: `${data.user.displayName}님 즐거운 쇼핑 되세요!`,
+      };
     }
     // 로그인 실패(없는 이메일 or 비번 입력 오류 or 유효성 오류(클라이언트에서 유효성검사함) or api키가 잘못된 경우)
-    const errorMessage: string = await res.json();
-    return { data: errorMessage, statusCode: res.status };
+    const errorMessage: string = await response.json();
+    return { data: null, statusCode: response.status, message: errorMessage };
 
     // 기타 오류(서버 문제, url이 잘못된 경우)
   } catch (error) {
     console.log('Error while login: ', error);
     return {
-      data: '로그인 도중 오류발생, 잠시 후 다시 시도해 주세요.',
+      data: null,
       statusCode: 400,
+      message: '로그인 도중 오류발생, 잠시 후 다시 시도해 주세요.',
     };
   }
 };
@@ -41,7 +46,7 @@ export const signUp = async (signUpData: {
   profileImgBase64?: string;
 }) => {
   try {
-    const res = await fetch(`${API_URL}/auth/signup`, {
+    const response = await fetch(`${API_URL}/auth/signup`, {
       method: 'POST',
       headers: HEADERS,
       body: JSON.stringify({
@@ -52,20 +57,25 @@ export const signUp = async (signUpData: {
       }),
     });
     // 회원가입 성공
-    if (res.ok) {
-      const user: UserResponseValue = await res.json();
-      return { data: user, statusCode: res.status };
+    if (response.ok) {
+      const data: UserResponseValue = await response.json();
+      return {
+        data,
+        statusCode: response.status,
+        message: `${data.user.displayName}님 즐거운 쇼핑 되세요!`,
+      };
     }
     // 회원가입 실패(이미 등록된 이메일 or 유효성 오류(클라이언트 유효성에서 막음) or apikey오류)
-    const errorMessage: string = await res.json();
-    return { data: errorMessage, statusCode: res.status };
+    const errorMessage: string = await response.json();
+    return { data: null, statusCode: response.status, message: errorMessage };
 
     // 기타 오류(서버 문제, url이 잘못된 경우)
   } catch (error) {
     console.log('Error while signup: ', error);
     return {
-      data: '회원가입 도중 에러 발생, 잠시 후 다시 시도해 주세요.',
+      data: null,
       statusCode: 400,
+      message: '회원가입 도중 에러 발생, 잠시 후 다시 시도해 주세요.',
     };
   }
 };
@@ -74,29 +84,38 @@ export const signUp = async (signUpData: {
 export const logOut = async (accessToken: string) => {
   // accessToken 이 없다면 로그아웃상태이므로 함수 종료
   try {
-    const res = await fetch(`${API_URL}/auth/logout`, {
+    const response = await fetch(`${API_URL}/auth/logout`, {
       method: 'POST',
       headers: {
         ...HEADERS,
         Authorization: `Bearer ${accessToken}`,
       },
     });
-    if (res.ok) {
-      const isLoggedOut: boolean = await res.json(); // 당연히 true
-      return { data: isLoggedOut, statusCode: res.status };
+    if (response.ok) {
+      const data: true = await response.json(); // 당연히 true
+      return {
+        data,
+        statusCode: response.status,
+        message: '안녕히 가세요!🖐️🖐️',
+      };
     }
-    const errorMessage: string = await res.json();
-    return { data: errorMessage, statusCode: res.status };
-  } catch (error) {
+    const errorMessage: string = await response.json();
     return {
-      data: '로그아웃 도중 에러 발생, 잠시 후 다시 시도해 주세요.',
+      data: null,
+      statusCode: response.status,
+      message: errorMessage,
+    };
+  } catch (error) {
+    console.log('error while logout');
+    return {
+      data: null,
       statusCode: 400,
+      message: '로그아웃 도중 에러 발생, 잠시 후 다시 시도해 주세요.',
     };
   }
 };
 
 // 4. 인증확인
-
 export const authenticate = async (accessToken: string | null) => {
   // 토큰이 없는 경우
   if (!accessToken) {
@@ -106,7 +125,7 @@ export const authenticate = async (accessToken: string | null) => {
 
   // 토큰이 있는경우
   try {
-    const res = await fetch(`${API_URL}/auth/me`, {
+    const response = await fetch(`${API_URL}/auth/me`, {
       method: 'POST',
       headers: {
         ...HEADERS,
@@ -115,33 +134,26 @@ export const authenticate = async (accessToken: string | null) => {
     });
 
     // 유효한 토큰이 맞는 경우
-    if (res.ok) {
-      const user: AuthenticateResponseValue = await res.json();
-      return { data: user, statusCode: res.status };
+    if (response.ok) {
+      const data: AuthenticateResponseValue = await response.json();
+      return { data, statusCode: response.status, message: '' };
     }
 
     // 유효한 토큰이 아닌경우(expired 또는 임의의 토큰을 입력한 경우)
-    const errorMessage: string = await res.json();
-    return { data: errorMessage, statusCode: res.status };
+    const errorMessage: string = await response.json();
+    return { data: null, statusCode: response.status, message: errorMessage };
     // 기타 오류(서버 문제, url이 잘못된 경우)
   } catch (error) {
     console.log('Error while authenticate: ', error);
     return {
-      data: '로그아웃 도중 에러 발생, 잠시 후 다시 시도해 주세요.',
+      data: null,
       statusCode: 400,
+      message: '인증 도중 에러 발생, 잠시 후 다시 시도해 주세요.',
     };
   }
 };
 
-//사용자 정보수정
-
-//수정 성공시 응답값의 타입
-// interface EditUserResponseValue {
-//   email: string;
-//   displayName: string;
-//   profileImg: string | null;
-// }
-
+// 5. 사용자 정보수정
 export const editUser = async (
   accessToken: string,
   editData: {
@@ -151,11 +163,8 @@ export const editUser = async (
     newPassword?: string;
   }
 ) => {
-  if (!accessToken) {
-    return;
-  }
   try {
-    const res = await fetch(`${API_URL}/auth/user`, {
+    const response = await fetch(`${API_URL}/auth/user`, {
       method: 'PUT',
       headers: {
         ...HEADERS,
@@ -168,15 +177,27 @@ export const editUser = async (
         profileImgBase64: editData.profileImgBase64,
       }),
     });
-    if (res.ok) {
-      return true;
+    if (response.ok) {
+      const data: UpdatedUserResponseValue = await response.json();
+      return {
+        data,
+        statusCode: response.status,
+        message: '',
+      };
     }
-    // 기존 비번이 안맞는경우
-    const error: string = await res.json();
-    console.log({ error });
-    return error;
+    // 기존 비번이 안맞는경우, 등등
+    const errorMessage: string = await response.json();
+    return {
+      data: null,
+      statusCode: response.status,
+      message: errorMessage,
+    };
   } catch (error) {
     console.log('Error while EditUser: ', error);
-    return '회원정보 수정 도중 오류발생, 잠시 후 다시 시도해 주세요.';
+    return {
+      data: null,
+      statusCode: 400,
+      message: '회원정보 수정 도중 오류발생, 잠시 후 다시 시도해 주세요.',
+    };
   }
 };

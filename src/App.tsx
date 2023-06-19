@@ -12,8 +12,8 @@ import AdminClients from '@/routes/Admin/AdminClients';
 import ChangeName from '@/routes/Auth/ChangeName';
 import ChangePassword from '@/routes/Auth/ChangePassword';
 import Info from '@/routes/Auth/Info';
-import AdminProductView from '@/routes/Admin/AdminProductView';
-import EditProduct from '@/routes/Admin/EditProduct';
+import AdminProduct from '@/routes/Admin/AdminProducts';
+// import EditProduct from '@/routes/Admin/EditProduct';
 import ConnectAccount from '@/routes/Account/ConnectAccount';
 import Products from '@/routes/Products';
 import ProductDetail from '@/routes/ProductDetail';
@@ -21,6 +21,8 @@ import AccountList from '@/routes/Account/AccountList';
 import SearchProducts from '@/routes/SearchProducts';
 import OrderList from '@/routes/Auth/OrderList';
 import AllTransactions from './routes/Admin/AllTransactions';
+import OrderDetail from './routes/Auth/OrderDetail';
+import LogoutNeededRoute from './routes/Auth/LogoutNeededRoute';
 
 export default function App() {
   return (
@@ -36,10 +38,16 @@ export default function App() {
         />
 
         {/* 로그인 */}
-        <Route path="/login" element={<Login />} />
+        <Route
+          path="/login"
+          element={<LogoutNeededRoute element={<Login />} />}
+        />
 
         {/* 회원가입 */}
-        <Route path="/signup" element={<SignUp />} />
+        <Route
+          path="/signup"
+          element={<LogoutNeededRoute element={<SignUp />} />}
+        />
 
         {/* 내 정보 */}
         <Route
@@ -52,6 +60,7 @@ export default function App() {
           <Route path="accountList" element={<AccountList />} />
           <Route path="connectAccount" element={<ConnectAccount />} />
           <Route path="orderList" element={<OrderList />} />
+          <Route path="order/:detailId" element={<OrderDetail />} />
         </Route>
 
         {/* 관리자 */}
@@ -62,13 +71,11 @@ export default function App() {
           {/*유저관리*/}
           <Route path="clients" element={<AdminClients />} />
           {/*상품관리*/}
-          <Route path="products" element={<AdminProductView />} />
+          <Route path="products" element={<AdminProduct />} />
           {/*상품추가*/}
           <Route path="addProduct" element={<AddProduct />} />
           {/*상품수정*/}
-          <Route path="editProduct" element={<EditProduct />} />
-          {/*상품수정*/}
-          <Route path="editProduct" element={<EditProduct />} />
+          {/* <Route path="editProduct" element={<EditProduct />} /> */}
           {/*거래내역*/}
           <Route path="alltransactions" element={<AllTransactions />} />
         </Route>

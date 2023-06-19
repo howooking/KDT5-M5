@@ -5,16 +5,13 @@ import { editUser } from '@/api/authApi';
 import { useNavigate } from 'react-router-dom';
 import Input from '@/components/ui/Input';
 import Button from '@/components/ui/Button';
-import AlertMessage from '@/components/ui/AlertMessage';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import toast from 'react-hot-toast';
 
 export default function ChangeName() {
-  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
   const [isSending, setIsSending] = useState(false);
   const navigate = useNavigate();
   const { authMe, userInfo } = userStore();
-
-  const [message, setMessage] = useState('');
   const [editData, setEditData] = useState({
     displayName: '',
   });
@@ -31,50 +28,36 @@ export default function ChangeName() {
     e.preventDefault();
 
     // 이전 타임아웃이 아직 작동중이 초기화
-    if (timeoutId) {
-      clearTimeout(timeoutId);
-      setTimeoutId(null);
-    }
 
     if (editData.displayName.trim() === '') {
-      setMessage('변경 할 닉네임를 입력해주세요.');
-      const id = setTimeout(() => {
-        setMessage('');
-      }, 2000);
-      setTimeoutId(id);
+      toast.error('변경 할 닉네임를 입력해주세요.', { id: 'changeName' });
       return;
     }
     if (editData.displayName.trim() === userInfo?.user.displayName) {
-      setMessage('원래 닉네임과 동일합니다.');
-      const id = setTimeout(() => {
-        setMessage('');
-      }, 2000);
-      setTimeoutId(id);
+      toast.error('원래 닉네임과 동일합니다.', { id: 'changeName' });
       return;
     }
     if (editData.displayName.length > 20) {
-      setMessage('닉네임은 20자 이하로 작성해주세요');
-      const id = setTimeout(() => {
-        setMessage('');
-      }, 2000);
-      setTimeoutId(id);
+      toast.error('닉네임은 20자 이하로 작성해주세요', { id: 'changeName' });
       return;
     }
 
     setIsSending(true);
+    toast.loading('닉네임 변경 중', { id: 'changeName' });
     const res = await editUser(userInfo?.accessToken as string, editData);
-    if (typeof res === 'string') {
-      setMessage(res);
-      const id = setTimeout(() => {
-        setMessage('');
-      }, 2000);
-      setTimeoutId(id);
+    if (res.statusCode === 200) {
+      authMe();
+      const updatedUser = res.data as UpdatedUserResponseValue;
+      toast.success(`${updatedUser.displayName}으로 변경하셨습니다.`, {
+        id: 'changeName',
+      });
+      navigate('/myaccount/info', { replace: true });
       setIsSending(false);
       return;
     }
+    const errorMessage = res.message;
+    toast.error(errorMessage, { id: 'changeName' });
     setIsSending(false);
-    navigate('/myaccount/info', { replace: true });
-    authMe();
   };
 
   return (
@@ -87,7 +70,6 @@ export default function ChangeName() {
           type="text"
           value={editData.displayName}
         />
-        <AlertMessage message={message} />
         <Button
           text={isSending ? <LoadingSpinner color="white" /> : '닉네임 변경'}
           disabled={isSending}

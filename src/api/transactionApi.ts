@@ -4,22 +4,23 @@ import { API_URL, HEADERS } from '@/constants/constants';
 
 export async function searchProducts({ searchText }: { searchText: string }) {
   try {
-    const res = await fetch(`${API_URL}/products/search`, {
+    const response = await fetch(`${API_URL}/products/search`, {
       method: 'POST',
       headers: HEADERS,
       body: JSON.stringify({ searchText }),
     });
-    if (res.ok) {
-      const products: Product[] = await res.json();
-      return { data: products, statusCode: res.status };
+    if (response.ok) {
+      const data: Product[] = await response.json();
+      return { data, statusCode: response.status, message: '' };
     }
-    const errorMessage: string = await res.json();
-    return { data: errorMessage, statusCode: res.status };
+    const errorMessage: string = await response.json();
+    return { data: null, statusCode: response.status, message: errorMessage };
   } catch (error) {
-    console.log('Error while getUser: ', error);
+    console.log('Error while searching products: ', error);
     return {
-      data: '상품 검색 도중 에러발생, 잠시 후 다시 시도해 주세요.',
+      data: null,
       statusCode: 400,
+      message: '상품 검색 도중 에러발생, 잠시 후 다시 시도해 주세요.',
     };
   }
 }
@@ -35,7 +36,7 @@ export async function buyProduct(
       accountId,
     };
 
-    const res = await fetch(`${API_URL}/products/buy`, {
+    const response = await fetch(`${API_URL}/products/buy`, {
       method: 'POST',
       headers: {
         ...HEADERS,
@@ -44,50 +45,75 @@ export async function buyProduct(
       body: JSON.stringify(requestBody),
     });
 
-    if (res.ok) {
-      const transactionSuccess: boolean = await res.json();
-      return { data: transactionSuccess, statusCode: res.status };
+    if (response.ok) {
+      const data: true = await response.json();
+      return { data, statusCode: response.status, message: '' };
     }
 
-    const errorMessage: string = await res.json();
-    return { data: errorMessage, statusCode: res.status };
+    const errorMessage: string = await response.json();
+    return { data: null, statusCode: response.status, message: errorMessage };
   } catch (error) {
     console.log('Error while buyProduct: ', error);
     return {
-      data: '제품 거래 도중 에러 발생, 잠시 후 다시 시도해 주세요.',
+      data: null,
       statusCode: 400,
+      message: '제품 거래 도중 에러 발생, 잠시 후 다시 시도해 주세요.',
     };
   }
 }
 
 export async function getOrderList(accessToken: string) {
   try {
-    const res = await fetch(`${API_URL}/products/transactions/details`, {
+    const response = await fetch(`${API_URL}/products/transactions/details`, {
       method: 'GET',
       headers: {
         ...HEADERS,
         Authorization: `Bearer ${accessToken}`,
       },
     });
-    console.log(res);
-
-    if (res.ok) {
-      const orderList: TransactionDetail[] = await res.json();
-      return { data: orderList, statusCode: res.status };
+    if (response.ok) {
+      const data: TransactionDetail[] = await response.json();
+      return { data, statusCode: response.status, message: '' };
     }
-    console.log('error');
-    const errorMessage: string = await res.json();
-    return { data: errorMessage, statusCode: res.status };
+    const errorMessage: string = await response.json();
+    return { data: null, statusCode: response.status, message: errorMessage };
   } catch (error) {
-    console.log('Error while buyProduct: ', error);
+    console.log('Error while getting order list: ', error);
     return {
-      data: '거래내역 조회 중 에러 발생, 잠시 후 다시 시도해 주세요.',
+      data: null,
       statusCode: 400,
+      message: '주문내역 조회 중 에러 발생, 잠시 후 다시 시도해 주세요.',
     };
   }
 }
 
-export const orderConfirmed = async (accessToken: string, detailId: string) => {
+export async function getOrderDetail(accessToken: string, detailId: string) {
+  try {
+    const response = await fetch(`${API_URL}/products/transactions/detail`, {
+      method: 'POST',
+      headers: {
+        ...HEADERS,
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({ detailId }),
+    });
+    if (response.ok) {
+      const data: TransactionDetail = await response.json();
+      return { data, statusCode: response.status, message: '' };
+    }
+    const errorMessage: string = await response.json();
+    return { data: null, statusCode: response.status, message: errorMessage };
+  } catch (error) {
+    console.log('Error while getting transaction detail: ', error);
+    return {
+      data: null,
+      statusCode: 400,
+      message: '거래 내역 상세 조회 중 에러 발생, 잠시 후 다시 시도해 주세요.',
+    };
+  }
+}
+
+export const confirmOrder = async (accessToken: string, detailId: string) => {
   try {
     const res = await fetch(`${API_URL}/products/ok`, {
       method: 'POST',
@@ -97,21 +123,19 @@ export const orderConfirmed = async (accessToken: string, detailId: string) => {
       },
       body: JSON.stringify({ detailId }),
     });
-    console.log(res);
 
     if (res.ok) {
-      const confirmed: boolean = await res.json();
-      console.log(confirmed);
-      return { data: confirmed, statusCode: res.status };
+      const data: true = await res.json();
+      return { data, statusCode: res.status, message: '' };
     }
-    console.log('error');
     const errorMessage: string = await res.json();
-    return { data: errorMessage, statusCode: res.status };
+    return { data: null, statusCode: res.status, message: errorMessage };
   } catch (error) {
-    console.log('Error while buyProduct: ', error);
+    console.log('Error while confirming a order: ', error);
     return {
-      data: '구매확정 시도 중 에러 발생, 잠시 후 다시 시도해 주세요.',
+      data: null,
       statusCode: 400,
+      message: '구매확정 시도 중 에러 발생, 잠시 후 다시 시도해 주세요.',
     };
   }
 };

@@ -11,6 +11,7 @@ interface ProductBarProps {
   handleBrand?: (brandValue: string) => void;
   selectedBrand?: string;
   handleSortByPrice: (brandValue: string) => void;
+  brand?: string;
 }
 
 export default function ProductBar({
@@ -20,6 +21,7 @@ export default function ProductBar({
   handleBrand,
   selectedBrand,
   handleSortByPrice,
+  brand,
 }: ProductBarProps) {
   return (
     <div className="mb-10">
@@ -34,7 +36,7 @@ export default function ProductBar({
       )}
 
       <div className="flex justify-between text-xs">
-        <Breadcrumbs category={category} />
+        <Breadcrumbs category={category} brand={brand?.toUpperCase()} />
         <div className="flex gap-3">
           <SortOptions handleSortByPrice={handleSortByPrice} />
           <span>총 {productNumber ?? '0'} 개</span>

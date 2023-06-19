@@ -1,117 +1,156 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { getProductDetail } from '@/api/adminApi';
 import SectionTitle from '@/components/ui/SectionTitle';
-import { DICTIONARY_SHOES } from '@/constants/constants';
 import { priceBeforeDiscount } from '@/constants/library';
-import { useEffect, useState } from 'react';
-import { getAccountList } from '@/api/bankApi';
+import { useEffect, useMemo, useState } from 'react';
+import { getAccountListAndBalance } from '@/api/bankApi';
 import { userStore } from '@/store';
 import { buyProduct } from '@/api/transactionApi';
-import { Link, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Button from '@/components/ui/Button';
+import toast from 'react-hot-toast';
+import CrazyLoading from '@/components/ui/CrazyLoading';
+import Breadcrumbs from '@/components/ui/Breadcrumbs';
+import Select from '@/components/ui/Select';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 
 export default function ProductDetail() {
+  const navigate = useNavigate();
   const { productId } = useParams();
   const [isLoading, setIsLoading] = useState(false);
   const [product, setProduct] = useState<ProductDetail>();
+  console.log(product);
   const [accounts, setAccounts] = useState<UserAccount[]>([]);
   const { userInfo } = userStore();
   const [selectedAccount, setSelectedAccount] = useState<string>('');
+  const [isPurchasing, setIsPurchasing] = useState(false);
 
   useEffect(() => {
-    const fetchProductDetail = async () => {
+    async function fetchData() {
+      setIsLoading(true);
       const res = await getProductDetail(productId as string);
-      if (res) {
-        setProduct(res);
+      if (res.statusCode === 200) {
+        setProduct(res.data as ProductDetail);
         setIsLoading(false);
+        return;
       }
-    };
-    setIsLoading(true);
-    fetchProductDetail();
+      toast.error(res.message, { id: 'getProduct' });
+      navigate('/');
+      setIsLoading(false);
+    }
+    fetchData();
   }, [productId]);
 
   useEffect(() => {
-    async function fetchAccountList() {
-      const data = await getAccountList(userInfo?.accessToken as string);
-      if (data) {
-        setAccounts(data.accounts);
+    async function fetchData() {
+      const res = await getAccountListAndBalance(
+        userInfo?.accessToken as string
+      );
+      if (res.statusCode === 200) {
+        setAccounts((res.data as AccountsAndBalance).accounts);
       }
     }
-    fetchAccountList();
-  }, [userInfo?.accessToken]);
+    fetchData();
+  }, [userInfo?.accessToken, isPurchasing]);
+
+  const accountOptions = useMemo(
+    () => [
+      { name: '결제할 계좌 선택', value: '' },
+      ...accounts.map((account) => ({
+        name: `${account.bankName} / ${account.accountNumber} / 잔액 : ${account.balance}`,
+        value: account.id,
+      })),
+    ],
+    [accounts]
+  );
 
   const handlePurchase = async () => {
-    const purchaseResult = await buyProduct(
+    setIsPurchasing(true);
+    const res = await buyProduct(
       productId as string,
       selectedAccount,
       userInfo?.accessToken as string
     );
-    if (purchaseResult.data) {
-      console.log('Purchase success');
-    } else {
-      console.log('Purchase failed');
+    if (res.statusCode === 200) {
+      setIsPurchasing(false);
+      toast.success(`${product?.title}를 구매하였습니다!`, {
+        id: 'buyProduct',
+      });
+      return;
     }
+    setIsPurchasing(false);
+    toast.error(res.message, { id: 'buyProduct' });
   };
 
   return (
-    <div className="container mx-auto px-20">
+    <div className="my-10">
       {isLoading ? (
-        <LoadingSpinner color="accent" />
+        <CrazyLoading />
       ) : (
-        <>
-          <div className="py-4 text-sm text-gray-500">
-            <Link to="/">크레이지11 /</Link>
-            <Link to={`/products/${product?.tags[0]}`}>
-              {' '}
-              {DICTIONARY_SHOES[product?.tags[0] as string]} /
-            </Link>
-            <Link to=""> {product?.tags[1].toUpperCase()} / </Link>
-            <span>{product?.title}</span>
-          </div>
+        <div className="container mx-auto px-20">
+          <Breadcrumbs
+            category={product?.tags[0]}
+            brand={product?.tags[1].toUpperCase()}
+            name={product?.title}
+          />
           <div className="flex gap-10">
             <div className="flex-1">
-              {/* 이미지 */}
               <img
-                src={product?.thumbnail || '/defaultThumb.jpg'}
+                src={product?.thumbnail || ''}
                 alt="썸네일 이미지"
                 className="pl-[140px]"
               />
             </div>
-            <div className="flex-1">
-              <div className="py-10 text-2xl font-bold">{product?.title}</div>
+            <div className="flex flex-1 flex-col gap-5">
+              <div className="text-2xl font-bold">{product?.title}</div>
               <div className="flex items-center gap-8">
                 <span className="text-3xl text-red-500 ">
                   {product?.price.toLocaleString('ko-KR')}원
                 </span>
-                <span className="text-xl text-gray-500 line-through">
-                  {priceBeforeDiscount(
-                    product?.price as number,
-                    product?.discountRate as number
-                  )}
-                  원
-                </span>
-                <span className="flex h-10 w-10 items-center justify-center rounded-full ring-1 ring-gray-400">
-                  {product?.discountRate}%
-                </span>
+                {product?.discountRate === 0 ? (
+                  <></>
+                ) : (
+                  <>
+                    <span className="text-xl text-gray-500 line-through">
+                      {priceBeforeDiscount(
+                        product?.price as number,
+                        product?.discountRate as number
+                      )}
+                      원
+                    </span>
+                    <span className="flex h-10 w-10 items-center justify-center rounded-full ring-1 ring-gray-400">
+                      {product?.discountRate}%
+                    </span>
+                  </>
+                )}
               </div>
-              <div>
-                <label htmlFor="account-select">결제할 계좌:</label>
-                <select
-                  name="account-select"
-                  id="account-select"
-                  value={selectedAccount}
-                  onChange={(e) => setSelectedAccount(e.target.value)}
-                >
-                  <option value="">계좌 선택</option>
-                  {accounts.map((account) => (
-                    <option key={account.id} value={account.id}>
-                      {account.bankName} - {account.accountNumber} - 잔액:{' '}
-                      {account.balance}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <Button onClick={handlePurchase} text="결제하기" />
+              <div className="flex-1 text-gray-700">{product?.description}</div>
+              {userInfo ? (
+                <div className="flex flex-col gap-3">
+                  <Select
+                    name="account"
+                    onChange={(e) => setSelectedAccount(e.target.value)}
+                    options={accountOptions}
+                    value={selectedAccount}
+                  />
+                  <Button
+                    onClick={handlePurchase}
+                    text={
+                      isPurchasing ? (
+                        <LoadingSpinner color="white" />
+                      ) : (
+                        '간편결제'
+                      )
+                    }
+                    disabled={isPurchasing}
+                  />
+                </div>
+              ) : (
+                <Button
+                  text="로그인 하러가기"
+                  onClick={() => navigate('/login')}
+                />
+              )}
             </div>
           </div>
           <div className="divider" />
@@ -121,7 +160,7 @@ export default function ProductDetail() {
             alt="상세 이미지"
             className="mx-auto"
           />
-        </>
+        </div>
       )}
     </div>
   );

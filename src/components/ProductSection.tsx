@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import ProductBar from '@/components/ProductBar';
 import ProductCard from '@/components/ProductCard';
 import Skeleton from '@/components/ui/Skeleton';
+import toast from 'react-hot-toast';
 
 interface ProductSectionProps {
   category?: string;
@@ -28,26 +29,26 @@ export default function ProductSection({ category }: ProductSectionProps) {
   useEffect(() => {
     setBrand('all');
     async function fetchData() {
+      setIsLoading(true);
       const res = await getProducts();
-      // return 값이 없는경우(상품조회에 실패한 경우)
-      // 일단은 아무 작업도 안함.. 나중에 기능 추가 할 수도 있지만 안할듯
-      if (!res) {
+      if (res.statusCode === 200) {
+        // 카테고리에 따라서 products을 setting
+        const categoryFilteredProducts = (res.data as Product[]).filter(
+          (product) => (category ? product.tags[0] === category : product)
+        );
+        setProducts(categoryFilteredProducts);
+
+        // 스켈레톤의 갯수를 미리 알기 위해 로컬저장소에 각 카테고리별 상품수를 저장
+        localStorage.setItem(
+          category ? category : 'all',
+          JSON.stringify(categoryFilteredProducts.length)
+        );
+        setIsLoading(false);
         return;
       }
-      // 카테고리에 따라서 products을 setting
-      const categoryFilteredProducts = res.filter((product) =>
-        category ? product.tags[0] === category : product
-      );
-      setProducts(categoryFilteredProducts);
-
-      // 스켈레톤의 갯수를 미리 알기 위해 로컬저장소에 각 카테고리별 상품수를 저장
-      localStorage.setItem(
-        category ? category : 'all',
-        JSON.stringify(categoryFilteredProducts.length)
-      );
       setIsLoading(false);
+      toast.error(res.message, { id: 'getProducts' });
     }
-    setIsLoading(true);
     fetchData();
   }, [category]);
 
@@ -78,6 +79,7 @@ export default function ProductSection({ category }: ProductSectionProps) {
       <ProductBar
         selectedBrand={brand}
         category={category}
+        brand={brand}
         productNumber={filteredProducts?.length}
         handleBrand={handleBrand}
         handleSortByPrice={handleSortByPrice}

@@ -58,7 +58,7 @@ export const SUB_MENUS_MYACCOUNT = [
     href: '/myaccount/connectAccount',
   },
   {
-    label: '주문 목록',
+    label: '주문 내역',
     href: '/myaccount/orderList',
   },
 ];
