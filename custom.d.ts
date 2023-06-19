@@ -17,7 +17,7 @@ interface UpdatedUserResponseValue {
   profileImg: string | null;
 }
 
-interface User {
+interface LocalUser {
   user: {
     email: string;
     displayName: string;

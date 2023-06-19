@@ -140,6 +140,7 @@ export default function OrderList() {
                           order.product.title
                         )
                       }
+                      secondary
                     />
                     {order.done ? (
                       <></>

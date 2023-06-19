@@ -4,8 +4,8 @@ import { ADMINS } from '@/constants/constants';
 
 // user관련 전역state(store)에 무엇이 들어가는지 타입지정
 interface UserState {
-  userInfo: User | null;
-  setUser: (user: User | null) => void;
+  userInfo: LocalUser | null;
+  setUser: (user: LocalUser | null) => void;
   authMe: () => Promise<string | undefined>;
 }
 
@@ -17,7 +17,7 @@ export const userStore = create<UserState>((set) => ({
     : null,
 
   // 사용자 세팅
-  setUser: (user: User | null) =>
+  setUser: (user: LocalUser | null) =>
     set({
       userInfo: user,
     }),
@@ -25,7 +25,7 @@ export const userStore = create<UserState>((set) => ({
   // 인증
   authMe: async () => {
     // 로컬저장소에 'user'가 있다면 json.parse시켜 객체로 만들고 useInfo에 저장 / 없다면 useInfo에 null
-    const userInfo: User | null = localStorage.getItem('user')
+    const userInfo: LocalUser | null = localStorage.getItem('user')
       ? JSON.parse(localStorage.getItem('user') as string)
       : null;
 

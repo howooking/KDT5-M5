@@ -19,7 +19,7 @@ export const signIn = async (loginData: {
       const data: UserResponseValue = await response.json();
       return {
         data,
-        statusCode: response.status,
+        statusCode: response.status, //200
         message: `${data.user.displayName}님 즐거운 쇼핑 되세요!`,
       };
     }
