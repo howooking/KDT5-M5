@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { getProductDetail, updateProduct } from '@/api/adminApi';
 import Input from '@/components/ui/Input';
 import Button from '@/components/ui/Button';
-import AlertMessage from '@/components/ui/AlertMessage';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 // import ImageUpload from '@/components/ui/ImageUpload';
 import Select from '@/components/ui/Select';
@@ -25,7 +24,6 @@ export default function EditProduct() {
   });
   const [loading, setLoading] = useState(false);
   // 성공적으로 제품을 등록하였을 경우 message색을 초록색으로 바꾸기 위한 state
-  const [positive, setPositive] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const [message, setMessage] = useState('');
   // 2초가 지나면 alert message가 없어지는 기능을 위한 state
@@ -57,10 +55,9 @@ export default function EditProduct() {
   // console.log(detailProduct.photoBase64);
   // console.log(btoa(detailProduct.photoBase64 as string));
 
-  const handleImage = ()=>{
-    console.log(productId)
-  }
-
+  const handleImage = () => {
+    console.log(productId);
+  };
 
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -249,7 +246,7 @@ export default function EditProduct() {
           </div>
           <div className={'flex justify-center gap-4'}>
             <div>
-            <img src={detailProduct?.thumbnailBase64} alt='' />
+              <img src={detailProduct?.thumbnailBase64} alt="" />
             </div>
             <div
               tabIndex={0}
@@ -304,7 +301,6 @@ export default function EditProduct() {
               />
             </div>
           </div>*/}
-          <AlertMessage message={message} positive={positive} />
           <div>
             <Button
               text={isSending ? <LoadingSpinner color="white" /> : '제품 수정'}
@@ -313,7 +309,7 @@ export default function EditProduct() {
           </div>
         </form>
         <div>
-          <Button text={'이미지 수정'} secondary={true} onClick={handleImage}/>
+          <Button text={'이미지 수정'} secondary={true} onClick={handleImage} />
         </div>
       </div>
     </div>

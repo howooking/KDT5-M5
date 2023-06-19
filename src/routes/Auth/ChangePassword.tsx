@@ -1,15 +1,13 @@
 import { useState } from 'react';
-import { userStore } from '../../store';
-import { editUser } from '../../api/authApi';
-import Input from '../../components/ui/Input';
-import Button from '../../components/ui/Button';
-import AlertMessage from '../../components/ui/AlertMessage';
-import LoadingSpinner from '../../components/ui/LoadingSpinner';
+import { userStore } from '@/store';
+import { editUser } from '@/api/authApi';
+import Input from '@/components/ui/Input';
+import Button from '@/components/ui/Button';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import toast from 'react-hot-toast';
 
 export default function ChangePassword() {
-  const [positive, setPositive] = useState(false);
   const [isSending, setIsSending] = useState(false);
-  const [message, setMessage] = useState('');
   const { userInfo } = userStore();
   const [editData, setEditData] = useState({
     oldPassword: '',
@@ -31,7 +29,6 @@ export default function ChangePassword() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setPositive(false);
 
     // 이전 타임아웃이 아직 작동중이 초기화
     if (timeoutId) {
@@ -44,59 +41,54 @@ export default function ChangePassword() {
       editData.newPassword.trim() === '' ||
       editData.oldPassword.trim() === ''
     ) {
-      setMessage('비밀번호를 입력해주세요.');
-      const id = setTimeout(() => {
-        setMessage('');
-      }, 2000);
-      setTimeoutId(id);
+      toast.error('비밀번호를 입력해주세요.', { id: 'changePassword' });
       return;
     }
     // 변경 비번 확인
     if (editData.checkPassword !== editData.newPassword) {
-      setMessage('변경 할 비밀번호가 일치하지 않습니다.');
-      const id = setTimeout(() => {
-        setMessage('');
-      }, 2000);
-      setTimeoutId(id);
+      toast.error('변경 할 비밀번호가 일치하지 않습니다.', {
+        id: 'changePassword',
+      });
       return;
     }
     // 변경 비번 길이 수
     if (editData.newPassword.length <= 7) {
-      setMessage('비밀번호를 8자리 이상 입력해주세요.');
-      const id = setTimeout(() => {
-        setMessage('');
-      }, 2000);
-      setTimeoutId(id);
+      toast.error('비밀번호를 8자리 이상 입력해주세요.', {
+        id: 'changePassword',
+      });
       return;
     }
 
     setIsSending(true);
+    toast.loading('비밀번호 수정 중', {
+      id: 'changePassword',
+    });
     const res = await editUser(userInfo?.accessToken as string, {
       newPassword: editData.newPassword,
       oldPassword: editData.oldPassword,
     });
 
-    if (typeof res === 'string') {
-      setMessage(res);
-      const id = setTimeout(() => {
-        setMessage('');
-      }, 2000);
-      setTimeoutId(id);
+    if (res.statusCode === 200) {
+      const updatedUser = res.data as UpdatedUserResponseValue;
+      toast.success(
+        `${updatedUser.displayName}님의 비밀번호가 변경되었습니다.`,
+        {
+          id: 'changePassword',
+        }
+      );
+      setEditData({
+        oldPassword: '',
+        newPassword: '',
+        checkPassword: '',
+      });
       setIsSending(false);
       return;
     }
-    setPositive(true);
-    setMessage('비밀번호를 수정하였습니다.');
-    const id = setTimeout(() => {
-      setMessage('');
-    }, 2000);
-    setTimeoutId(id);
-    setIsSending(false);
-    setEditData({
-      oldPassword: '',
-      newPassword: '',
-      checkPassword: '',
+    const errorMessage = res.message;
+    toast.error(errorMessage, {
+      id: 'changePassword',
     });
+    setIsSending(false);
   };
 
   return (
@@ -123,7 +115,6 @@ export default function ChangePassword() {
           value={editData.checkPassword}
           placeholder="변경할 비밀번호 확인"
         />
-        <AlertMessage message={message} positive={positive} />
         <Button
           text={isSending ? <LoadingSpinner color="white" /> : '비밀번호 변경'}
           disabled={isSending}

@@ -28,3 +28,26 @@
     transform: rotate(360deg);
   }
 }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto;
+}
+
+thead {
+  background-color: #efe9e9;
+}
+
+th,
+td {
+  padding: 16px 8px;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+.toaster {
+  border: 2px solid #320b0b;
+  color: '#713200';
+  width: 500px;
+}

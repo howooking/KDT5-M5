@@ -1,19 +1,19 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { userStore } from '../../store';
-import { signUp } from '../../api/authApi';
-import { EMAIL_REGEX } from '../../constants/constants';
-import Button from '../../components/ui/Button';
-import AlertMessage from '../../components/ui/AlertMessage';
-import Input from '../../components/ui/Input';
-import LoadingSpinner from '../../components/ui/LoadingSpinner';
-import ImageUpload from '../../components/ui/ImageUpload';
+import { userStore } from '@/store';
+import { signUp } from '@/api/authApi';
+import { EMAIL_REGEX } from '@/constants/constants';
+import Button from '@/components/ui/Button';
+import Input from '@/components/ui/Input';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import ImageUpload from '@/components/ui/ImageUpload';
+import SectionTitle from '@/components/ui/SectionTitle';
+import toast from 'react-hot-toast';
 
 export default function SignUp() {
   const navigate = useNavigate();
   const { setUser } = userStore();
 
-  const [message, setMessage] = useState('');
   const [signUpData, setSignData] = useState({
     email: '',
     password: '',
@@ -61,78 +61,74 @@ export default function SignUp() {
       signUpData.password.trim() === '' ||
       signUpData.displayName.trim() === ''
     ) {
-      setMessage('이메일, 비밀번호, 닉네임을 모두 입력해주세요.');
-      const id = setTimeout(() => {
-        setMessage('');
-      }, 2000);
-      setTimeoutId(id);
+      toast.error('이메일, 비밀번호, 닉네임을 모두 입력해주세요.', {
+        id: 'signUp',
+      });
+
       return;
     }
 
     // 이메일의 유효성 검사
     if (!EMAIL_REGEX.test(signUpData.email)) {
-      setMessage('올바른 이메일을 입력해주세요.');
-      const id = setTimeout(() => {
-        setMessage('');
-      }, 2000);
-      setTimeoutId(id);
+      toast.error('올바른 이메일을 입력해주세요.', {
+        id: 'signUp',
+      });
       return;
     }
 
     // 비번 8자리 유효성검사
     if (signUpData.password.length < 7) {
-      setMessage('비밀번호를 8자리 이상 입력해주세요.');
-      const id = setTimeout(() => {
-        setMessage('');
-      }, 2000);
-      setTimeoutId(id);
+      toast.error('비밀번호를 8자리 이상 입력해주세요.', {
+        id: 'signUp',
+      });
+
       return;
     }
 
     // 이름 길이 유효성검사
     if (signUpData.displayName.length > 20) {
-      setMessage('이름은 20자 이하로 작성해주세요.');
-      const id = setTimeout(() => {
-        setMessage('');
-      }, 2000);
-      setTimeoutId(id);
+      toast.error('이름은 20자 이하로 작성해주세요.', {
+        id: 'signUp',
+      });
+
       return;
     }
 
     // 비밀번호 확인
     if (signUpData.password !== signUpData.passwordRepeat) {
-      setMessage('비밀번호가 일치하지 않습니다.');
-      const id = setTimeout(() => {
-        setMessage('');
-      }, 2000);
-      setTimeoutId(id);
+      toast.error('비밀번호가 일치하지 않습니다.', {
+        id: 'signUp',
+      });
       return;
     }
 
     setIsSending(true);
     const res = await signUp(signUpData);
-    // 기타오류, 이미 등록된 이메일 or 유효성 오류 or apikey오류
-    if (typeof res === 'string') {
-      setMessage(res);
-      const id = setTimeout(() => {
-        setMessage('');
-      }, 2000);
-      setTimeoutId(id);
-      setIsSending(false);
+    // 회원가입에 성공하는 경우
+    if (res.statusCode === 200) {
+      const user = res.data as UserResponseValue;
+      toast.success(`${user.user.displayName}님 즐거운 쇼핑 되세요!`, {
+        id: 'signUp',
+      });
+      localStorage.setItem('user', JSON.stringify(res));
+      setUser({ ...user, isAdmin: false });
+      setIsSending(true);
+      navigate('/', { replace: true });
       return;
     }
-    // 회원가입에 성공하는 경우
-    localStorage.setItem('user', JSON.stringify(res));
-    setUser({ ...res, isAdmin: false });
-    setIsSending(true);
-    navigate('/', { replace: true });
+    // 기타오류, 이미 등록된 이메일 or 유효성 오류 or apikey오류
+    const errorMessage = res.data as string;
+    toast.error(errorMessage, {
+      id: 'signUp',
+    });
+    setIsSending(false);
   };
 
   return (
     <div className="flex justify-center p-20">
       <div className="flex w-[436px] flex-col">
-        <h3 className="py-3 text-3xl text-gray-800">회원가입</h3>
-        <form onSubmit={handleSubmit}>
+        <SectionTitle text="회원가입" />
+        <form onSubmit={handleSubmit} className="space-y-5">
           <div className="space-y-3">
             <Input
               placeholder="이메일*"
@@ -167,7 +163,6 @@ export default function SignUp() {
               name="profileImgBase64"
               onChange={handleChange}
             />
-            <AlertMessage message={message} />
           </div>
           <div>
             <Button

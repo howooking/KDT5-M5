@@ -6,10 +6,34 @@ import { BsCart } from 'react-icons/bs';
 import SubNavbar from '@/components/SubNavbar';
 import { SUB_MENUS } from '@/constants/constants';
 import ProfileImage from '@/components/ui/ProfileImage';
+import { useState } from 'react';
+import { logOut } from '@/api/authApi';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import toast from 'react-hot-toast';
 
 export default function Navbar() {
   // store에서 필요한 메소드(로그아웃, 인증), 유져정보를 가져옴
-  const { userInfo, logoutUser } = userStore();
+  const { userInfo, setUser } = userStore();
+  const [isLogoutting, setIsLogoutting] = useState(false);
+
+  const handleLogout = async () => {
+    setIsLogoutting(true);
+    toast.loading('로그아웃 중', { id: 'logout' });
+    const res = await logOut(userInfo?.accessToken as string);
+    // 로그아웃성공
+    if (res.statusCode === 200) {
+      toast.success(res.message, { id: 'logout' });
+      setIsLogoutting(false);
+      // 클라이언트상 전역 user를 null로
+      setUser(null);
+      // 로컬저장소 user삭제
+      localStorage.removeItem('user');
+      return;
+    }
+    // 로그아웃 실패
+    toast.error(res.message, { id: 'logout' });
+    setIsLogoutting(false);
+  };
 
   return (
     <>
@@ -24,8 +48,12 @@ export default function Navbar() {
             // 로그인 되어있는 경우
             <>
               <li>
-                <Link to="#" onClick={logoutUser}>
-                  로그아웃
+                <Link to="#" onClick={handleLogout}>
+                  {isLogoutting ? (
+                    <LoadingSpinner color="accent" />
+                  ) : (
+                    '로그아웃'
+                  )}
                 </Link>
               </li>
 
@@ -53,11 +81,6 @@ export default function Navbar() {
               </li>
             </>
           )}
-          <li>
-            <Link to="/mycart" className="text-accent">
-              <BsCart size={20} />
-            </Link>
-          </li>
         </ul>
       </header>
       <SubNavbar menus={SUB_MENUS} />

@@ -9,7 +9,7 @@ interface SubNavbarProps {
 
 export default function SubNavbar({ menus, gray }: SubNavbarProps) {
   return (
-    <nav className={`flex h-12 ${gray ? 'bg-gray-700' : 'bg-accent'} w-full`}>
+    <nav className={`flex h-12 ${gray ? 'bg-gray-600' : 'bg-accent'} w-full`}>
       <ul className="container mx-auto flex items-center gap-20 px-20 text-sm">
         {menus.map((menu) => (
           <li key={menu.label}>
