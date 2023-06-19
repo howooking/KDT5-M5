@@ -5,6 +5,7 @@ interface ProductCardProps {
   price: number; // 제품 가격
   thumbnail: string | null; // 제품 썸네일 이미지(URL)
   discountRate: number; // 제품 할인율
+  isSoldOut: boolean;
 }
 
 export default function ProductCard({
@@ -12,13 +13,16 @@ export default function ProductCard({
   price,
   thumbnail,
   title,
+  isSoldOut,
 }: ProductCardProps) {
   return (
-    <div className="text-sm">
+    <div className={`text-sm ${isSoldOut ? 'opacity-50' : ''} relative`}>
       <img
         src={thumbnail || `/products/dummy.jpg`}
         alt={title}
-        className="p-1 duration-300 group-hover:scale-105"
+        className={`p-1 duration-300 ${
+          isSoldOut ? '' : 'group-hover:scale-105'
+        }`}
       />
       <h3 className="line-clamp-2" title={title}>
         {title}
@@ -32,6 +36,9 @@ export default function ProductCard({
         >
           {priceBeforeDiscount(price, discountRate)}원
         </span>
+      </div>
+      <div className={`${isSoldOut ? '' : 'hidden'}`}>
+        <img src="/soldout.png" alt="soldout" className="absolute inset-0" />
       </div>
     </div>
   );

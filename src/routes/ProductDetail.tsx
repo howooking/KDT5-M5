@@ -66,6 +66,7 @@ export default function ProductDetail() {
 
   const handlePurchase = async () => {
     setIsPurchasing(true);
+    toast.loading('결제 요청 중...', { id: 'buyProduct' });
     const res = await buyProduct(
       productId as string,
       selectedAccount,
@@ -94,11 +95,14 @@ export default function ProductDetail() {
             name={product?.title}
           />
           <div className="flex gap-10">
-            <div className="flex-1">
+            <div className="relative flex flex-1 items-center justify-center">
+              <img src={product?.thumbnail as string} alt="썸네일 이미지" />
               <img
-                src={product?.thumbnail || ''}
-                alt="썸네일 이미지"
-                className="pl-[140px]"
+                src="/soldout.png"
+                alt="soldout"
+                className={`absolute w-60 ${
+                  product?.isSoldOut ? '' : 'hidden'
+                }`}
               />
             </div>
             <div className="flex flex-1 flex-col gap-5">

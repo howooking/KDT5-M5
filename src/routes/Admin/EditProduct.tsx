@@ -3,16 +3,20 @@ import { getProductDetail, updateProduct } from '@/api/adminApi';
 import Input from '@/components/ui/Input';
 import Button from '@/components/ui/Button';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
-// import ImageUpload from '@/components/ui/ImageUpload';
 import Select from '@/components/ui/Select';
 import { SELECT_BRAND, SELECT_CATEGORY } from '@/constants/constants';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
+import CrazyLoading from '@/components/ui/CrazyLoading';
+import SectionTitle from '@/components/ui/SectionTitle';
+import ImageUpload from '@/components/ui/ImageUpload';
 
 export default function EditProduct() {
+  const navigate = useNavigate();
   const {
     state: { productId, productTitle },
   } = useLocation();
-  const [detailProduct, setDetailProduct] = useState<ProductInputData>({
+  const [detailProduct, setDetailProduct] = useState<EditProductInputData>({
     title: '',
     price: '',
     description: '',
@@ -20,50 +24,41 @@ export default function EditProduct() {
     thumbnailBase64: '',
     photoBase64: '',
     discountRate: '',
-    isSoldOut: false,
+    isSoldOut: '',
   });
-  const [loading, setLoading] = useState(false);
-  // 성공적으로 제품을 등록하였을 경우 message색을 초록색으로 바꾸기 위한 state
+  console.log(detailProduct);
+  const [isLoading, setIsLoading] = useState(false);
   const [isSending, setIsSending] = useState(false);
-  const [message, setMessage] = useState('');
-  // 2초가 지나면 alert message가 없어지는 기능을 위한 state
-  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
+  const [isImageUpdate, setIsImageUpdate] = useState(false);
 
   useEffect(() => {
     const fetchProducts = async () => {
-      setLoading(true);
+      setIsLoading(true);
       const res = await getProductDetail(productId);
-      if (res) {
+      if (res.statusCode === 200) {
+        const data = res.data as ProductDetail;
         setDetailProduct({
-          title: res.title,
-          price: res.price.toString(),
-          description: res.description,
-          tags: res.tags,
-          thumbnailBase64: res.thumbnail,
-          photoBase64: res.photo,
-          discountRate: res.discountRate,
-          isSoldOut: res.isSoldOut,
+          title: data.title,
+          price: data.price.toString(),
+          description: data.description,
+          tags: data.tags,
+          thumbnailBase64: data.thumbnail,
+          photoBase64: data.photo,
+          discountRate: data.discountRate.toString(),
+          isSoldOut: data.isSoldOut.toString(),
         });
-        setLoading(false);
+        setIsLoading(false);
       }
     };
     fetchProducts();
   }, [productId]);
 
-  // console.log(detailProduct.thumbnailBase64);
-  // console.log(btoa(detailProduct.thumbnailBase64 as string));
-  // console.log(detailProduct.photoBase64);
-  // console.log(btoa(detailProduct.photoBase64 as string));
-
-  const handleImage = () => {
-    console.log(productId);
-  };
-
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    const { name, value, type, checked } = event.target;
+    const { name, value, type } = event.target;
     if (type === 'file') {
+      setIsImageUpdate(true);
       const files = (event.target as HTMLInputElement).files as FileList;
       const reader = new FileReader();
       reader.readAsDataURL(files[0]);
@@ -75,8 +70,6 @@ export default function EditProduct() {
           };
         });
       };
-      // select로 tags의 element를 지정하는 로직
-      // tags = ["카테고리(축구화, 족구화...)", "브랜드(나이키, 아디다스...)"]
     } else if (name === 'category') {
       setDetailProduct((prevData) => {
         return {
@@ -91,13 +84,6 @@ export default function EditProduct() {
           tags: [prevData?.tags?.[0] || '', value],
         };
       });
-    } else if (name === 'isSoldOut') {
-      setDetailProduct((prevData) => {
-        return {
-          ...prevData,
-          [name]: checked,
-        };
-      });
     } else {
       setDetailProduct((prevdata) => {
         return {
@@ -110,27 +96,16 @@ export default function EditProduct() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setPositive(false);
 
-    // 이전 타임아웃이 아직 작동중이면 초기화
-    if (timeoutId) {
-      clearTimeout(timeoutId);
-      setTimeoutId(null);
-    }
-
-    //// 클라이언트 사이드 유효성 검사
-
-    // 제품이름 or 제품가격 or 제품설명을 입력하지 않은 경우
+    // 상품이름 or 상품가격 or 상품설명을 입력하지 않은 경우
     if (
       detailProduct?.title.trim() === '' ||
       detailProduct?.price.trim() === '' ||
       detailProduct?.description.trim() === ''
     ) {
-      setMessage('제품이름, 가격, 제품설명을 모두 입력해주세요.');
-      const id = setTimeout(() => {
-        setMessage('');
-      }, 2000);
-      setTimeoutId(id);
+      toast.error('상품이름, 가격, 상품설명을 모두 입력해주세요.', {
+        id: 'updateProduct',
+      });
       return;
     }
 
@@ -141,177 +116,134 @@ export default function EditProduct() {
         Number(detailProduct?.discountRate) <= 0 ||
         Number(detailProduct?.discountRate) >= 100
       ) {
-        setMessage('할인율은 0 ~ 99를 입력해주세요.');
-        const id = setTimeout(() => {
-          setMessage('');
-        }, 2000);
-        setTimeoutId(id);
+        toast.error('할인율은 0 ~ 99를 입력해주세요.', {
+          id: 'updateProduct',
+        });
         return;
       }
     }
 
-    // //////// api 통신 부분 시작
     setIsSending(true);
-    const res = await updateProduct(productId, {
-      title: detailProduct.title,
-      price: Number(detailProduct?.price),
-      description: detailProduct?.description,
-      tags: detailProduct?.tags,
-      // thumbnailBase64: detailProduct?.thumbnailBase64,
-      // photoBase64: detailProduct?.photoBase64,
-      discountRate: Number(detailProduct?.discountRate),
-      isSoldOut: detailProduct?.isSoldOut,
-    });
-    // 제품등록이 성공한 경우
-    if (res) {
-      setPositive(true);
-      setMessage('제품이 수정되었습니다.');
+    const res = await updateProduct(
+      productId,
+      isImageUpdate
+        ? {
+            title: detailProduct.title,
+            price: Number(detailProduct.price),
+            description: detailProduct.description,
+            tags: detailProduct.tags,
+            discountRate: Number(detailProduct?.discountRate),
+            isSoldOut: detailProduct.isSoldOut === 'true',
+            thumbnailBase64: detailProduct?.thumbnailBase64,
+            photoBase64: detailProduct?.photoBase64,
+          }
+        : {
+            title: detailProduct.title,
+            price: Number(detailProduct.price),
+            description: detailProduct.description,
+            tags: detailProduct.tags,
+            discountRate: Number(detailProduct?.discountRate),
+            isSoldOut: detailProduct.isSoldOut === 'true',
+          }
+    );
+    if (res.statusCode === 200) {
+      toast.success(res.message, { id: 'updateProduct' });
       setIsSending(false);
-      const id = setTimeout(() => {
-        setMessage('');
-      }, 2000);
-      setTimeoutId(id);
+      navigate(`/products/${detailProduct.tags[0]}/${productId}`);
       return;
     }
-    // 제품등록이 실패한 경우
-    setMessage(res);
+    toast.error(res.message, { id: 'updateProduct' });
     setIsSending(false);
-    const id = setTimeout(() => {
-      setMessage('');
-    }, 2000);
-    setTimeoutId(id);
   };
-  ////////////   통신 부분 끝
 
   return (
-    <div className="flex justify-center p-3">
-      <div className="flex flex-col">
-        <h3 className="py-3 text-3xl text-gray-800">
-          {loading ? <LoadingSpinner color={'accent'} /> : productTitle}
-        </h3>
-        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-          <div className="flex gap-10">
-            <div className="flex-1  space-y-3">
-              <Select
-                options={SELECT_CATEGORY}
-                onChange={handleChange}
-                value={detailProduct?.tags[0]}
-              />
-              <Select
-                options={SELECT_BRAND}
-                onChange={handleChange}
-                value={detailProduct?.tags[1]}
-              />
+    <>
+      {isLoading ? (
+        <CrazyLoading />
+      ) : (
+        <div className="container mx-auto px-20 py-10">
+          <div className="flex flex-col">
+            <SectionTitle text={productTitle} />
+            <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+              <div className="flex gap-10">
+                <div className="flex-1 space-y-5">
+                  <Select
+                    name="category"
+                    options={SELECT_CATEGORY}
+                    onChange={handleChange}
+                    value={detailProduct.tags[0]}
+                  />
+                  <Select
+                    name="brand"
+                    options={SELECT_BRAND}
+                    onChange={handleChange}
+                    value={detailProduct.tags[1]}
+                  />
 
-              <Input
-                placeholder="제품이름*"
-                name="title"
-                onChange={handleChange}
-                value={detailProduct?.title}
-              />
-              <Input
-                placeholder="가격*"
-                name="price"
-                onChange={handleChange}
-                value={detailProduct?.price}
-              />
-              <Input
-                placeholder="제품설명*"
-                name="description"
-                onChange={handleChange}
-                value={detailProduct?.description}
-              />
-              <Input
-                placeholder="할인율 (0 ~ 99, 입력 안할 경우 0) "
-                name="discountRate"
-                onChange={handleChange}
-                value={detailProduct?.discountRate}
-              />
-            </div>
-          </div>
-          <div className={'flex'}>
-            <div className={'ml-4 flex items-center gap-3'}>
-              <input
-                type="checkbox"
-                checked={detailProduct?.isSoldOut}
-                name="isSoldOut"
-                onChange={handleChange}
-                className={'text-2xl'}
-              />
-              <label htmlFor={'isSoldOut'} className={'text-2xl text-accent'}>
-                {' '}
-                {detailProduct.isSoldOut ? '매진' : '재고있슴'}
-              </label>
-            </div>
-          </div>
-          <div className={'flex justify-center gap-4'}>
-            <div>
-              <img src={detailProduct?.thumbnailBase64} alt="" />
-            </div>
-            <div
-              tabIndex={0}
-              className="collapse-plus collapse mr-4 w-[400px] border border-base-300 bg-base-200"
-            >
-              <div className="collapse-title text-xl font-medium">
-                상세이미지 보기
+                  <Input
+                    placeholder="상품이름*"
+                    name="title"
+                    onChange={handleChange}
+                    value={detailProduct.title}
+                  />
+                  <Input
+                    placeholder="가격*"
+                    name="price"
+                    onChange={handleChange}
+                    value={detailProduct.price}
+                  />
+                  <Input
+                    placeholder="상품설명*"
+                    name="description"
+                    onChange={handleChange}
+                    value={detailProduct.description}
+                  />
+                  <Input
+                    placeholder="할인율 (0 ~ 99, 입력 안할 경우 0) "
+                    name="discountRate"
+                    onChange={handleChange}
+                    value={detailProduct.discountRate}
+                  />
+                  <Select
+                    name="isSoldOut"
+                    onChange={handleChange}
+                    options={[
+                      { name: '재고 있음', value: 'false' },
+                      { name: '재고 없음', value: 'true' },
+                    ]}
+                    value={detailProduct.isSoldOut}
+                  />
+                </div>
+                <div className="flex flex-1 flex-col space-y-5">
+                  <ImageUpload
+                    korName="썸네일사진"
+                    name="thumbnailBase64"
+                    onChange={handleChange}
+                  />
+                  <ImageUpload
+                    korName="상세사진"
+                    name="photoBase64"
+                    onChange={handleChange}
+                  />
+                  <div className="flex-1" />
+                  <div>
+                    <Button
+                      text={
+                        isSending ? (
+                          <LoadingSpinner color="white" />
+                        ) : (
+                          '상품 수정'
+                        )
+                      }
+                      disabled={isSending}
+                    />
+                  </div>
+                </div>
               </div>
-              <div className="collapse-content flex justify-center">
-                <img
-                  src={detailProduct?.photoBase64}
-                  alt={detailProduct?.title}
-                  className="h-auto w-[300px]"
-                />
-              </div>
-            </div>
+            </form>
           </div>
-
-          {/*<div className={'flex'}>
-            <img
-              src={detailProduct?.thumbnailBase64}
-              alt={productTitle}
-              className="mr-4 w-[200px]"
-            />
-            <ImageUpload
-              korName="썸네일사진"
-              name="thumbnailBase64"
-              onChange={handleChange}
-            />
-          </div>
-          <div className="mb-0 flex w-full border-2 border-orange-300">*!/
-            <div
-              tabIndex={0}
-              className="collapse-plus collapse mr-4 w-[400px] border border-base-300 bg-base-200"
-            >
-              <div className="collapse-title text-xl font-medium">
-                상세이미지 보기
-              </div>
-              <div className="collapse-content flex justify-center">
-                <img
-                  src={detailProduct?.photoBase64}
-                  alt={detailProduct?.title}
-                  className="h-auto w-[300px]"
-                />
-              </div>
-            </div>
-            <div>
-              <ImageUpload
-                korName="상세사진"
-                name="photoBase64"
-                onChange={handleChange}
-              />
-            </div>
-          </div>*/}
-          <div>
-            <Button
-              text={isSending ? <LoadingSpinner color="white" /> : '제품 수정'}
-              disabled={isSending}
-            />
-          </div>
-        </form>
-        <div>
-          <Button text={'이미지 수정'} secondary={true} onClick={handleImage} />
         </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 }

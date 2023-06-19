@@ -96,13 +96,12 @@ export default function ProductSection({ category }: ProductSectionProps) {
             {sortedFilteredProducts?.map((product) => (
               <li
                 key={product.id}
-                className={`p-2 ${
-                  product.isSoldOut ? '.sold-out opacity-20' : ''
-                } group cursor-pointer shadow-md`}
+                className={`group cursor-pointer p-2 shadow-md`}
               >
                 <Link to={`/products/${product.tags[0]}/${product.id}`}>
                   <ProductCard
                     key={product.id}
+                    isSoldOut={product.isSoldOut}
                     title={product.title}
                     discountRate={product.discountRate}
                     price={product.price}
