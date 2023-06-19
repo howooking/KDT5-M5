@@ -22,13 +22,11 @@ export default function SignUp() {
     profileImgBase64: '',
   });
 
-  // 서버와 전송상태에 따라 버튼의 상태를 바꿔주기 위해서 스테이트 지정
   const [isSending, setIsSending] = useState(false);
-  // 에러메세지 타임아웃
-  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
+    // 이미지 파일 다루는 로직
     if (name === 'profileImgBase64') {
       const files = event.target.files as FileList;
       const reader = new FileReader();
@@ -44,16 +42,7 @@ export default function SignUp() {
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    // form이벤트의 기본 새로고침을 막음
     event.preventDefault();
-
-    // 이전 타임아웃이 아직 작동중인경우 초기화
-    if (timeoutId) {
-      clearTimeout(timeoutId);
-      setTimeoutId(null);
-    }
-
-    //// 클라이언트 사이드 유효성 검사
 
     // 이메일 or 비밀번호 or 이름을 입력하지 않은경우
     if (
@@ -64,7 +53,6 @@ export default function SignUp() {
       toast.error('이메일, 비밀번호, 닉네임을 모두 입력해주세요.', {
         id: 'signUp',
       });
-
       return;
     }
 
@@ -81,16 +69,14 @@ export default function SignUp() {
       toast.error('비밀번호를 8자리 이상 입력해주세요.', {
         id: 'signUp',
       });
-
       return;
     }
 
     // 이름 길이 유효성검사
     if (signUpData.displayName.length > 20) {
-      toast.error('이름은 20자 이하로 작성해주세요.', {
+      toast.error('닉네임은 20자 이하로 작성해주세요.', {
         id: 'signUp',
       });
-
       return;
     }
 
@@ -102,23 +88,25 @@ export default function SignUp() {
       return;
     }
 
+    // 통신 시작
     setIsSending(true);
+    toast.loading('회원가입 요청 중...', { id: 'signUp' });
     const res = await signUp(signUpData);
     // 회원가입에 성공하는 경우
     if (res.statusCode === 200) {
       const user = res.data as UserResponseValue;
+      setIsSending(false);
       toast.success(`${user.user.displayName}님 즐거운 쇼핑 되세요!`, {
         id: 'signUp',
       });
-      localStorage.setItem('user', JSON.stringify(res));
+      // 새로 가입하는 사람이 관리자일리 없음
+      localStorage.setItem('user', JSON.stringify({ ...user, isAdmin: false }));
       setUser({ ...user, isAdmin: false });
-      setIsSending(true);
       navigate('/', { replace: true });
       return;
     }
-    // 기타오류, 이미 등록된 이메일 or 유효성 오류 or apikey오류
-    const errorMessage = res.data as string;
-    toast.error(errorMessage, {
+    // 회원가입 실패
+    toast.error(res.message, {
       id: 'signUp',
     });
     setIsSending(false);
@@ -126,9 +114,9 @@ export default function SignUp() {
 
   return (
     <div className="flex justify-center p-20">
-      <div className="flex w-[436px] flex-col">
+      <div className="flex w-96 flex-col">
         <SectionTitle text="회원가입" />
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
           <div className="space-y-3">
             <Input
               placeholder="이메일*"
@@ -164,10 +152,16 @@ export default function SignUp() {
               onChange={handleChange}
             />
           </div>
-          <div>
+          <div className="flex gap-3">
             <Button
+              submit
               text={isSending ? <LoadingSpinner color="white" /> : '회원가입'}
               disabled={isSending}
+            />
+            <Button
+              text="로그인"
+              secondary
+              onClick={() => navigate('/login')}
             />
           </div>
         </form>

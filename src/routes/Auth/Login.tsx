@@ -20,6 +20,14 @@ export default function Login() {
   const [isSending, setIsSending] = useState(false);
   const [loginData, setLoginData] = useState({ email: '', password: '' });
 
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setLoginData({
+      ...loginData,
+      [name]: value,
+    });
+  };
+
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     // form이벤트의 기본 새로고침을 막음
     event.preventDefault();
@@ -62,14 +70,6 @@ export default function Login() {
     const errorMessage = res.message;
     toast.error(errorMessage, { id: 'login' });
     setIsSending(false);
-  };
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setLoginData({
-      ...loginData,
-      [name]: value,
-    });
   };
 
   return (
