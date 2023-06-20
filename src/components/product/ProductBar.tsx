@@ -43,17 +43,20 @@ export default function ProductBar({
         </div>
       </div>
       <div className="divider my-1" />
-
-      <div className="flex gap-10">
-        {PRODUCT_BRAND.map((brand) => (
-          <Button
-            key={brand.value}
-            text={brand.name}
-            secondary={brand.value !== selectedBrand}
-            onClick={() => handleBrand?.(brand.value)}
-          />
-        ))}
-      </div>
+      {searchText ? (
+        <></>
+      ) : (
+        <div className="flex gap-10">
+          {PRODUCT_BRAND.map((brand) => (
+            <Button
+              key={brand.value}
+              text={brand.name}
+              secondary={brand.value !== selectedBrand}
+              onClick={() => handleBrand?.(brand.value)}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

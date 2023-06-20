@@ -6,7 +6,6 @@ import ProductCard from '@/components/product/ProductCard';
 import Skeleton from '@/components/ui/Skeleton';
 import toast from 'react-hot-toast';
 import SectionTitle from '../ui/SectionTitle';
-import { DICTIONARY_SHOES } from '@/constants/constants';
 
 interface ProductSectionProps {
   category?: string;
