@@ -79,13 +79,13 @@ export default function Login() {
         <form onSubmit={handleLogin} className="flex flex-col gap-5">
           <div className="space-y-3">
             <Input
-              placeholder="이메일"
+              placeholder="이메일 (관리자 admin@naver.com)"
               name="email"
               onChange={handleChange}
               value={loginData.email}
             />
             <Input
-              placeholder="비밀번호"
+              placeholder="비밀번호 (11111111)"
               name="password"
               onChange={handleChange}
               type="password"

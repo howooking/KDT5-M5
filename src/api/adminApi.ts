@@ -122,7 +122,7 @@ export const getClients = async () => {
       statusCode: res.status,
       message: errorMessage,
     };
-    // 기타 오류(url이 잘못된경우, aws가 서버다운)
+    // 기타 오류(url이 잘못된경우, 서버다운)
   } catch (error) {
     console.log('Error while getUser: ', error);
     return {
@@ -225,4 +225,3 @@ export const getAllTransactions = async () => {
     };
   }
 };
-

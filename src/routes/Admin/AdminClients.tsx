@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { getClients } from '@/api/adminApi';
+import { getAllTransactions, getClients } from '@/api/adminApi';
 import SingleUser from '@/components/SingleUser';
 import { ADMINS } from '@/constants/constants';
 import toast from 'react-hot-toast';
@@ -7,22 +7,43 @@ import SectionTitle from '@/components/ui/SectionTitle';
 import CrazyLoading from '@/components/ui/CrazyLoading';
 
 export default function AdminClients() {
-  const [clients, setClient] = useState<Client[]>([]);
+  const [clients, setClients] = useState<SpentMoneyIncludedClient[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    setIsLoading(true);
     async function fetchData() {
-      setIsLoading(true);
-      const res = await getClients();
-      // 조회 성공
-      if (res.statusCode === 200) {
-        setClient(res.data as Client[]);
+      const promiseClients = getClients();
+      const promiseTansactions = getAllTransactions();
+      const [res1, res2] = await Promise.all([
+        promiseClients,
+        promiseTansactions,
+      ]);
+      if (res1.statusCode === 200 && res2.statusCode === 200) {
+        const spentMoneyIncludedClients = (res1.data as Client[]).map(
+          (client) => {
+            // 각 고객마다 소비금액을 구하는 로직
+            const spentMoney = (res2.data as TransactionDetail[])
+              // 고객이메일과 거래정보 이메일이 일치하면서 완료된 거래 필터링
+              .filter(
+                (transaction) =>
+                  transaction.user.email === client.email && transaction.done
+              )
+              // 거래 금액을 다 더함
+              .reduce((acc, curr) => acc + curr.product.price, 0);
+
+            return {
+              ...client,
+              spentMoney,
+            };
+          }
+        );
+        setClients(spentMoneyIncludedClients);
         setIsLoading(false);
         return;
       }
-      // 조회 실패
-      toast.error(res.message, { id: 'getClients' });
-      setIsLoading(true);
+      toast.error(res1.message, { id: 'getClients' });
+      setIsLoading(false);
     }
     fetchData();
   }, []);
@@ -46,20 +67,21 @@ export default function AdminClients() {
                 <th>프로필사진</th>
                 <th>이메일</th>
                 <th>닉네임</th>
-                <th>역할</th>
+                <th>
+                  등급(*<span className="text-accent">💰VIP</span> : 30만원,
+                  <span className="text-accent">💰VVIP💰</span> : 50만원)
+                </th>
               </tr>
             </thead>
             <tbody>
-              {clients.map((user, index) => {
-                const isAdmin = ADMINS.includes(user.email);
+              {clients.map((user) => {
                 return (
                   <SingleUser
-                    index={index}
                     key={user.email}
                     displayName={user.displayName}
                     email={user.email}
                     profileImg={user.profileImg}
-                    isAdmin={isAdmin}
+                    spentMoney={user.spentMoney}
                   />
                 );
               })}

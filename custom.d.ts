@@ -35,6 +35,9 @@ interface Client {
   displayName: string; // 사용자 표시 이름
   profileImg: string; // 사용자 프로필 이미지 URL
 }
+interface SpentMoneyIncludedClient extends Client {
+  spentMoney: number;
+}
 
 // 상품 추가시 서버로 부터 받는 응답
 interface AddProductResponseValue {

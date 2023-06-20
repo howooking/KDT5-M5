@@ -4,29 +4,33 @@ interface SingleUserProps {
   email: string;
   displayName: string;
   profileImg: string;
-  index: number;
-  isAdmin: boolean;
+  spentMoney: number;
 }
 
 export default function SingleUser({
   email,
   displayName,
   profileImg,
-  index,
-  isAdmin,
+  spentMoney,
 }: SingleUserProps) {
   return (
-    <tr
-      className={`${
-        index % 2 === 0 ? 'hover:bg-gray-200' : 'bg-gray-100 hover:bg-gray-200'
-      }`}
-    >
+    <tr>
       <td className="py-2">
-        <ProfileImage small src={profileImg || '/defaultProfile.jpg'} />
+        <ProfileImage small src={profileImg as string} />
       </td>
       <td>{email}</td>
       <td>{displayName}</td>
-      <td>{isAdmin ? <span className="text-accent">관리자</span> : '회원'}</td>
+      <td>
+        {spentMoney >= 300000 ? (
+          spentMoney >= 500000 ? (
+            <span className="font-bold text-accent">💰VVIP💰</span>
+          ) : (
+            <span className="font-bold text-accent">💰VIP</span>
+          )
+        ) : (
+          '일반회원'
+        )}
+      </td>
     </tr>
   );
 }
