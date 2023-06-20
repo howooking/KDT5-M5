@@ -62,7 +62,7 @@ export const SUB_MENUS_MYACCOUNT = [
 // admin 패널 sub anvbar
 export const SUB_MENUS_ADMIN = [
   {
-    label: '회원 관리',
+    label: '회원 정보',
     href: '/admin/clients',
   },
   {

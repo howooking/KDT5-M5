@@ -13,8 +13,8 @@ export default function AdminProduct() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    setIsLoading(true);
     const fetchData = async () => {
-      setIsLoading(true);
       const res = await getProducts();
       if (res.statusCode === 200) {
         setProducts(res.data as Product[]);
@@ -27,7 +27,7 @@ export default function AdminProduct() {
     fetchData();
   }, []);
 
-  const toDetailPage = async (category: string, productId: string) => {
+  const toDetailPage = (category: string, productId: string) => {
     navigate(`/products/${category}/${productId}`);
   };
 
@@ -36,7 +36,11 @@ export default function AdminProduct() {
     productId: string,
     productTitle: string
   ) => {
+    // 버튼을 눌렀을 때 상세 페이지로 가지 않기 위해
     event.stopPropagation();
+    // 상세 페이지로 state를 전달하는 방법은 두가지가 있습니다.
+    // 1. "/admin/editproduct/:productId"와 같이 url로 보내는 방법
+    // 2. history api의 state를 이용하는 방법, 이 방법을 사용하겠습니다.
     navigate('/admin/editproduct', { state: { productId, productTitle } });
   };
 
@@ -68,7 +72,7 @@ export default function AdminProduct() {
         <CrazyLoading />
       ) : (
         <section className="container mx-auto px-20 py-4">
-          <SectionTitle text="전체 상품 조회" />
+          <SectionTitle text="상품 관리" />
           <table className="table-zebra table table-fixed text-center">
             <thead className="text-sm text-black">
               <tr>
@@ -104,26 +108,18 @@ export default function AdminProduct() {
                     <td>{DICTIONARY_SHOES[product.tags[0]]}</td>
                     <td>{product.tags[1].toUpperCase()}</td>
                     <td>{product.isSoldOut ? '❌' : '🔘'}</td>
-                    <td>{product.discountRate} %</td>
-                    <td>
-                      {/* <Button
-                        text="상세조회"
-                        onClick={() =>
-                          toDetailPage(product.tags[0], product.id)
-                        }
-                        value={product.id}
-                        secondary
-                      /> */}
+                    <td>{product.discountRate}%</td>
+                    <td className="space-y-2">
                       <Button
                         onClick={(event) =>
                           handleUpdate(event, product.id, product.title)
                         }
-                        text="상품수정"
+                        text="상품 수정"
                         value={product.id}
                         secondary
                       />
                       <Button
-                        text="상품삭제"
+                        text="상품 삭제"
                         onClick={(event) =>
                           handleDelete(event, product.id, product.title)
                         }

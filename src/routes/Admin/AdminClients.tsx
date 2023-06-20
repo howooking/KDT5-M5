@@ -15,6 +15,7 @@ export default function AdminClients() {
     async function fetchData() {
       const promiseClients = getClients();
       const promiseTansactions = getAllTransactions();
+      // 통신을 두개 돌리기 때문에 로딩시간이 긻니다.
       const [res1, res2] = await Promise.all([
         promiseClients,
         promiseTansactions,
@@ -59,7 +60,10 @@ export default function AdminClients() {
         <CrazyLoading />
       ) : (
         <section className="container mx-auto px-20 py-4">
-          <SectionTitle text={`회원수: ${clients.length - adminCount}명`} />
+          <div className="flex justify-between">
+            <SectionTitle text="회원 정보" />
+            <SectionTitle text={`회원수: ${clients.length - adminCount}명`} />
+          </div>
 
           <table className="table-zebra table table-fixed text-center">
             <thead className="text-sm text-black">
