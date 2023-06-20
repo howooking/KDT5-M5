@@ -14,6 +14,7 @@ import Breadcrumbs from '@/components/ui/Breadcrumbs';
 import Select from '@/components/ui/Select';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import { AiOutlineEdit } from 'react-icons/ai';
+import ProductSection from '@/components/product/ProductSection';
 
 export default function ProductDetail() {
   const navigate = useNavigate();
@@ -176,7 +177,7 @@ export default function ProductDetail() {
                       ) : (
                         `${
                           accounts.length > 0
-                            ? '간편 결제'
+                            ? '원클릭 간편 결제'
                             : '계좌 등록하러 가기'
                         }`
                       )
@@ -198,6 +199,13 @@ export default function ProductDetail() {
             src={product?.photo || '/defaultThumb.jpg'}
             alt="상세 이미지"
             className="mx-auto"
+          />
+          <div className="divider" />
+          <ProductSection
+            category={product?.tags[0]}
+            related
+            productId={productId}
+            productTitle={product?.title}
           />
         </div>
       )}
