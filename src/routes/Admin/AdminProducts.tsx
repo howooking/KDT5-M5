@@ -95,7 +95,7 @@ export default function AdminProduct() {
                   >
                     <td>
                       <img
-                        src={product.thumbnail as string}
+                        src={product.thumbnail || '/defaultThumb.jpg'}
                         alt={product.title}
                       />
                     </td>

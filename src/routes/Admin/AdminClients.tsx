@@ -72,7 +72,7 @@ export default function AdminClients() {
                 <th>이메일</th>
                 <th>닉네임</th>
                 <th>
-                  등급(*<span className="text-accent">💰VIP</span> : 30만원,
+                  등급(<span className="text-accent">💰VIP</span> : 30만원,
                   <span className="text-accent">💰VVIP💰</span> : 50만원)
                 </th>
               </tr>

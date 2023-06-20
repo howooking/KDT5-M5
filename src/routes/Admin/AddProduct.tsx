@@ -109,16 +109,6 @@ export default function AddProduct() {
       toast.success(res.message, { id: 'addProduct' });
       setIsSending(false);
       navigate(`/products/${res.data?.tags[0]}/${res.data?.id}`);
-      setProductInputData({
-        description: '',
-        price: '',
-        title: '',
-        discountRate: '',
-        photoBase64: '',
-        tags: ['category', 'brand'],
-        thumbnailBase64: '',
-        isSoldOut: false,
-      });
       return;
     }
     // 상품등록이 실패한 경우
@@ -127,7 +117,7 @@ export default function AddProduct() {
   };
 
   return (
-    <div className="container mx-auto px-20 py-10">
+    <div className="container mx-auto px-20 py-4">
       <div className="flex flex-col">
         <SectionTitle text="상품추가" />
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
@@ -184,6 +174,7 @@ export default function AddProduct() {
               <div className="flex-1" />
               <div>
                 <Button
+                  submit
                   text={
                     isSending ? <LoadingSpinner color="white" /> : '상품등록'
                   }

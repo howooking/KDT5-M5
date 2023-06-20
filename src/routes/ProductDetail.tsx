@@ -100,7 +100,10 @@ export default function ProductDetail() {
           />
           <div className="flex gap-10">
             <div className="relative flex flex-1 items-center justify-center">
-              <img src={product?.thumbnail as string} alt={product?.title} />
+              <img
+                src={product?.thumbnail || '/defaultThumb.jpg'}
+                alt={product?.title}
+              />
               <img
                 src="/soldout.png"
                 alt="soldout"
