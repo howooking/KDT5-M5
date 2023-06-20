@@ -21,6 +21,7 @@ export default function ProductDetail() {
   const [isLoading, setIsLoading] = useState(false);
   const [product, setProduct] = useState<ProductDetail>();
   const [accounts, setAccounts] = useState<UserAccount[]>([]);
+  console.log(accounts);
   const { userInfo } = userStore();
   const [selectedAccount, setSelectedAccount] = useState<string>('');
   const [isPurchasing, setIsPurchasing] = useState(false);
@@ -48,19 +49,24 @@ export default function ProductDetail() {
       );
       if (res.statusCode === 200) {
         setAccounts((res.data as AccountsAndBalance).accounts);
+        return;
       }
+      toast.error(res.message, { id: 'getAccountListAndBalance' });
     }
     fetchData();
   }, [userInfo?.accessToken, isPurchasing]);
 
   const accountOptions = useMemo(
-    () => [
-      { name: '결제할 계좌 선택', value: '' },
-      ...accounts.map((account) => ({
-        name: `${account.bankName} / ${account.accountNumber} / 잔액 : ${account.balance}`,
-        value: account.id,
-      })),
-    ],
+    () =>
+      accounts.length > 0
+        ? [
+            { name: '결제할 계좌 선택', value: '' },
+            ...accounts.map((account) => ({
+              name: `${account.bankName} / ${account.accountNumber} / 잔액 : ${account.balance}`,
+              value: account.id,
+            })),
+          ]
+        : [{ name: '계좌를 먼저 등록해주세요', value: '' }],
     [accounts]
   );
 
@@ -161,12 +167,20 @@ export default function ProductDetail() {
                     value={selectedAccount}
                   />
                   <Button
-                    onClick={handlePurchase}
+                    onClick={
+                      accounts.length > 0
+                        ? handlePurchase
+                        : () => navigate('/myaccount/connectAccount')
+                    }
                     text={
                       isPurchasing ? (
                         <LoadingSpinner color="white" />
                       ) : (
-                        '간편결제'
+                        `${
+                          accounts.length > 0
+                            ? '간편 결제'
+                            : '계좌 등록하러 가기'
+                        }`
                       )
                     }
                     disabled={isPurchasing}

@@ -39,7 +39,7 @@ export default function BankAccounts() {
       setIsLoading(false);
     }
     fetchAccountList();
-  }, [userInfo?.accessToken, isDeleting]);
+  }, [userInfo?.accessToken]);
 
   const handleDeleteAccount = async (
     accountId: string,
@@ -60,6 +60,7 @@ export default function BankAccounts() {
         toast.success(`${accountName} 계좌를 해지하였습니다.`, {
           id: 'deleteAccount',
         });
+        setAccounts((prev) => prev?.filter((bank) => bank.id !== accountId));
         setIsDeleting(false);
         return;
       }
