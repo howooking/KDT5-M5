@@ -1,10 +1,10 @@
 import { priceBeforeDiscount } from '@/constants/library';
 
 interface ProductCardProps {
-  title: string; // 제품 이름
-  price: number; // 제품 가격
-  thumbnail: string | null; // 제품 썸네일 이미지(URL)
-  discountRate: number; // 제품 할인율
+  title: string;
+  price: number;
+  thumbnail: string | null;
+  discountRate: number;
   isSoldOut: boolean;
 }
 
@@ -37,9 +37,11 @@ export default function ProductCard({
           {priceBeforeDiscount(price, discountRate)}원
         </span>
       </div>
-      <div className={`${isSoldOut ? '' : 'hidden'}`}>
-        <img src="/soldout.png" alt="soldout" className="absolute inset-0" />
-      </div>
+      <img
+        src="/soldout.png"
+        alt="soldout"
+        className={`${isSoldOut ? '' : 'hidden'} absolute inset-0`}
+      />
     </div>
   );
 }

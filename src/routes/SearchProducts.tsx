@@ -50,27 +50,25 @@ export default function SearchProducts() {
   );
 
   return (
-    <section className="container mx-auto px-20 py-10">
-      <ProductBar
-        searchText={searchText}
-        productNumber={sortedSearchedProducts?.length}
-        handleSortByPrice={handleSortByPrice}
-      />
-      <ul className="grid grid-cols-5 gap-10">
-        {isLoading ? (
-          <CrazyLoading />
-        ) : (
-          <>
+    <>
+      {isLoading ? (
+        <CrazyLoading />
+      ) : (
+        <section className="container mx-auto px-20 py-10">
+          <ProductBar
+            searchText={searchText}
+            productNumber={sortedSearchedProducts?.length}
+            handleSortByPrice={handleSortByPrice}
+          />
+          <ul className="grid grid-cols-5 gap-10">
             {sortedSearchedProducts?.map((product) => (
               <li
                 key={product.id}
-                className={`p-2 ${
-                  product.isSoldOut ? 'opacity-20' : ''
-                } group cursor-pointer shadow-md`}
+                className={`group cursor-pointer p-2 shadow-md`}
               >
                 <Link to={`/products/${product.tags[0]}/${product.id}`}>
                   <ProductCard
-                    isSoldOut
+                    isSoldOut={product.isSoldOut}
                     key={product.id}
                     title={product.title}
                     discountRate={product.discountRate}
@@ -80,10 +78,10 @@ export default function SearchProducts() {
                 </Link>
               </li>
             ))}
-          </>
-        )}
-      </ul>
-      <span className="text-xl">{message}</span>
-    </section>
+          </ul>
+          <span className="text-xl">{message}</span>
+        </section>
+      )}
+    </>
   );
 }

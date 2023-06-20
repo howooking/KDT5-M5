@@ -28,8 +28,8 @@ export default function ProductSection({ category }: ProductSectionProps) {
 
   useEffect(() => {
     setBrand('all');
+    setIsLoading(true);
     async function fetchData() {
-      setIsLoading(true);
       const res = await getProducts();
       if (res.statusCode === 200) {
         // 카테고리에 따라서 products을 setting

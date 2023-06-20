@@ -10,7 +10,7 @@ interface ProductBarProps {
   productNumber?: number;
   handleBrand?: (brandValue: string) => void;
   selectedBrand?: string;
-  handleSortByPrice: (brandValue: string) => void;
+  handleSortByPrice: (sort: string) => void;
   brand?: string;
 }
 
@@ -39,24 +39,21 @@ export default function ProductBar({
         <Breadcrumbs category={category} brand={brand?.toUpperCase()} />
         <div className="flex gap-3">
           <ProductSortOptions handleSortByPrice={handleSortByPrice} />
-          <span>총 {productNumber ?? '0'} 개</span>
+          <span>총 {productNumber} 개</span>
         </div>
       </div>
-      <div className="divider my-0 mt-2" />
-      {searchText ? (
-        <></>
-      ) : (
-        <div className="flex gap-10">
-          {PRODUCT_BRAND.map((brand) => (
-            <Button
-              key={brand.value}
-              text={brand.name}
-              secondary={brand.value === selectedBrand ? false : true}
-              onClick={() => handleBrand?.(brand.value)}
-            />
-          ))}
-        </div>
-      )}
+      <div className="divider my-1" />
+
+      <div className="flex gap-10">
+        {PRODUCT_BRAND.map((brand) => (
+          <Button
+            key={brand.value}
+            text={brand.name}
+            secondary={brand.value !== selectedBrand}
+            onClick={() => handleBrand?.(brand.value)}
+          />
+        ))}
+      </div>
     </div>
   );
 }
