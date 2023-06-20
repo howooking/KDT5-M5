@@ -70,6 +70,7 @@ export default function SearchProducts() {
               >
                 <Link to={`/products/${product.tags[0]}/${product.id}`}>
                   <ProductCard
+                    isSoldOut
                     key={product.id}
                     title={product.title}
                     discountRate={product.discountRate}

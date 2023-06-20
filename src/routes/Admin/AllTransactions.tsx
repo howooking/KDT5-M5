@@ -3,6 +3,7 @@ import { getAllTransactions } from '@/api/adminApi';
 import toast from 'react-hot-toast';
 import CrazyLoading from '@/components/ui/CrazyLoading';
 import { convertToHumanReadable } from '@/constants/library';
+import SectionTitle from '@/components/ui/SectionTitle';
 
 export default function TransactionsPage() {
   const [transactions, setTransactions] = useState<TransactionDetail[]>([]);
@@ -40,6 +41,7 @@ export default function TransactionsPage() {
         <CrazyLoading />
       ) : (
         <section className="container mx-auto px-20 py-4">
+          <SectionTitle text="거래 내역" />
           <div className="mb-4">
             <input
               value={searchTerm}
@@ -55,31 +57,27 @@ export default function TransactionsPage() {
                 <th>상품 이미지</th>
                 <th>고객</th>
                 <th>상품 이름</th>
-                <th>가격</th>
+                <th>가격(원)</th>
                 <th>거래 시간</th>
-                <th>거래 취소 여부</th>
-                <th>거래 완료 여부</th>
+                <th>거래 취소</th>
+                <th>거래 완료</th>
               </tr>
             </thead>
             <tbody>
               {filteredTransactions.map((transaction, index) => (
                 <tr key={index}>
                   <td>
-                    {transaction.product.thumbnail ? (
-                      <img
-                        src={transaction.product.thumbnail}
-                        alt="thumbnail"
-                      />
-                    ) : (
-                      '이미지 없음'
-                    )}
+                    <img
+                      src={transaction.product.thumbnail || '/defaultThumb.jpg'}
+                      alt="thumbnail"
+                    />
                   </td>
                   <td>{transaction.user.displayName}</td>
                   <td>{transaction.product.title}</td>
-                  <td>{transaction.product.price}</td>
+                  <td>{transaction.product.price.toLocaleString('ko-KR')}</td>
                   <td>{convertToHumanReadable(transaction.timePaid)}</td>
-                  <td>{transaction.isCanceled ? '취소됨' : '취소되지 않음'}</td>
-                  <td>{transaction.done ? '완료됨' : '완료되지 않음'}</td>
+                  <td>{transaction.isCanceled ? '취소함' : '취소하지 않음'}</td>
+                  <td>{transaction.done ? '🔘' : '❌'}</td>
                 </tr>
               ))}
             </tbody>
