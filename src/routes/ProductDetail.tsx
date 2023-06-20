@@ -21,7 +21,6 @@ export default function ProductDetail() {
   const [isLoading, setIsLoading] = useState(false);
   const [product, setProduct] = useState<ProductDetail>();
   const [accounts, setAccounts] = useState<UserAccount[]>([]);
-  console.log(accounts);
   const { userInfo } = userStore();
   const [selectedAccount, setSelectedAccount] = useState<string>('');
   const [isPurchasing, setIsPurchasing] = useState(false);
@@ -51,7 +50,6 @@ export default function ProductDetail() {
         setAccounts((res.data as AccountsAndBalance).accounts);
         return;
       }
-      toast.error(res.message, { id: 'getAccountListAndBalance' });
     }
     fetchData();
   }, [userInfo?.accessToken, isPurchasing]);
