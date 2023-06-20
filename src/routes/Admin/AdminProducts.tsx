@@ -31,7 +31,7 @@ export default function AdminProduct() {
     navigate(`/products/${category}/${productId}`);
   };
 
-  const handleUpdate = (
+  const toEditPage = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     productId: string,
     productTitle: string
@@ -112,7 +112,7 @@ export default function AdminProduct() {
                     <td className="space-y-2">
                       <Button
                         onClick={(event) =>
-                          handleUpdate(event, product.id, product.title)
+                          toEditPage(event, product.id, product.title)
                         }
                         text="상품 수정"
                         value={product.id}

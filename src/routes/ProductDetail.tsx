@@ -13,13 +13,13 @@ import CrazyLoading from '@/components/ui/CrazyLoading';
 import Breadcrumbs from '@/components/ui/Breadcrumbs';
 import Select from '@/components/ui/Select';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import { AiOutlineEdit } from 'react-icons/ai';
 
 export default function ProductDetail() {
   const navigate = useNavigate();
   const { productId } = useParams();
   const [isLoading, setIsLoading] = useState(false);
   const [product, setProduct] = useState<ProductDetail>();
-  console.log(product);
   const [accounts, setAccounts] = useState<UserAccount[]>([]);
   const { userInfo } = userStore();
   const [selectedAccount, setSelectedAccount] = useState<string>('');
@@ -83,6 +83,10 @@ export default function ProductDetail() {
     toast.error(res.message, { id: 'buyProduct' });
   };
 
+  const toEditPage = (productId: string, productTitle: string) => {
+    navigate('/admin/editproduct', { state: { productId, productTitle } });
+  };
+
   return (
     <div className="my-10">
       {isLoading ? (
@@ -96,7 +100,7 @@ export default function ProductDetail() {
           />
           <div className="flex gap-10">
             <div className="relative flex flex-1 items-center justify-center">
-              <img src={product?.thumbnail as string} alt="썸네일 이미지" />
+              <img src={product?.thumbnail as string} alt={product?.title} />
               <img
                 src="/soldout.png"
                 alt="soldout"
@@ -106,7 +110,23 @@ export default function ProductDetail() {
               />
             </div>
             <div className="flex flex-1 flex-col gap-5">
-              <div className="text-2xl font-bold">{product?.title}</div>
+              <div className="text-2xl font-bold">
+                {product?.title}
+                {userInfo?.isAdmin ? (
+                  <AiOutlineEdit
+                    size={20}
+                    className="ml-3 inline cursor-pointer text-accent transition hover:scale-125"
+                    onClick={() =>
+                      toEditPage(
+                        product?.id as string,
+                        product?.title as string
+                      )
+                    }
+                  />
+                ) : (
+                  <></>
+                )}
+              </div>
               <div className="flex items-center gap-8">
                 <span className="text-3xl text-red-500 ">
                   {product?.price.toLocaleString('ko-KR')}원

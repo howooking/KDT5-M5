@@ -13,9 +13,12 @@ import ImageUpload from '@/components/ui/ImageUpload';
 
 export default function EditProduct() {
   const navigate = useNavigate();
+  // navigate로부터 받은 state정보들
   const {
     state: { productId, productTitle },
   } = useLocation();
+
+  // 얘도 일단은 모두 string으로 초기값 세팅
   const [detailProduct, setDetailProduct] = useState<EditProductInputData>({
     title: '',
     price: '',
@@ -31,12 +34,13 @@ export default function EditProduct() {
   const [isImageUpdate, setIsImageUpdate] = useState(false);
 
   useEffect(() => {
+    setIsLoading(true);
     const fetchProducts = async () => {
-      setIsLoading(true);
       const res = await getProductDetail(productId);
       if (res.statusCode === 200) {
         const data = res.data as ProductDetail;
         setDetailProduct({
+          // string이 아닌 항목은 string으로 변환후 세팅해줌
           title: data.title,
           price: data.price.toString(),
           description: data.description,
@@ -47,18 +51,21 @@ export default function EditProduct() {
           isSoldOut: data.isSoldOut.toString(),
         });
         setIsLoading(false);
+        return;
       }
+      toast.error(res.message, { id: 'getProductDetail' });
+      setIsLoading(false);
     };
     fetchProducts();
   }, [productId]);
-  console.log(detailProduct.discountRate);
-  console.log(typeof detailProduct.isSoldOut);
 
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value, type } = event.target;
+    setIsImageUpdate(false);
     if (type === 'file') {
+      // 이미지를 업로드 여부를 state로 관리
       setIsImageUpdate(true);
       const files = (event.target as HTMLInputElement).files as FileList;
       const reader = new FileReader();
@@ -111,29 +118,19 @@ export default function EditProduct() {
     }
 
     // 할인율 0 ~ 99 가 아닌경우
-    // if (detailProduct.discountRate) {
-    //   if (
-    //     !Number(detailProduct?.discountRate) ||
-    //     Number(detailProduct?.discountRate) <= 0 ||
-    //     Number(detailProduct?.discountRate) >= 100
-    //   ){
-    //     toast.error('할인율은 0 ~ 99를 입력해주세요.', {
-    //       id: 'updateProduct',
-    //     });
-    //     return;
-    //   }
-    // }
-    if (detailProduct?.discountRate) {
-      const discount = Number(detailProduct.discountRate);
-      if (discount < 0 || discount >= 100) {
-        toast.error('할인율은 0 ~ 99를 입력해주세요.', { id: 'updateProduct' });
-        return
-      }
+    if (
+      Number(detailProduct.discountRate) < 0 ||
+      Number(detailProduct.discountRate) >= 100
+    ) {
+      toast.error('할인율은 0 ~ 99를 입력해주세요.', { id: 'updateProduct' });
+      return;
     }
-
     setIsSending(true);
     const res = await updateProduct(
       productId,
+      // 이미지를 업로드 한 경우에만 'thumbnailBase64', 'photoBase64' 키값을 추가해서 보냄
+      // 그런데 두개의 이미지 중에 하나만 업로드를 할 경우 나머지 하나의 값이 base64가 아니기 때문에 에러가 발생함.
+      // 따라서 수정할거라면 두개 다 업로드해야함.
       isImageUpdate
         ? {
             title: detailProduct.title,
@@ -187,7 +184,6 @@ export default function EditProduct() {
                     onChange={handleChange}
                     value={detailProduct.tags[1]}
                   />
-
                   <Input
                     placeholder="상품이름*"
                     name="title"
@@ -244,6 +240,7 @@ export default function EditProduct() {
                         )
                       }
                       disabled={isSending}
+                      submit
                     />
                   </div>
                 </div>
