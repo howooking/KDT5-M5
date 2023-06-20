@@ -8,6 +8,36 @@ export const HEADERS = {
   username: 'KDT5_Team1',
 };
 
+// 이미지 슬라이더
+
+export const SLIDES = [
+  {
+    id: 0,
+    href: '/products/soccer/PQDbxl8TerMV7dbcHjFM',
+    label: '푸마퓨쳐',
+  },
+  {
+    id: 1,
+    href: '/products/soccer/TswEFE3gibavTlGMFUuA',
+    label: '아디다스포탈',
+  },
+  {
+    id: 2,
+    href: '#',
+    label: '패캠',
+  },
+  {
+    id: 3,
+    href: '/products/soccer/ea3COhwuw0YHtY5ADuyg',
+    label: '아디다스프레데터',
+  },
+  {
+    id: 4,
+    href: '/products/soccer/bZ5fc4ywRgWCxIJJEowC',
+    label: '나이키머큐리얼',
+  },
+];
+
 // 어드민 이메일 목록
 export const ADMINS = [
   'admin@naver.com',

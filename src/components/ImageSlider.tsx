@@ -1,8 +1,9 @@
+import { SLIDES } from '@/constants/constants';
 import Carousel from 'nuka-carousel';
-
-const SLIDES = [0, 1, 2, 3, 4, 5];
+import { useNavigate } from 'react-router-dom';
 
 export default function ImageSlider() {
+  const navigate = useNavigate();
   return (
     <Carousel
       autoplay
@@ -29,10 +30,11 @@ export default function ImageSlider() {
     >
       {SLIDES.map((slide) => (
         <img
-          key={slide}
-          src={`slider/mainSlide${slide}.jpg`}
-          alt={`/mainSlide${slide}`}
-          className="mx-auto select-none hover:opacity-80"
+          key={slide.id}
+          src={`slider/mainSlide${slide.id}.jpg`}
+          alt={`/mainSlide${slide.label}`}
+          className="mx-auto cursor-pointer select-none hover:opacity-80"
+          onClick={() => navigate(`${slide.href}`)}
         />
       ))}
     </Carousel>
