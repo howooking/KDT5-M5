@@ -2,7 +2,7 @@ import Carousel from 'nuka-carousel';
 
 const SLIDES = [0, 1, 2, 3, 4, 5];
 
-export default function Slider() {
+export default function ImageSlider() {
   return (
     <Carousel
       autoplay

@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import { getProducts } from '@/api/adminApi';
 import { Link } from 'react-router-dom';
-import ProductBar from '@/components/ProductBar';
-import ProductCard from '@/components/ProductCard';
+import ProductBar from '@/components/product/ProductBar';
+import ProductCard from '@/components/product/ProductCard';
 import Skeleton from '@/components/ui/Skeleton';
 import toast from 'react-hot-toast';
 

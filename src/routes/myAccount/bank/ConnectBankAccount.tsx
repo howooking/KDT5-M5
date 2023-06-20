@@ -10,7 +10,7 @@ import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import { toast } from 'react-hot-toast';
 import SectionTitle from '@/components/ui/SectionTitle';
 
-export default function ConnectAccount() {
+export default function ConnectBankAccount() {
   const navigate = useNavigate();
   const [isSending, setIsSending] = useState(false);
   const { userInfo } = userStore();

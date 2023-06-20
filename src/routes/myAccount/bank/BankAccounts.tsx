@@ -9,7 +9,7 @@ import toast from 'react-hot-toast';
 import CrazyLoading from '@/components/ui/CrazyLoading';
 import SectionTitle from '@/components/ui/SectionTitle';
 
-export default function AccountList() {
+export default function BankAccounts() {
   const navigate = useNavigate();
   const [totalBalance, setTotalBalance] = useState<number>(0);
   const [accounts, setAccounts] = useState<UserAccount[]>();

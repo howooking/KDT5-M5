@@ -2,27 +2,27 @@ import { Route, Routes } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import Home from '@/routes/Home';
 import NotFound from '@/routes/NotFound';
-import Login from '@/routes/Auth/Login';
-import SignUp from '@/routes/Auth/SignUp';
-import Admin from '@/routes/Admin/Admin';
-import AddProduct from '@/routes/Admin/AddProduct';
-import ProtectedRoute from '@/components/ProtectedRoute';
-import MyAccount from '@/routes/Auth/MyAccount';
-import AdminClients from '@/routes/Admin/AdminClients';
-import ChangeName from '@/routes/Auth/ChangeName';
-import ChangePassword from '@/routes/Auth/ChangePassword';
-import Info from '@/routes/Auth/Info';
-import AdminProduct from '@/routes/Admin/AdminProducts';
-import ConnectAccount from '@/routes/Account/ConnectAccount';
+import Login from '@/routes/myAccount/Login';
+import SignUp from '@/routes/myAccount/SignUp';
+import Admin from '@/routes/admin/Admin';
+import AddProduct from '@/routes/admin/AddProduct';
+import ProtectedRoute from '@/routes/ProtectedRoute';
+import MyAccount from '@/routes/myAccount/MyAccount';
+import AdminClients from '@/routes/admin/AdminClients';
+import ChangeName from '@/routes/myAccount/ChangeName';
+import ChangePassword from '@/routes/myAccount/ChangePassword';
+import Info from '@/routes/myAccount/Info';
+import AdminProduct from '@/routes/admin/AdminProducts';
+import ConnectBankAccount from '@/routes/myAccount/bank/ConnectBankAccount';
 import Products from '@/routes/Products';
 import ProductDetail from '@/routes/ProductDetail';
-import AccountList from '@/routes/Account/AccountList';
+import BankAccounts from '@/routes/myAccount/bank/BankAccounts';
 import SearchProducts from '@/routes/SearchProducts';
-import OrderList from '@/routes/Auth/OrderList';
-import AllTransactions from './routes/Admin/AllTransactions';
-import OrderDetail from './routes/Auth/OrderDetail';
-import LogoutNeededRoute from './routes/Auth/LogoutNeededRoute';
-import EditProduct from './routes/Admin/EditProduct';
+import OrderList from '@/routes/myAccount/OrderList';
+import AllTransactions from './routes/admin/AllTransactions';
+import OrderDetail from './routes/myAccount/OrderDetail';
+import LogoutNeededRoute from './routes/myAccount/LogoutNeededRoute';
+import EditProduct from './routes/admin/EditProduct';
 
 export default function App() {
   return (
@@ -57,8 +57,8 @@ export default function App() {
           <Route path="info" element={<Info />} />
           <Route path="changename" element={<ChangeName />} />
           <Route path="changepw" element={<ChangePassword />} />
-          <Route path="accountList" element={<AccountList />} />
-          <Route path="connectAccount" element={<ConnectAccount />} />
+          <Route path="accountList" element={<BankAccounts />} />
+          <Route path="connectAccount" element={<ConnectBankAccount />} />
           <Route path="orderList" element={<OrderList />} />
           <Route path="order/:detailId" element={<OrderDetail />} />
         </Route>

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import ProductBar from '@/components/ProductBar';
-import ProductCard from '@/components/ProductCard';
+import ProductBar from '@/components/product/ProductBar';
+import ProductCard from '@/components/product/ProductCard';
 import { searchProducts } from '@/api/transactionApi';
 import CrazyLoading from '@/components/ui/CrazyLoading';
 

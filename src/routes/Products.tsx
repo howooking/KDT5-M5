@@ -1,5 +1,5 @@
 import { Navigate, useParams } from 'react-router-dom';
-import ProductSection from '@/components/ProductSection';
+import ProductSection from '@/components/product/ProductSection';
 
 export default function Products() {
   const { category } = useParams();

@@ -1,8 +1,8 @@
 import { DICTIONARY_SHOES, PRODUCT_BRAND } from '@/constants/constants';
 import Breadcrumbs from '@/components/ui/Breadcrumbs';
 import SectionTitle from '@/components/ui/SectionTitle';
-import Button from './ui/Button';
-import SortOptions from '@/components/SortOptions';
+import Button from '../ui/Button';
+import ProductSortOptions from '@/components/product/ProductSortOptions';
 
 interface ProductBarProps {
   searchText?: string;
@@ -38,7 +38,7 @@ export default function ProductBar({
       <div className="flex justify-between text-xs">
         <Breadcrumbs category={category} brand={brand?.toUpperCase()} />
         <div className="flex gap-3">
-          <SortOptions handleSortByPrice={handleSortByPrice} />
+          <ProductSortOptions handleSortByPrice={handleSortByPrice} />
           <span>총 {productNumber ?? '0'} 개</span>
         </div>
       </div>
