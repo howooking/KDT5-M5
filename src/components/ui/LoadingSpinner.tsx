@@ -1,5 +1,7 @@
-import styles from './LoadingSpinner.module.css';
+interface LoadingSpinnerProps {
+  color: 'white' | 'accent';
+}
 
-export default function LoadingSpinner() {
-  return <div className={styles.loading}></div>;
+export default function LoadingSpinner({ color }: LoadingSpinnerProps) {
+  return <div className={`loading-${color}`}></div>;
 }

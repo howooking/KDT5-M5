@@ -1,12 +1,35 @@
-// CSS적용 예시입니다.
-// Button.module.css와 index.cee참고
-import styles from './Button.module.css';
+interface ButtonProps {
+  text: string | JSX.Element;
+  secondary?: boolean;
+  value?: string;
+  onClick?: (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => void | Promise<void>;
+  disabled?: boolean;
+  submit?: boolean;
+}
 
-export default function Button({ text }: { text: string }) {
+export default function Button({
+  text,
+  secondary,
+  disabled,
+  onClick,
+  value,
+  submit,
+}: ButtonProps) {
   return (
-    <button className={styles.button}>
+    <button
+      type={submit ? 'submit' : 'button'}
+      onClick={onClick}
+      value={value}
+      disabled={disabled}
+      className={`${
+        secondary
+          ? 'border border-accent text-accent hover:bg-accent/10'
+          : 'bg-accent text-white hover:bg-accent/80'
+      } h-12 w-full rounded-sm px-4 py-2  disabled:bg-accent/50`}
+    >
       {text}
-      <span className={styles.span}>"버!튼"</span>
     </button>
   );
 }

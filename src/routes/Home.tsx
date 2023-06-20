@@ -1,11 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect } from 'react';
-import { userStore } from '../store';
+import ImageSlider from '@/components/ImageSlider';
+import ProductSection from '@/components/product/ProductSection';
 
 export default function Home() {
-  const { authMe, userInfo } = userStore();
-  useEffect(() => {
-    authMe();
-  }, []);
-  return <div>{userInfo.user.displayName}</div>;
+  return (
+    <>
+      <ImageSlider />
+      <ProductSection />
+    </>
+  );
 }
