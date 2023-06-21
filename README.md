@@ -11,6 +11,8 @@
 > 저희 1조는 주어진 API로 축구화 온라인 쇼핑몰을 제작하였습니다.  
 > 개발 기간 : 2023. 5. 31 ~ 2023. 6. 21
 
+<br><br>
+
 # 배포주소
 
 https://kdt-5-m5-crazy11.vercel.app
@@ -23,7 +25,7 @@ https://kdt-5-m5-crazy11.vercel.app
 | 깃허브 | [@바꿔야함](https://github.com/howooking) | [@HyunJunPark0](https://github.com/HyunJunPark0) | [@PelicanStd](https://github.com/PelicanStd) | [@hwanginseung](https://github.com/hwanginseung) | [@howooking](https://github.com/howooking) |
 |  담당  |  회원정보<br>상품 상세페이지<br>구매확정  |      개인정보 수정<br>구매내역<br>구매취소       |     상품 관리<br>상품 추가<br>상품 수정      |          계좌<br>거래내역<br>상품 검색           |    인증, 인가<br>상품 배치<br>스타일링     |
 
-<br><br><br>
+<br><br>
 
 # 시작 가이드
 
@@ -70,24 +72,87 @@ nuka-carousel : 이미지 슬라이더<br>
 | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
 |                                                                                      메인페이지                                                                                       |                                                                                       모든제품                                                                                        |
 |                     <img src="https://raw.githubusercontent.com/howooking/KDT5-M5/2237dd90bec93fbce697340069ef08e8d893f60c/public/readme/main.png" width="400"/>                      |     <img src="https://raw.githubusercontent.com/howooking/KDT5-M5/2237dd90bec93fbce697340069ef08e8d893f60c/public/readme/%EB%AA%A8%EB%93%A0%EC%A0%9C%ED%92%88.png" width="400"/>      |
-|                                                                                    카테고리별 상품                                                                                    |                                                                                       상품검색                                                                                        |
+|                                                                                    카테고리별 상품                                                                                    |                                                                                       상품 검색                                                                                       |
 | <img src="https://raw.githubusercontent.com/howooking/KDT5-M5/15934011c83bd52b28b65bd16dccca61a2fa7ceb/public/readme/%EC%B9%B4%ED%85%8C%EA%B3%A0%EB%A6%AC%EB%B3%84.png" width="400"/> |              <img src="https://raw.githubusercontent.com/howooking/KDT5-M5/2237dd90bec93fbce697340069ef08e8d893f60c/public/readme/%EA%B2%80%EC%83%89.png" width="400"/>               |
 |                                                                                    연관 상품 추천                                                                                     |                                                                                   상품 상세 페이지                                                                                    |
 |     <img src="https://raw.githubusercontent.com/howooking/KDT5-M5/15934011c83bd52b28b65bd16dccca61a2fa7ceb/public/readme/%EC%97%B0%EA%B4%80%EC%83%81%ED%92%88.png" width="400"/>      | <img src="https://raw.githubusercontent.com/howooking/KDT5-M5/2237dd90bec93fbce697340069ef08e8d893f60c/public/readme/%EC%83%81%EC%84%B8%ED%8E%98%EC%9D%B4%EC%A7%80.png" width="400"/> |
-|                                                                                       회원정보                                                                                        |                                                                                       상품관리                                                                                        |
+|                                                                                       회원 정보                                                                                       |                                                                                       상품 관리                                                                                       |
 |     <img src="https://raw.githubusercontent.com/howooking/KDT5-M5/2237dd90bec93fbce697340069ef08e8d893f60c/public/readme/%ED%9A%8C%EC%9B%90%EC%A0%95%EB%B3%B4.png" width="400"/>      |     <img src="https://raw.githubusercontent.com/howooking/KDT5-M5/2237dd90bec93fbce697340069ef08e8d893f60c/public/readme/%EC%83%81%ED%92%88%EA%B4%80%EB%A6%AC.png" width="400"/>      |
-|                                                                                       상품추가                                                                                        |                                                                                       상품수정                                                                                        |
+|                                                                                       상품 추가                                                                                       |                                                                                       상품 수정                                                                                       |
 |     <img src="https://raw.githubusercontent.com/howooking/KDT5-M5/2237dd90bec93fbce697340069ef08e8d893f60c/public/readme/%EC%83%81%ED%92%88%EC%B6%94%EA%B0%80.png" width="400"/>      |                        <img src="https://github.com/howooking/KDT5-M5/blob/main/public/readme/%EC%83%81%ED%92%88%EC%88%98%EC%A0%95.png?raw=true" width="400"/>                        |
-|                                                                                       거래내역                                                                                        |                                                                                        내정보                                                                                         |
+|                                                                                       거래 내역                                                                                       |                                                                                        내 정보                                                                                        |
 |     <img src="https://raw.githubusercontent.com/howooking/KDT5-M5/2237dd90bec93fbce697340069ef08e8d893f60c/public/readme/%EA%B1%B0%EB%9E%98%EB%82%B4%EC%97%AD.png" width="400"/>      |          <img src="https://raw.githubusercontent.com/howooking/KDT5-M5/2237dd90bec93fbce697340069ef08e8d893f60c/public/readme/%EB%82%B4%EC%A0%95%EB%B3%B4.png" width="400"/>          |
-|                                                                                    계좌조회 / 해지                                                                                    |                                                                                       계좌 연결                                                                                       |
+|                                                                                   계좌 조회 / 해지                                                                                    |                                                                                       계좌 연결                                                                                       |
 |    <img src="https://raw.githubusercontent.com/howooking/KDT5-M5/2237dd90bec93fbce697340069ef08e8d893f60c/public/readme/%EA%B3%84%EC%A2%8C%20%EC%A1%B0%ED%9A%8C.png" width="400"/>    |     <img src="https://raw.githubusercontent.com/howooking/KDT5-M5/2237dd90bec93fbce697340069ef08e8d893f60c/public/readme/%EA%B3%84%EC%A2%8C%EC%97%B0%EA%B2%B0.png" width="400"/>      |
-|                                                                                       구매내역                                                                                        |                                                                                       로딩화면                                                                                        |
+|                                                                                       구매 내역                                                                                       |                                                                                       로딩화면                                                                                        |
 |     <img src="https://raw.githubusercontent.com/howooking/KDT5-M5/2237dd90bec93fbce697340069ef08e8d893f60c/public/readme/%EA%B5%AC%EB%A7%A4%EB%82%B4%EC%97%AD.png" width="400"/>      |              <img src="https://raw.githubusercontent.com/howooking/KDT5-M5/2237dd90bec93fbce697340069ef08e8d893f60c/public/readme/%EB%A1%9C%EB%94%A9.gif" width="400"/>               |
 |                                                                                        로그인                                                                                         |                                                                                       회원가입                                                                                        |
 |                            <img src="https://github.com/howooking/KDT5-M5/blob/main/public/readme/%EB%A1%9C%EA%B7%B8%EC%9D%B8.png?raw=true" width="400"/>                             |                        <img src="https://github.com/howooking/KDT5-M5/blob/main/public/readme/%ED%9A%8C%EC%9B%90%EA%B0%80%EC%9E%85.png?raw=true" width="400"/>                        |
 
 # 고찰
+
+- 상태관리 툴
+
+  - 상대적으로 사용이 쉬운 [ZUSTAND](https://zustand-demo.pmnd.rs/)를 사용
+
+    ```js
+    (src/store.ts)
+    import { create } from 'zustand';
+    import { authenticate } from '@/api/authApi';
+    import { ADMINS } from '@/constants/constants';
+
+    interface UserState {
+      userInfo: LocalUser | null;
+      setUser: (user: LocalUser | null) => void;
+      authMe: () => Promise<string | undefined>;
+    }
+
+    export const userStore = create<UserState>((set) => ({
+      userInfo: localStorage.getItem('user')
+        ? JSON.parse(localStorage.getItem('user') as string)
+        : null,
+
+      setUser: (user: LocalUser | null) =>
+        set({
+          userInfo: user,
+        }),
+
+      authMe: async () => {
+        const userInfo: LocalUser | null = localStorage.getItem('user')
+          ? JSON.parse(localStorage.getItem('user') as string)
+          : null;
+        if (!userInfo) {
+          set({
+            userInfo: null,
+          });
+          return '로그인을 해주세요.';
+        }
+        const res = await authenticate(userInfo.accessToken);
+        if (res.statusCode === 200) {
+          const user = res.data as AuthenticateResponseValue;
+          const isAdmin = ADMINS.includes(user.email);
+          set({
+            userInfo: {
+              user: user,
+              accessToken: userInfo.accessToken,
+              isAdmin,
+            },
+          });
+          return;
+        }
+        set({
+          userInfo: null,
+        });
+        localStorage.removeItem('user');
+        return '로그인 하신지 24시간이 지나셨어요! 다시 로그인해주세요.';
+      },
+    }));
+
+
+    (필요한 곳에서 사용)
+    import { userStore } from '@/store';
+    const { userInfo, setUser } = userStore();
+    ```
 
 - 관리자 확인
 
@@ -104,7 +169,7 @@ nuka-carousel : 이미지 슬라이더<br>
     }
     ```
 
-  - 따라서 클라이언트 단에서 관리자 여부를 확인하고 isAdmin이라는 property를 추가하여 전역상태와 로컬저장소에 저장한다.
+  - 따라서 클라이언트 단에서 관리자 여부를 확인하고 isAdmin이라는 property를 추가하여 전역 User 상태와 로컬저장소에 저장한다.
 
     ```ts
     interface LocalUser {
@@ -118,7 +183,7 @@ nuka-carousel : 이미지 슬라이더<br>
     }
     ```
 
-  - 그러나 이 방법은 보안상 취약하다.
+  - 그러나 이 방법은 보안상 취약하지만 다음과 같은 대응 전략을 세울 수 있다.
 
     - 비건전한 사용자가 local storage에 접근하여 isAdmin을 true로 바꿀 경우<br> 👉 관리자만 접근 할 수 있는 route 분기점에 인증 api를 사용하여 사용자의 신원을 확인한다.
 
@@ -143,11 +208,11 @@ nuka-carousel : 이미지 슬라이더<br>
       }
       ```
 
-    - 비건전한 사용자가 파일에 저장되어있는 어드민의 이메일 주소를 보는 경우<br>👉 관리자의 메일 주소를 알더라도 비밀번호는 모르니 괜찮다. 그래도 불안하면 환경변수에 저장하는 방법이 있다.
+    - 비건전한 사용자가 파일에 저장된 관리자 이메일 주소를 보는 경우<br>👉 관리자의 메일 주소를 알더라도 비밀번호는 모르니 괜찮다. 그래도 불안하면 환경변수에 저장하는 방법이 있다.
 
 - 부족한 상품 정보
 
-  - 상품의 스키마는 아래와 같으며 해당 프로젝트에서 필요한 category와 brand 항목이 없다.
+  - 상품의 스키마는 아래와 같으며 해당 프로젝트에서 필요한 'category'와 'brand' 항목이 없다.
     ```ts
     interface Product {
       id: string;
@@ -161,7 +226,7 @@ nuka-carousel : 이미지 슬라이더<br>
       discountRate: number;
     }
     ```
-  - 따라서 tags 항목에서 배열의 첫번째 요소를 category, 두번째 요소를 brand로 하기로 하였다.
+  - 따라서 tags 항목에서 배열의 첫번째 요소를 category, 두번째 요소를 brand로 지정하였다.
 
     ```js
     tags: ['soccer', 'nike'],
@@ -170,7 +235,7 @@ nuka-carousel : 이미지 슬라이더<br>
 - 라우트 보호
 
   - 로그인 상태, 관리자 여부에 따라서 접근할 수 있는 페이지를 제한해야 한다.
-  - ProdtectedRoute에서 전역 user 상태와 adminRequired props 속성에 따라서 접근을 제한할 수 있다.
+  - ProdtectedRoute에서 전역 User 상태와 adminRequired props 속성에 따라서 접근을 제한할 수 있다.
 
     ```js
     import { Navigate } from 'react-router-dom';
@@ -204,12 +269,12 @@ nuka-carousel : 이미지 슬라이더<br>
     - 관리자의 경우 상품 상세 페이지에서 상품 수정 아이콘이 보인다.
   - 로그인
     - 로그인하지 않은 경우 상품 상세 페이지에서 결제 버튼 대신 "로그인 하러가기" 버튼이 보인다.
-    - 로그인한 경우 login 페이지와 signup 페이지에 접근 할 수 없다.
+    - 로그인을 한 경우 login 페이지와 signup 페이지에 접근 할 수 없다.
   - 계좌
     - 계좌를 하나도 등록하지 않은 경우 상품 상세 페이지에서 "원클린 간편 결제" 버튼 대신 "계좌 등록하러 가기" 버튼이 보인다.
-    - 계좌 연결 페이지에서 은행을 선택시 선택한 은행에 해당하는 계좌번호의 갯수를 알려주며 그 수를 input 요소의 maxLength로 지정한다.
+    - 계좌 연결 페이지에서 은행을 선택시 선택한 은행의 계좌번호의 갯수를 알려주며 그 수를 input 요소의 maxLength로 지정한다.
   - 상품
-    - 상품 상세 페이지에서 해당 상품과 같은 카테고리에 있는 제품 10개를 랜덤으로 추천한다.
+    - 상품 상세 페이지 하단에 해당 상품과 같은 카테고리에 있는 제품 10개를 랜덤으로 추천한다.
     - 상품이 매진인 경우 "SOLD OUT" 이미지를 상품 이미지 위에 표시
       <br><br>
 
