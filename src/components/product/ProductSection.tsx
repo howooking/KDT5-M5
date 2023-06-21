@@ -87,7 +87,7 @@ export default function ProductSection({
     <section className="container mx-auto px-20 py-10">
       {/* ProductDetail 컴포넌트에서 related 옵션을 props로 전달할 경우 */}
       {related ? (
-        <SectionTitle text={`"${productTitle}"와 유사한 제품`} />
+        <SectionTitle text={`"${productTitle}"와 유사한 상품`} />
       ) : (
         <ProductBar
           selectedBrand={brand}

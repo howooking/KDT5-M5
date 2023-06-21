@@ -30,25 +30,22 @@ export default function App() {
       <Route element={<Layout />}>
         {/* 홈 */}
         <Route path="/" element={<Home />} />
-        <Route path="products/search" element={<SearchProducts />} />
+        <Route path="/products/search" element={<SearchProducts />} />
         <Route path="/products/:category" element={<Products />} />
         <Route
           path="/products/:category/:productId"
           element={<ProductDetail />}
         />
-
         {/* 로그인 */}
         <Route
           path="/login"
           element={<LogoutNeededRoute element={<Login />} />}
         />
-
         {/* 회원가입 */}
         <Route
           path="/signup"
           element={<LogoutNeededRoute element={<SignUp />} />}
         />
-
         {/* 내 정보 */}
         <Route
           path="/myaccount"
@@ -62,7 +59,6 @@ export default function App() {
           <Route path="orderList" element={<OrderList />} />
           <Route path="order/:detailId" element={<OrderDetail />} />
         </Route>
-
         {/* 관리자 */}
         <Route
           path="/admin"
