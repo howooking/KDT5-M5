@@ -89,11 +89,12 @@ nuka-carousel : 이미지 슬라이더<br>
 |                                                                                        로그인                                                                                         |                                                                                       회원가입                                                                                        |
 |                            <img src="https://github.com/howooking/KDT5-M5/blob/main/public/readme/%EB%A1%9C%EA%B7%B8%EC%9D%B8.png?raw=true" width="400"/>                             |                        <img src="https://github.com/howooking/KDT5-M5/blob/main/public/readme/%ED%9A%8C%EC%9B%90%EA%B0%80%EC%9E%85.png?raw=true" width="400"/>                        |
 
-# 고찰
+# 고찰, 느낀점
 
 - 상태관리 툴
 
   - 상대적으로 사용이 쉬운 [ZUSTAND](https://zustand-demo.pmnd.rs/)를 사용
+  - cotext wrapping하는 과정이 필요하지 않음
 
     ```js
     (src/store.ts)
@@ -151,7 +152,7 @@ nuka-carousel : 이미지 슬라이더<br>
 
     (필요한 곳에서 사용)
     import { userStore } from '@/store';
-    const { userInfo, setUser } = userStore();
+    const { userInfo, setUser, authMe } = userStore();
     ```
 
 - 관리자 확인
@@ -183,7 +184,7 @@ nuka-carousel : 이미지 슬라이더<br>
     }
     ```
 
-  - 그러나 이 방법은 보안상 취약하지만 다음과 같은 대응 전략을 세울 수 있다.
+  - 이 방법은 보안상 위험하지만 다음과 같은 대응 전략을 취할 수 있다.
 
     - 비건전한 사용자가 local storage에 접근하여 isAdmin을 true로 바꿀 경우<br> 👉 관리자만 접근 할 수 있는 route 분기점에 인증 api를 사용하여 사용자의 신원을 확인한다.
 
@@ -208,11 +209,11 @@ nuka-carousel : 이미지 슬라이더<br>
       }
       ```
 
-    - 비건전한 사용자가 파일에 저장된 관리자 이메일 주소를 보는 경우<br>👉 관리자의 메일 주소를 알더라도 비밀번호는 모르니 괜찮다. 그래도 불안하면 환경변수에 저장하는 방법이 있다.
+    - 비건전한 사용자가 파일에 저장된 관리자 이메일 주소를 보는 경우<br>👉 관리자의 메일 주소를 알더라도 비밀번호는 모르기 때문에 괜찮다. 관리자 메일 주소를 환경변수에 저장하는 방법도 있다.
 
 - 부족한 상품 정보
 
-  - 상품의 스키마는 아래와 같으며 해당 프로젝트에서 필요한 'category'와 'brand' 항목이 없다.
+  - 상품의 스키마는 아래와 같으며 본 프로젝트에서 필요한 'category'와 'brand' 항목이 없다.
     ```ts
     interface Product {
       id: string;
@@ -226,7 +227,7 @@ nuka-carousel : 이미지 슬라이더<br>
       discountRate: number;
     }
     ```
-  - 따라서 tags 항목에서 배열의 첫번째 요소를 category, 두번째 요소를 brand로 지정하였다.
+  - tags 항목에서 배열의 첫번째 요소를 category, 두번째 요소를 brand로 지정하였다.
 
     ```js
     tags: ['soccer', 'nike'],
@@ -235,7 +236,7 @@ nuka-carousel : 이미지 슬라이더<br>
 - 라우트 보호
 
   - 로그인 상태, 관리자 여부에 따라서 접근할 수 있는 페이지를 제한해야 한다.
-  - ProdtectedRoute에서 전역 User 상태와 adminRequired props 속성에 따라서 접근을 제한할 수 있다.
+  - ProdtectedRoute에서 전역 User 상태와 adminRequired props 속성에 따라서 접근을 제한하였다.
 
     ```js
     import { Navigate } from 'react-router-dom';
@@ -276,6 +277,18 @@ nuka-carousel : 이미지 슬라이더<br>
   - 상품
     - 상품 상세 페이지 하단에 해당 상품과 같은 카테고리에 있는 제품 10개를 랜덤으로 추천한다.
     - 상품이 매진인 경우 "SOLD OUT" 이미지를 상품 이미지 위에 표시
+      <br><br>
+- 첫 협업 프로젝트
+  - 첫 팀프로젝트이다 보니 협업과정에서 아쉬웠던 부분이 많았음
+  - 브랜치 전략
+    - 5명이 각자 맡은 기능의 branch를 생성하여 develope 브랜치에 merge하는 방식으로 진행
+    - 이러한 방식보다는 git hub에서 pull request를 활용하는 것이 바람직하다.
+  - 지속적으로 develope 브렌치를 pull을 해야 한꺼번에 많은 양의 conflict가 발생하는 것을 방지할 수 있다.
+  - commit 단위, commit message
+    - commit의 단위는 기능 단위여야 한다.
+    - commit message를 적기 힘들다면 해당 commit은 너무 많은 기능을 담고 있을 가능성이 높다.
+    - 5명의 commit message가 제각각이라 다른 사람의 commit을 한번에 이해하기 어려웠다.
+    - 협업을 진행하기 전에 commit 규칙을 반드시 세워야한다.
       <br><br>
 
 # 디렉토리 구조
