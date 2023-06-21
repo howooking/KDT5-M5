@@ -6,13 +6,10 @@
     <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fhowooking%2FKDT5-M5&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false" alt="Hits">
   </a>
 </p>
-<br>
 
 > 본 프로젝트는 패스트캠퍼스 부트캠프 프론트앤드 5기, 5차 과제입니다.  
 > 저희 1조는 주어진 API로 축구화 온라인 쇼핑몰을 제작하였습니다.  
 > 개발 기간 : 2023. 5. 31 ~ 2023. 6. 21
-
-<br><br>
 
 # 배포주소
 
@@ -89,3 +86,179 @@ nuka-carousel : 이미지 슬라이더<br>
 |     <img src="https://raw.githubusercontent.com/howooking/KDT5-M5/2237dd90bec93fbce697340069ef08e8d893f60c/public/readme/%EA%B5%AC%EB%A7%A4%EB%82%B4%EC%97%AD.png" width="400"/>      |              <img src="https://raw.githubusercontent.com/howooking/KDT5-M5/2237dd90bec93fbce697340069ef08e8d893f60c/public/readme/%EB%A1%9C%EB%94%A9.gif" width="400"/>               |
 |                                                                                        로그인                                                                                         |                                                                                       회원가입                                                                                        |
 |                            <img src="https://github.com/howooking/KDT5-M5/blob/main/public/readme/%EB%A1%9C%EA%B7%B8%EC%9D%B8.png?raw=true" width="400"/>                             |                        <img src="https://github.com/howooking/KDT5-M5/blob/main/public/readme/%ED%9A%8C%EC%9B%90%EA%B0%80%EC%9E%85.png?raw=true" width="400"/>                        |
+
+# 고찰
+
+- 관리자 확인
+
+  - 로그인 시 서버로 부터 받는 데이터는 아래와 같으며 해당 정보로는 관리자 여부를 알 수 없다.
+
+  ```ts
+  interface ResponseValue {
+    user: {
+      email: string;
+      displayName: string;
+      profileImg: string | null;
+    };
+    accessToken: string;
+  }
+  ```
+
+  - 따라서 클라이언트 단에서 관리자 여부를 확인하고 isAdmin이라는 property를 추가하여 전역상태와 로컬저장소에 저장한다.
+
+  ```ts
+  interface LocalUser {
+    user: {
+      email: string;
+      displayName: string;
+      profileImg: string | null;
+    };
+    accessToken: string;
+    isAdmin: boolean;
+  }
+  ```
+
+  - 그러나 이 방법은 보안상 취약하다.
+
+    - 비건전한 사용자가 local storage에 접근하여 isAdmin을 true로 바꿀 경우<br> 👉 관리자만 접근 할 수 있는 route 분기점에 인증 api를 사용하여 사용자의 신원을 확인한다.
+
+      ```js
+      export default function Admin() {
+        const { authMe } = userStore();
+        useEffect(() => {
+          async function auth() {
+            const errorMessage = await authMe();
+            if (errorMessage) {
+              toast.error(errorMessage, { id: 'authMe' });
+            }
+          }
+          auth();
+        }, []);
+        return (
+          <>
+            <SubNavbar menus={SUB_MENUS_ADMIN} gray />
+            <Outlet />
+          </>
+        );
+      }
+      ```
+
+    - 비건전한 사용자가 파일에 저장되어있는 어드민의 이메일 주소를 보는 경우<br>👉 비밀번호는 모르니깐 괜찮다. 그래도 불안하면 환경변수에 저장하는 방법이 있다.
+
+- 부족한 상품의 정보
+  - 상품의 스키마는 아래와 같다.
+  ```ts
+  interface Product {
+    id: string;
+    title: string;
+    price: number;
+    description: string;
+    tags: string[];
+    thumbnail: string | null;
+    photo: string | null;
+    isSoldOut: boolean;
+    discountRate: number;
+  }
+  ```
+
+<br><br>
+
+# 디렉토리 구조
+
+````
+
+┣ 📂public
+┃ ┣ 📂products
+┃ ┣ 📂readme
+┃ ┣ 📂slider
+┣ 📂src
+┃ ┣ 📂api
+┃ ┃ ┣ 📜adminApi.ts
+┃ ┃ ┣ 📜authApi.ts
+┃ ┃ ┣ 📜bankApi.ts
+┃ ┃ ┗ 📜transactionApi.ts
+┃ ┣ 📂components
+┃ ┃ ┣ 📂product
+┃ ┃ ┃ ┣ 📜ProductBar.tsx
+┃ ┃ ┃ ┣ 📜ProductCard.tsx
+┃ ┃ ┃ ┣ 📜ProductSection.tsx
+┃ ┃ ┃ ┗ 📜ProductSortOptions.tsx
+┃ ┃ ┣ 📂ui
+┃ ┃ ┃ ┣ 📜Breadcrumbs.tsx
+┃ ┃ ┃ ┣ 📜Button.tsx
+┃ ┃ ┃ ┣ 📜CrazyLoading.tsx
+┃ ┃ ┃ ┣ 📜ImageUpload.tsx
+┃ ┃ ┃ ┣ 📜Input.tsx
+┃ ┃ ┃ ┣ 📜LoadingSpinner.tsx
+┃ ┃ ┃ ┣ 📜ProfileImage.tsx
+┃ ┃ ┃ ┣ 📜SectionTitle.tsx
+┃ ┃ ┃ ┣ 📜Select.tsx
+┃ ┃ ┃ ┗ 📜Skeleton.tsx
+┃ ┃ ┣ 📜Footer.tsx
+┃ ┃ ┣ 📜ImageSlider.tsx
+┃ ┃ ┣ 📜Layout.tsx
+┃ ┃ ┣ 📜Navbar.tsx
+┃ ┃ ┣ 📜Search.tsx
+┃ ┃ ┣ 📜SingleUser.tsx
+┃ ┃ ┗ 📜SubNavbar.tsx
+┃ ┣ 📂constants
+┃ ┃ ┣ 📜constants.ts
+┃ ┃ ┗ 📜library.ts
+┃ ┣ 📂routes
+┃ ┃ ┣ 📂admin
+┃ ┃ ┃ ┣ 📜AddProduct.tsx
+┃ ┃ ┃ ┣ 📜Admin.tsx
+┃ ┃ ┃ ┣ 📜AdminClients.tsx
+┃ ┃ ┃ ┣ 📜AdminProducts.tsx
+┃ ┃ ┃ ┣ 📜AllTransactions.tsx
+┃ ┃ ┃ ┗ 📜EditProduct.tsx
+┃ ┃ ┣ 📂myAccount
+┃ ┃ ┃ ┣ 📂bank
+┃ ┃ ┃ ┃ ┣ 📜BankAccounts.tsx
+┃ ┃ ┃ ┃ ┗ 📜ConnectBankAccount.tsx
+┃ ┃ ┃ ┣ 📜ChangeName.tsx
+┃ ┃ ┃ ┣ 📜ChangePassword.tsx
+┃ ┃ ┃ ┣ 📜Info.tsx
+┃ ┃ ┃ ┣ 📜Login.tsx
+┃ ┃ ┃ ┣ 📜LogoutNeededRoute.tsx
+┃ ┃ ┃ ┣ 📜MyAccount.tsx
+┃ ┃ ┃ ┣ 📜OrderDetail.tsx
+┃ ┃ ┃ ┣ 📜OrderList.tsx
+┃ ┃ ┃ ┗ 📜SignUp.tsx
+┃ ┃ ┣ 📜Home.tsx
+┃ ┃ ┣ 📜NotFound.tsx
+┃ ┃ ┣ 📜ProductDetail.tsx
+┃ ┃ ┣ 📜Products.tsx
+┃ ┃ ┣ 📜ProtectedRoute.tsx
+┃ ┃ ┗ 📜SearchProducts.tsx
+┃ ┣ 📜App.tsx
+┃ ┣ 📜index.css
+┃ ┣ 📜main.tsx
+┃ ┣ 📜store.ts
+┃ ┗ 📜vite-env.d.ts
+┣ 📜.eslintrc.cjs
+┣ 📜.gitignore
+┣ 📜.prettierrc
+┣ 📜custom.d.ts
+┣ 📜index.html
+┣ 📜package-lock.json
+┣ 📜package.json
+┣ 📜postcss.config.js
+┣ 📜README.md
+┣ 📜tailwind.config.js
+┣ 📜tsconfig.json
+┣ 📜tsconfig.node.json
+┗ 📜vite.config.ts
+
+```
+
+```
+
+```
+
+```
+
+```
+
+```
+````
