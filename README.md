@@ -50,8 +50,8 @@ $ npm run dev
 
 ## Config
 
-<img src="https://img.shields.io/badge/NPM-CB3837?style=flat&logo=github&logoColor=white"/><br>
-<img src="https://img.shields.io/badge/VITE-646CFF?style=flat&logo=github&logoColor=white"/><br>
+<img src="https://img.shields.io/badge/NPM-CB3837?style=flat&logo=npm&logoColor=white"/><br>
+<img src="https://img.shields.io/badge/VITE-646CFF?style=flat&logo=vite&logoColor=white"/><br>
 
 ## Development
 
@@ -93,30 +93,30 @@ nuka-carousel : 이미지 슬라이더<br>
 
   - 로그인 시 서버로 부터 받는 데이터는 아래와 같으며 해당 정보로는 관리자 여부를 알 수 없다.
 
-  ```ts
-  interface ResponseValue {
-    user: {
-      email: string;
-      displayName: string;
-      profileImg: string | null;
-    };
-    accessToken: string;
-  }
-  ```
+    ```ts
+    interface ResponseValue {
+      user: {
+        email: string;
+        displayName: string;
+        profileImg: string | null;
+      };
+      accessToken: string;
+    }
+    ```
 
   - 따라서 클라이언트 단에서 관리자 여부를 확인하고 isAdmin이라는 property를 추가하여 전역상태와 로컬저장소에 저장한다.
 
-  ```ts
-  interface LocalUser {
-    user: {
-      email: string;
-      displayName: string;
-      profileImg: string | null;
-    };
-    accessToken: string;
-    isAdmin: boolean;
-  }
-  ```
+    ```ts
+    interface LocalUser {
+      user: {
+        email: string;
+        displayName: string;
+        profileImg: string | null;
+      };
+      accessToken: string;
+      isAdmin: boolean;
+    }
+    ```
 
   - 그러나 이 방법은 보안상 취약하다.
 
@@ -143,30 +143,79 @@ nuka-carousel : 이미지 슬라이더<br>
       }
       ```
 
-    - 비건전한 사용자가 파일에 저장되어있는 어드민의 이메일 주소를 보는 경우<br>👉 비밀번호는 모르니깐 괜찮다. 그래도 불안하면 환경변수에 저장하는 방법이 있다.
+    - 비건전한 사용자가 파일에 저장되어있는 어드민의 이메일 주소를 보는 경우<br>👉 관리자의 메일 주소를 알더라도 비밀번호는 모르니 괜찮다. 그래도 불안하면 환경변수에 저장하는 방법이 있다.
 
-- 부족한 상품의 정보
-  - 상품의 스키마는 아래와 같다.
-  ```ts
-  interface Product {
-    id: string;
-    title: string;
-    price: number;
-    description: string;
-    tags: string[];
-    thumbnail: string | null;
-    photo: string | null;
-    isSoldOut: boolean;
-    discountRate: number;
-  }
-  ```
+- 부족한 상품 정보
 
-<br><br>
+  - 상품의 스키마는 아래와 같으며 해당 프로젝트에서 필요한 category와 brand 항목이 없다.
+    ```ts
+    interface Product {
+      id: string;
+      title: string;
+      price: number;
+      description: string;
+      tags: string[];
+      thumbnail: string | null;
+      photo: string | null;
+      isSoldOut: boolean;
+      discountRate: number;
+    }
+    ```
+  - 따라서 tags 항목에서 배열의 첫번째 요소를 category, 두번째 요소를 brand로 하기로 하였다.
+
+    ```js
+    tags: ['soccer', 'nike'],
+    ```
+
+- 라우트 보호
+
+  - 로그인 상태, 관리자 여부에 따라서 접근할 수 있는 페이지를 제한해야 한다.
+  - ProdtectedRoute에서 전역 user 상태와 adminRequired props 속성에 따라서 접근을 제한할 수 있다.
+
+    ```js
+    import { Navigate } from 'react-router-dom';
+    import { userStore } from '@/store';
+
+    type ProtectedRouteProps = {
+      element: React.ReactNode,
+      adminRequired?: boolean,
+    };
+
+    export default function ProtectedRoute({
+      element,
+      adminRequired,
+    }: ProtectedRouteProps) {
+      const { userInfo } = userStore();
+
+      if (!userInfo) {
+        return <Navigate to="/login" replace />;
+      }
+      if (adminRequired && !userInfo.isAdmin) {
+        return <Navigate to="/" replace />;
+      }
+      return <>{element}</>;
+    }
+    ```
+
+- 상태에 따른 UI 동적 구현
+  - 관리자
+    - 관리자의 경우 Navbar에 "관리자" 버튼이 보인다.
+    - 관리자의 경우 로그인시 "주인님 오셨습니다" 알림 메세지가 출력된다.
+    - 관리자의 경우 상품 상세 페이지에서 상품 수정 아이콘이 보인다.
+  - 로그인
+    - 로그인하지 않은 경우 상품 상세 페이지에서 결제 버튼 대신 "로그인 하러가기" 버튼이 보인다.
+    - 로그인한 경우 login 페이지와 signup 페이지에 접근 할 수 없다.
+  - 계좌
+    - 계좌를 하나도 등록하지 않은 경우 상품 상세 페이지에서 "원클린 간편 결제" 버튼 대신 "계좌 등록하러 가기" 버튼이 보인다.
+    - 계좌 연결 페이지에서 은행을 선택시 선택한 은행에 해당하는 계좌번호의 갯수를 알려주며 그 수를 input 요소의 maxLength로 지정한다.
+  - 상품
+    - 상품 상세 페이지에서 해당 상품과 같은 카테고리에 있는 제품 10개를 랜덤으로 추천한다.
+    - 상품이 매진인 경우 "SOLD OUT" 이미지를 상품 이미지 위에 표시
+      <br><br>
 
 # 디렉토리 구조
 
-````
-
+```
 ┣ 📂public
 ┃ ┣ 📂products
 ┃ ┣ 📂readme
@@ -249,16 +298,4 @@ nuka-carousel : 이미지 슬라이더<br>
 ┣ 📜tsconfig.json
 ┣ 📜tsconfig.node.json
 ┗ 📜vite.config.ts
-
 ```
-
-```
-
-```
-
-```
-
-```
-
-```
-````

@@ -41,6 +41,7 @@ export default function ProductDetail() {
     }
     fetchData();
   }, [productId]);
+  console.log(product);
 
   useEffect(() => {
     async function fetchData() {

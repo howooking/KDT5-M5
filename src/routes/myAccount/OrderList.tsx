@@ -111,6 +111,7 @@ export default function OrderList() {
             <tbody>
               {orders?.map((order) => (
                 <tr
+                  key={order.detailId}
                   onClick={() => toOrderDetail(order.detailId)}
                   className="cursor-pointer hover:opacity-80"
                 >
