@@ -71,28 +71,28 @@ nuka-carousel : 이미지 슬라이더<br>
 |                                                                                      메인페이지                                                                                       |                                                                                       모든제품                                                                                        |
 | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
 |                     <img src="https://raw.githubusercontent.com/howooking/KDT5-M5/2237dd90bec93fbce697340069ef08e8d893f60c/public/readme/main.png" width="400"/>                      |     <img src="https://raw.githubusercontent.com/howooking/KDT5-M5/2237dd90bec93fbce697340069ef08e8d893f60c/public/readme/%EB%AA%A8%EB%93%A0%EC%A0%9C%ED%92%88.png" width="400"/>      |
-|                                                                                    카테고리별 상품                                                                                    |                                                                                       상품 검색                                                                                       |
+|                                                                                  <b>카테고리별 상품                                                                                   |                                                                                     <b>상품 검색                                                                                      |
 | <img src="https://raw.githubusercontent.com/howooking/KDT5-M5/15934011c83bd52b28b65bd16dccca61a2fa7ceb/public/readme/%EC%B9%B4%ED%85%8C%EA%B3%A0%EB%A6%AC%EB%B3%84.png" width="400"/> |              <img src="https://raw.githubusercontent.com/howooking/KDT5-M5/2237dd90bec93fbce697340069ef08e8d893f60c/public/readme/%EA%B2%80%EC%83%89.png" width="400"/>               |
-|                                                                                    연관 상품 추천                                                                                     |                                                                                   상품 상세 페이지                                                                                    |
+|                                                                                   <b>연관 상품 추천                                                                                   |                                                                                  <b>상품 상세 페이지                                                                                  |
 |     <img src="https://raw.githubusercontent.com/howooking/KDT5-M5/15934011c83bd52b28b65bd16dccca61a2fa7ceb/public/readme/%EC%97%B0%EA%B4%80%EC%83%81%ED%92%88.png" width="400"/>      | <img src="https://raw.githubusercontent.com/howooking/KDT5-M5/2237dd90bec93fbce697340069ef08e8d893f60c/public/readme/%EC%83%81%EC%84%B8%ED%8E%98%EC%9D%B4%EC%A7%80.png" width="400"/> |
-|                                                                                       회원 정보                                                                                       |                                                                                       상품 관리                                                                                       |
+|                                                                                     <b>회원 정보                                                                                      |                                                                                     <b>상품 관리                                                                                      |
 |     <img src="https://raw.githubusercontent.com/howooking/KDT5-M5/2237dd90bec93fbce697340069ef08e8d893f60c/public/readme/%ED%9A%8C%EC%9B%90%EC%A0%95%EB%B3%B4.png" width="400"/>      |     <img src="https://raw.githubusercontent.com/howooking/KDT5-M5/2237dd90bec93fbce697340069ef08e8d893f60c/public/readme/%EC%83%81%ED%92%88%EA%B4%80%EB%A6%AC.png" width="400"/>      |
-|                                                                                       상품 추가                                                                                       |                                                                                       상품 수정                                                                                       |
+|                                                                                     <b>상품 추가                                                                                      |                                                                                     <b>상품 수정                                                                                      |
 |     <img src="https://raw.githubusercontent.com/howooking/KDT5-M5/2237dd90bec93fbce697340069ef08e8d893f60c/public/readme/%EC%83%81%ED%92%88%EC%B6%94%EA%B0%80.png" width="400"/>      |                        <img src="https://github.com/howooking/KDT5-M5/blob/main/public/readme/%EC%83%81%ED%92%88%EC%88%98%EC%A0%95.png?raw=true" width="400"/>                        |
-|                                                                                       거래 내역                                                                                       |                                                                                        내 정보                                                                                        |
+|                                                                                     <b>거래 내역                                                                                      |                                                                                      <b>내 정보                                                                                       |
 |     <img src="https://raw.githubusercontent.com/howooking/KDT5-M5/2237dd90bec93fbce697340069ef08e8d893f60c/public/readme/%EA%B1%B0%EB%9E%98%EB%82%B4%EC%97%AD.png" width="400"/>      |          <img src="https://raw.githubusercontent.com/howooking/KDT5-M5/2237dd90bec93fbce697340069ef08e8d893f60c/public/readme/%EB%82%B4%EC%A0%95%EB%B3%B4.png" width="400"/>          |
-|                                                                                   계좌 조회 / 해지                                                                                    |                                                                                       계좌 연결                                                                                       |
+|                                                                                  <b>계좌 조회 / 해지                                                                                  |                                                                                     <b>계좌 연결                                                                                      |
 |    <img src="https://raw.githubusercontent.com/howooking/KDT5-M5/2237dd90bec93fbce697340069ef08e8d893f60c/public/readme/%EA%B3%84%EC%A2%8C%20%EC%A1%B0%ED%9A%8C.png" width="400"/>    |     <img src="https://raw.githubusercontent.com/howooking/KDT5-M5/2237dd90bec93fbce697340069ef08e8d893f60c/public/readme/%EA%B3%84%EC%A2%8C%EC%97%B0%EA%B2%B0.png" width="400"/>      |
-|                                                                                       구매 내역                                                                                       |                                                                                       로딩화면                                                                                        |
+|                                                                                     <b>구매 내역                                                                                      |                                                                                      <b>로딩화면                                                                                      |
 |     <img src="https://raw.githubusercontent.com/howooking/KDT5-M5/2237dd90bec93fbce697340069ef08e8d893f60c/public/readme/%EA%B5%AC%EB%A7%A4%EB%82%B4%EC%97%AD.png" width="400"/>      |              <img src="https://raw.githubusercontent.com/howooking/KDT5-M5/2237dd90bec93fbce697340069ef08e8d893f60c/public/readme/%EB%A1%9C%EB%94%A9.gif" width="400"/>               |
-|                                                                                        로그인                                                                                         |                                                                                       회원가입                                                                                        |
+|                                                                                       <b>로그인                                                                                       |                                                                                      <b>회원가입                                                                                      |
 |                            <img src="https://github.com/howooking/KDT5-M5/blob/main/public/readme/%EB%A1%9C%EA%B7%B8%EC%9D%B8.png?raw=true" width="400"/>                             |                        <img src="https://github.com/howooking/KDT5-M5/blob/main/public/readme/%ED%9A%8C%EC%9B%90%EA%B0%80%EC%9E%85.png?raw=true" width="400"/>                        |
 
 # 고찰, 느낀점
 
 - 상태관리 툴
 
-  - 팀원내 입문자를 배려하여 상대적으로 사용이 쉬운 [ZUSTAND](https://zustand-demo.pmnd.rs/)를 사용
+  - 팀원 내 입문자를 배려하여 상대적으로 사용이 쉬운 [ZUSTAND](https://zustand-demo.pmnd.rs/)를 사용
   - context wrapping하는 과정이 필요하지 않음
 
     ```js
@@ -277,17 +277,18 @@ nuka-carousel : 이미지 슬라이더<br>
     - 계좌 연결 페이지에서 은행을 선택시 선택한 은행의 계좌번호의 갯수를 알려주며 그 수를 input 요소의 maxLength로 지정한다.
   - 상품
     - 상품 상세 페이지 하단에 해당 상품과 같은 카테고리에 있는 제품 10개를 랜덤으로 추천한다.
-    - 상품이 매진인 경우 "SOLD OUT" 이미지를 상품 이미지 위에 표시
+    - 상품이 매진인 경우 "SOLD OUT" 이미지를 상품 이미지 위에 표시한다.
       <br><br>
 - 첫 협업 프로젝트
-  - 첫 팀프로젝트다 보니 협업과정에서 아쉬웠던 부분이 많았음
+  - 첫 팀프로젝트다 보니 진행과정에서 아쉬웠던 부분이 많았음
   - 브랜치 전략
     - 5명이 각자 맡은 기능의 branch를 생성하여 develope 브랜치에 merge하고 최종적으로 main 브랜치에 merge하는 방식으로 진행
-    - 이 보다는 git hub의 pull request를 활용하는 것이 바람직하다.
+    - 이 보다는 git hub에서 pull request를 하고 다같이 리뷰를 한 후 merge하는 방식이 바람직하다.
   - 지속적으로 develope 브렌치를 pull을 해야 한꺼번에 많은 양의 conflict가 발생하는 것을 방지할 수 있다.
   - commit 단위 & commit message
     - commit의 단위는 기능 단위여야 한다.
     - commit message를 적기 힘들다면 해당 commit은 너무 많은 기능을 담고 있을 가능성이 높다.
+    - commit 단위는 파일 단위가 아니여도 된다. 줄 단위로 commit이 가능하다!
     - 5명의 commit message가 제각각이라 다른 사람의 commit을 한번에 이해하기 어려웠다.
     - 협업을 진행하기 전 commit 규칙을 반드시 세우고 시작해야 함
       <br><br>
