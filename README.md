@@ -61,9 +61,10 @@ $ npm run dev
 <img src="https://img.shields.io/badge/Typescript-3178C6?style=flat&logo=typescript&logoColor=white"/><br>
 <img src="https://img.shields.io/badge/Tailwind CSS-06B6D4?style=flat&logo=tailwindcss&logoColor=white"/><br>
 <img src="https://img.shields.io/badge/React Router-CA4245?style=flat&logo=reactrouter&logoColor=white"/> <br>
-zustand : 전역 상태관리<br>
-react-hot-toast : 팝업 안내 메시지<br>
-nuka-carousel : 이미지 슬라이더<br>
+<img src="https://img.shields.io/badge/ZUSTAND-443E38?style=flat&logo=&logoColor=white"/> : 전역 상태관리 <br>
+<img src="https://img.shields.io/badge/REACT HOT TOAST-FFF7E2?style=flat&logo=&logoColor=black"/> : 팝업 안내 메시지
+<br>
+<img src="https://img.shields.io/badge/NUKA CAROUSEL-8D428D?style=flat&logo=&logoColor=black"/> : 이미지 슬라이더<br>
 <br>
 
 # 화면 구성
@@ -94,9 +95,9 @@ nuka-carousel : 이미지 슬라이더<br>
 
   - 팀원 내 입문자를 배려하여 상대적으로 사용이 쉬운 [ZUSTAND](https://zustand-demo.pmnd.rs/)를 사용
   - context wrapping하는 과정이 필요하지 않음
+  - [src/store.ts](https://github.com/howooking/KDT5-M5/blob/0172a31077634c42139005c52c4e62156e3ab2ba/src/store.ts#L1-L64)
 
     ```js
-    (src/store.ts)
     import { create } from 'zustand';
     import { authenticate } from '@/api/authApi';
     import { ADMINS } from '@/constants/constants';
@@ -186,6 +187,7 @@ nuka-carousel : 이미지 슬라이더<br>
   - 이 방법은 보안상 위험하지만 다음과 같은 대응 전략을 취할 수 있다.
 
     - 비건전한 사용자가 local storage에 접근하여 isAdmin을 true로 바꿀 경우<br> 👉 관리자만 접근 할 수 있는 route 분기점에 인증 api를 사용하여 사용자의 신원을 확인한다.
+    - [src/routes/admin/Admin.tsx](https://github.com/howooking/KDT5-M5/blob/0172a31077634c42139005c52c4e62156e3ab2ba/src/routes/admin/Admin.tsx#L1C1-L26)
 
       ```js
       export default function Admin() {
@@ -236,6 +238,7 @@ nuka-carousel : 이미지 슬라이더<br>
 
   - 로그인 상태, 관리자 여부에 따라서 접근할 수 있는 페이지를 제한해야 한다.
   - ProdtectedRoute에서 전역 User 상태와 adminRequired props 속성에 따라서 접근을 제한하게 하였다.
+  - [src/routes/ProtectedRoute.tsx](https://github.com/howooking/KDT5-M5/blob/0172a31077634c42139005c52c4e62156e3ab2ba/src/routes/ProtectedRoute.tsx#L1-L22)
 
     ```js
     import { Navigate } from 'react-router-dom';
@@ -284,11 +287,11 @@ nuka-carousel : 이미지 슬라이더<br>
   - 브랜치 전략
     - 5명이 각자 맡은 기능의 branch를 생성하여 develope 브랜치에 merge하고 최종적으로 main 브랜치에 merge하는 방식으로 진행
     - 이 보다는 git hub에서 pull request를 하고 다같이 리뷰를 한 후 merge하는 방식이 바람직하다.
-  - 지속적으로 develope 브렌치를 pull을 해야 한꺼번에 많은 양의 conflict가 발생하는 것을 방지할 수 있다.
+  - 정기적으로 develope 브렌치를 pull해야 한꺼번에 많은 양의 conflict가 발생하는 것을 방지할 수 있다.
   - commit 단위 & commit message
     - commit의 단위는 기능 단위여야 한다.
     - commit message를 적기 힘들다면 해당 commit은 너무 많은 기능을 담고 있을 가능성이 높다.
-    - commit 단위는 파일 단위가 아니여도 된다. 줄 단위로 commit이 가능하다!
+    - commit 단위는 파일 단위가 아니여도 된다. 줄 단위로 commit이 가능하다.
     - 5명의 commit message가 제각각이라 다른 사람의 commit을 한번에 이해하기 어려웠다.
     - 협업을 진행하기 전 commit 규칙을 반드시 세우고 시작해야 함
       <br><br>
