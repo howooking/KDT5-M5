@@ -1,7 +1,7 @@
 import { DICTIONARY_SHOES, PRODUCT_BRAND } from '@/constants/constants';
 import Breadcrumbs from '@/components/ui/Breadcrumbs';
 import SectionTitle from '@/components/ui/SectionTitle';
-import Button from '../ui/Button';
+import Button from '@/components/ui/Button';
 import ProductSortOptions from '@/components/product/ProductSortOptions';
 
 interface ProductBarProps {

@@ -2,8 +2,7 @@ import { Route, Routes } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import Home from '@/routes/Home';
 import NotFound from '@/routes/NotFound';
-import Login from '@/routes/myAccount/Login';
-import SignUp from '@/routes/myAccount/SignUp';
+import Login from '@/routes/Login';
 import Admin from '@/routes/admin/Admin';
 import AddProduct from '@/routes/admin/AddProduct';
 import ProtectedRoute from '@/routes/ProtectedRoute';
@@ -19,10 +18,11 @@ import ProductDetail from '@/routes/ProductDetail';
 import BankAccounts from '@/routes/myAccount/bank/BankAccounts';
 import SearchProducts from '@/routes/SearchProducts';
 import OrderList from '@/routes/myAccount/OrderList';
-import AllTransactions from './routes/admin/AllTransactions';
-import OrderDetail from './routes/myAccount/OrderDetail';
-import LogoutNeededRoute from './routes/myAccount/LogoutNeededRoute';
-import EditProduct from './routes/admin/EditProduct';
+import AllTransactions from '@/routes/admin/AllTransactions';
+import OrderDetail from '@/routes/myAccount/OrderDetail';
+import EditProduct from '@/routes/admin/EditProduct';
+import LogoutNeededRoute from '@/routes/LogoutNeededRoute';
+import SignUp from '@/routes/SignUp';
 
 export default function App() {
   return (

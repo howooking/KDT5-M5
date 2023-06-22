@@ -1,12 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { userStore } from '../../store';
-import { signIn } from '../../api/authApi';
-import { ADMINS, EMAIL_REGEX } from '../../constants/constants';
-import Input from '../../components/ui/Input';
-import Button from '../../components/ui/Button';
-import LoadingSpinner from '../../components/ui/LoadingSpinner';
+import { userStore } from '@/store';
+import { signIn } from '@/api/authApi';
+import { ADMINS, EMAIL_REGEX } from '@/constants/constants';
+import Input from '@/components/ui/Input';
+import Button from '@/components/ui/Button';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import SectionTitle from '@/components/ui/SectionTitle';
 import toast from 'react-hot-toast';
 

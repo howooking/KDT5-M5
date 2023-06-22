@@ -37,7 +37,6 @@ export const userStore = create<UserState>((set) => ({
       });
       return '로그인을 해주세요.';
     }
-
     // 로컬저장소에 user가 있는 경우
     const res = await authenticate(userInfo.accessToken);
     // 인증에 성공하는 경우
@@ -52,6 +51,12 @@ export const userStore = create<UserState>((set) => ({
           isAdmin,
         },
       });
+      // 로컬 저장소에도 세팅
+      localStorage.setItem(
+        'user',
+        JSON.stringify({ user, accessToken: userInfo.accessToken, isAdmin })
+      );
+
       return;
     }
     // 토큰은 있으나 인증에 실패한 경우 (expired or 토큰 값 인위적 조작)

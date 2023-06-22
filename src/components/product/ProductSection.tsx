@@ -5,7 +5,7 @@ import ProductBar from '@/components/product/ProductBar';
 import ProductCard from '@/components/product/ProductCard';
 import Skeleton from '@/components/ui/Skeleton';
 import toast from 'react-hot-toast';
-import SectionTitle from '../ui/SectionTitle';
+import SectionTitle from '@/components/ui/SectionTitle';
 
 interface ProductSectionProps {
   category?: string;
