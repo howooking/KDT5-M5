@@ -9,6 +9,7 @@
 
 > 본 프로젝트는 패스트캠퍼스 부트캠프 프론트앤드 5기, 5차 과제입니다.  
 > 저희 1조는 주어진 API를 활용하여 축구화 온라인 쇼핑몰을 제작하였습니다.  
+> 참고 한 사이트: [크레이지11](https://crazy11.co.kr/) <br>
 > 개발 기간 : 2023. 5. 31 ~ 2023. 6. 21
 
 <br>
@@ -47,7 +48,7 @@ $ npm run dev
 ## Environment
 
 <img src="https://img.shields.io/badge/VISUAL STUDIO CODE-007ACC?style=flat&logo=visualstudiocode&logoColor=white"/><br>
-<img src="https://img.shields.io/badge/Git-F05032?style=flat&logo=git&logoColor=white"/><br>
+<img src="https://img.shields.io/badge/GIT-F05032?style=flat&logo=git&logoColor=white"/><br>
 <img src="https://img.shields.io/badge/GIT HUB-181717?style=flat&logo=github&logoColor=white"/><br>
 
 ## Config
@@ -57,15 +58,13 @@ $ npm run dev
 
 ## Development
 
-<img src="https://img.shields.io/badge/React-61DAFB?style=flat&logo=React&logoColor=white"/><br>
-<img src="https://img.shields.io/badge/Typescript-3178C6?style=flat&logo=typescript&logoColor=white"/><br>
-<img src="https://img.shields.io/badge/Tailwind CSS-06B6D4?style=flat&logo=tailwindcss&logoColor=white"/><br>
-<img src="https://img.shields.io/badge/React Router-CA4245?style=flat&logo=reactrouter&logoColor=white"/> <br>
+<img src="https://img.shields.io/badge/REACT-61DAFB?style=flat&logo=React&logoColor=white"/><br>
+<img src="https://img.shields.io/badge/TYPESCRIPT-3178C6?style=flat&logo=typescript&logoColor=white"/><br>
+<img src="https://img.shields.io/badge/TAILWIND-06B6D4?style=flat&logo=tailwindcss&logoColor=white"/><br>
+<img src="https://img.shields.io/badge/REACT ROUTER-CA4245?style=flat&logo=reactrouter&logoColor=white"/> <br>
 <img src="https://img.shields.io/badge/ZUSTAND-443E38?style=flat&logo=&logoColor=white"/> : 전역 상태관리 <br>
-<img src="https://img.shields.io/badge/REACT HOT TOAST-FFF7E2?style=flat&logo=&logoColor=black"/> : 팝업 안내 메시지
-<br>
+<img src="https://img.shields.io/badge/REACT HOT TOAST-FFF7E2?style=flat&logo=&logoColor=black"/> : 팝업 안내 메시지<br>
 <img src="https://img.shields.io/badge/NUKA CAROUSEL-8D428D?style=flat&logo=&logoColor=black"/> : 이미지 슬라이더<br>
-<br>
 
 # 화면 구성
 
@@ -95,7 +94,7 @@ $ npm run dev
 
   - 팀원 내 입문자를 배려하여 상대적으로 사용이 쉬운 [ZUSTAND](https://zustand-demo.pmnd.rs/)를 사용
   - context wrapping하는 과정이 필요하지 않음
-  - [src/store.ts](https://github.com/howooking/KDT5-M5/blob/0172a31077634c42139005c52c4e62156e3ab2ba/src/store.ts#L1-L64)
+  - [src/store.ts](https://github.com/howooking/KDT5-M5/blob/00c7b69fb881e9e7c8cf781f5b96cfd1c15e7b6b/src/store.ts#L1C1-L69)
 
     ```js
     import { create } from 'zustand';
@@ -285,6 +284,7 @@ $ npm run dev
   - 상품
     - 상품 상세 페이지 하단에 해당 상품과 같은 카테고리에 있는 제품 10개를 랜덤으로 추천한다.
     - 상품이 매진인 경우 "SOLD OUT" 이미지를 상품 이미지 위에 표시한다.
+    - 상품이 매진인 경우 "입고 알림" 버튼이 보인다.
       <br><br>
 - 첫 협업 프로젝트
   - 첫 팀프로젝트다 보니 진행과정에서 아쉬웠던 부분이 많았음

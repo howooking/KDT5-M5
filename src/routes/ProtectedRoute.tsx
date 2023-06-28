@@ -1,10 +1,10 @@
 import { Navigate } from 'react-router-dom';
 import { userStore } from '@/store';
 
-type ProtectedRouteProps = {
+interface ProtectedRouteProps {
   element: React.ReactNode;
   adminRequired?: boolean;
-};
+}
 
 export default function ProtectedRoute({
   element,

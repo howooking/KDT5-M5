@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getOrderDetail } from '@/api/transactionApi';
 import { userStore } from '@/store';
-import { convertToHumanReadable } from '@/constants/library';
+import { convertToHumanReadable } from '@/lib/time';
 import CrazyLoading from '@/components/ui/CrazyLoading';
 import SectionTitle from '@/components/ui/SectionTitle';
 import toast from 'react-hot-toast';

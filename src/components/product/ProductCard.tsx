@@ -1,4 +1,4 @@
-import { priceBeforeDiscount } from '@/constants/library';
+import { priceBeforeDiscount } from '@/lib/ceilPrice';
 
 interface ProductCardProps {
   title: string;

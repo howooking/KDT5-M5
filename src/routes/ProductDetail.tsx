@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { getProductDetail } from '@/api/adminApi';
 import SectionTitle from '@/components/ui/SectionTitle';
-import { priceBeforeDiscount } from '@/constants/library';
 import { useEffect, useMemo, useState } from 'react';
 import { getAccountListAndBalance } from '@/api/bankApi';
 import { userStore } from '@/store';
@@ -15,6 +14,7 @@ import Select from '@/components/ui/Select';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import { AiOutlineEdit } from 'react-icons/ai';
 import ProductSection from '@/components/product/ProductSection';
+import { priceBeforeDiscount } from '@/lib/ceilPrice';
 
 export default function ProductDetail() {
   const navigate = useNavigate();
@@ -41,7 +41,6 @@ export default function ProductDetail() {
     }
     fetchData();
   }, [productId]);
-  console.log(product);
 
   useEffect(() => {
     async function fetchData() {
@@ -62,7 +61,9 @@ export default function ProductDetail() {
         ? [
             { name: '결제할 계좌 선택', value: '' },
             ...accounts.map((account) => ({
-              name: `${account.bankName} / ${account.accountNumber} / 잔액 : ${account.balance}`,
+              name: `${account.bankName} / ${
+                account.accountNumber
+              } / 잔액 : ${account.balance.toLocaleString('ko-KR')}원`,
               value: account.id,
             })),
           ]
@@ -71,6 +72,10 @@ export default function ProductDetail() {
   );
 
   const handlePurchase = async () => {
+    if (!selectedAccount) {
+      toast.error('계좌를 선택해주세요.', { id: 'buyProduct' });
+      return;
+    }
     setIsPurchasing(true);
     toast.loading('결제 요청 중...', { id: 'buyProduct' });
     const res = await buyProduct(
@@ -91,6 +96,14 @@ export default function ProductDetail() {
 
   const toEditPage = (productId: string, productTitle: string) => {
     navigate('/admin/editproduct', { state: { productId, productTitle } });
+  };
+
+  const handleAlarm = () => {
+    setIsPurchasing(true);
+    setTimeout(() => {
+      toast.success(`${product?.title} 입고시 알림문자 발송!`);
+      setIsPurchasing(false);
+    }, 500);
   };
 
   return (
@@ -166,25 +179,39 @@ export default function ProductDetail() {
                     options={accountOptions}
                     value={selectedAccount}
                   />
-                  <Button
-                    onClick={
-                      accounts.length > 0
-                        ? handlePurchase
-                        : () => navigate('/myaccount/connectAccount')
-                    }
-                    text={
-                      isPurchasing ? (
-                        <LoadingSpinner color="white" />
-                      ) : (
-                        `${
-                          accounts.length > 0
-                            ? '원클릭 간편 결제'
-                            : '계좌 등록하러 가기'
-                        }`
-                      )
-                    }
-                    disabled={isPurchasing}
-                  />
+                  {product?.isSoldOut ? (
+                    <Button
+                      text={
+                        isPurchasing ? (
+                          <LoadingSpinner color="white" />
+                        ) : (
+                          '입고 알림'
+                        )
+                      }
+                      onClick={handleAlarm}
+                      disabled={isPurchasing}
+                    />
+                  ) : (
+                    <Button
+                      onClick={
+                        accounts.length > 0
+                          ? handlePurchase
+                          : () => navigate('/myaccount/connectAccount')
+                      }
+                      text={
+                        isPurchasing ? (
+                          <LoadingSpinner color="white" />
+                        ) : (
+                          `${
+                            accounts.length > 0
+                              ? '원클릭 간편 결제'
+                              : '계좌 등록하러 가기'
+                          }`
+                        )
+                      }
+                      disabled={isPurchasing}
+                    />
+                  )}
                 </div>
               ) : (
                 <Button

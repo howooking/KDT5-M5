@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { getAllTransactions } from '@/api/adminApi';
 import toast from 'react-hot-toast';
 import CrazyLoading from '@/components/ui/CrazyLoading';
-import { convertToHumanReadable } from '@/constants/library';
+import { convertToHumanReadable } from '@/lib/time';
 import SectionTitle from '@/components/ui/SectionTitle';
 
 export default function TransactionsPage() {

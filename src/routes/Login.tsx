@@ -68,7 +68,7 @@ export default function Login() {
 
     // 로그인 실패
     const errorMessage = res.message;
-    toast.error(errorMessage, { id: 'login' });
+    toast.error(errorMessage, { id: 'login' }); //토스트 메세지
     setIsSending(false);
   };
 

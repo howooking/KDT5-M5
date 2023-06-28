@@ -2,10 +2,7 @@ import { confirmOrder, getOrderList, cancelOrder } from '@/api/transactionApi';
 import Button from '@/components/ui/Button';
 import CrazyLoading from '@/components/ui/CrazyLoading';
 import SectionTitle from '@/components/ui/SectionTitle';
-import {
-  convertToHumanReadable,
-  convertToMilliseconds,
-} from '@/constants/library';
+import { convertToHumanReadable, convertToMilliseconds } from '@/lib/time';
 import { userStore } from '@/store';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
